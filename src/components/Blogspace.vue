@@ -2,7 +2,7 @@
     <div id="blog" class="container">
 
         <div class="blogvisit">
-        <p class="blog-visit"><a href="">Visit our Blog</a></p>
+        <p class="blog-visit"><a href="">Our Research</a></p>
     </div>
 
     <div class="blogspace">
@@ -85,7 +85,7 @@ export default {
 }
 .blogspace{
     width: 80%;
-    height: 28vh;
+    height: 50vh;
     padding-bottom: 1rem;
     padding-top:1rem;
     display: grid;
@@ -145,7 +145,7 @@ export default {
 } 
 
 .socials{
-    height: 12vh;
+    height: 20vh;
     display: flex;
     justify-content: center;
     align-items: center;

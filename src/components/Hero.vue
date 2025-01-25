@@ -12,12 +12,15 @@
       <ul>
         <li><a href="#">Home</a></li>
         <li><a href="#">About</a></li>
-        <li><a href="#">Research</a></li>
-        <li><a href="#">Participate</a></li>
-        <li><a href="#blog">Our Blog</a></li>
+        <!-- <li><a href="#">Research</a></li> -->
+        <!-- <li><a href="#">Participate</a></li> -->
+        
+
+        <li><a href="#blog">Research</a></li>
         <li><a href="#">Services</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#">Our Library</a></li>
+        
+        <li><a href="#contact">Contact a Herbalist</a></li>
       </ul>
     </nav>
 

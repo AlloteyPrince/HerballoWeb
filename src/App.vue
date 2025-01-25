@@ -17,12 +17,13 @@ import Appointment from "@/components/Appointment.vue"
 // import Jog from "@/components/Jog.vue"
 import Myfooter from "@/components/Myfooter.vue"
 import Contact from "@/components/Contact.vue"
+import Library from "./components/Library.vue"
 
 
 export default {
   name: 'App',
   components:{
-    Hero, Appointment, Blogspace, Myfooter, Contact,
+    Hero, Appointment, Blogspace,Library, Myfooter, Contact,
   },
   data(){
     return{}

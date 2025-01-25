@@ -36,7 +36,7 @@ export default {
 
 .appointment{
     background-color: white;
-    height: 20rem;
+    height: 25rem;
     width: 100%;
     display: flex;
     justify-content: space-between;
