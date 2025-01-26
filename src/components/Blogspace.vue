@@ -82,10 +82,11 @@ export default {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    padding: 2rem 0;
 }
 .blogspace{
     width: 80%;
-    height: 50vh;
+    height: 30vh;
     padding-bottom: 1rem;
     padding-top:1rem;
     display: grid;
@@ -131,12 +132,7 @@ export default {
     font-size: 0.8rem;
 }
 
-.blogvisit{
-  margin-top: 2rem;
-}
-
 .blog-visit a{
-    /* color: black; */
     font-weight: bolder;
     font-size: 2rem;
 } 
@@ -152,7 +148,6 @@ export default {
     gap: 2rem;
     background-color: rgb(238, 238, 238);
 }
-
 
 .socials img{
     height: 50px;

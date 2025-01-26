@@ -26,13 +26,6 @@ export default {
 </script>
 
 <style scoped>
-/* .container{
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 100%;
-    gap: 5rem;
-    overflow-x: auto;
-} */
 
 .appointment{
     background-color: white;
@@ -40,8 +33,8 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    gap: 3rem;
-    box-shadow: 2px 2px 2px rgb(197, 197, 197); 
+    gap: 2rem;
+    /* box-shadow: 2px 2px 2px rgb(197, 197, 197);  */
 }
 
 
@@ -66,32 +59,37 @@ export default {
 }
 
 .btn-app{
-    width: 7.5rem;
-    height: 2rem;
     font-family: Poppins, serif;
     border-radius: 0.3rem;
-    padding: 5px 5px 5px 5px;
+   
 }
 
 .btns-app{
-    margin-top: 1rem;
-    margin-bottom: 1rem;
     display: flex;
     justify-content: end;
     gap: 1.5rem;
-    margin-right: 15rem;
+    margin-top: 1rem;
 }
 
 .line-button{
     color: black;
     border: 2px solid black;
-    background-color: none;
+    padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+
+
 }
 
 .black-button{
+    padding: 0.75rem 1.5rem;
     color: rgb(71, 232, 119);
-    border: none;
     background-color: black;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
 }
 
 
@@ -106,7 +104,7 @@ export default {
 }
 
     .pub-mic{
-        margin-top: 2rem;
+        margin-top: 1rem;
         display: block;
         height: 14rem;
     }
@@ -132,12 +130,11 @@ export default {
    }
 
    .btns-app{
-    margin-top: 1rem;
-    margin-bottom: 1rem;
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-right: 0;
+    margin-right: 15rem;
+   
 
 }
 

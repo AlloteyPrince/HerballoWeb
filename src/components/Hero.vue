@@ -103,6 +103,7 @@ header{
   background-image: url(../images/ha7.jpg);
   background-size: cover;                     
   background-position: center;
+  padding: 2rem 0;
    
  }
 
@@ -231,8 +232,9 @@ height: 1.8rem;
 
 
  .hero-section{
-  padding-top: 13rem;
+  padding-top: 17rem;
  }
+ 
 .hero-1{
   color: white;
   font-size: 3rem;
@@ -257,16 +259,6 @@ height: 1.8rem;
   padding-top: 18rem;
  }
 
-  /* .hero-1{
-  color: white;
-  font-size: 3rem;
-  line-height: 0rem;
-  text-align: center;
-  font-weight: bolder;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-*/
 
 .hero-2{
   margin-top: 4rem;
@@ -278,9 +270,6 @@ height: 1.8rem;
 } 
   
 }
-
-
- 
   
 
 </style>
