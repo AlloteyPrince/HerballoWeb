@@ -1,5 +1,6 @@
 <template>
 <hero></hero>
+<services></services>
 <appointment></appointment>
 <shop></shop>
 <about></about>
@@ -18,12 +19,13 @@ import Appointment from "@/components/Appointment.vue"
 import Myfooter from "@/components/Myfooter.vue"
 import Contact from "@/components/Contact.vue"
 import Library from "./components/Library.vue"
+import Services from "./components/Services.vue"
 
 
 export default {
   name: 'App',
   components:{
-    Hero, Appointment, Blogspace,Library, Myfooter, Contact,
+    Hero, Services, Appointment, Blogspace,Library, Myfooter, Contact,
   },
   data(){
     return{}
