@@ -12,21 +12,21 @@
         <div class="service-item">
           <h2>Online Herbal Medicine Consultation</h2>
           <img src="../images/herbal-education.jpg" alt="Service 1 Image" />
-          <p>Some information about the first service and its benefits.</p>
+          <p>Our online consultation sessions are tailored to vast health needs. Whether you're seeking guidance on your herbal medicine journey, advice on using herbal remedies effectively, or personalized health insights, our experts are here to help. Explore the natural path to wellness with confidence and clarity</p>
         </div>
   
         <!-- Service 2 -->
         <div class="service-item">
           <h2>Reach Out Herbal Medicine Education</h2>
           <img src="../images/herbal-education.jpg" alt="Service 2 Image" />
-          <p>Details about the second service and why it's important for you.</p>
+          <p>Through engaging talks, YouTube, TikTok, and more, we bring herbal medicine education to life. We connect, share insights, and inspire healthier lifestyles through interactive platforms and speaking engagements.</p>
         </div>
   
         <!-- Service 3 -->
         <div class="service-item">
           <h2>Product Development and Packaging</h2>
           <img src="../images/herbal-pd.jpg" alt="Service 3 Image" />
-          <p>More information about the third service and how it can help.</p>
+          <p>We specialize in product development, FDA-compliant labeling, and modern product design. By blending innovation with current herbal medicine trends, we help create, brand, and position products to thrive in today's market.</p>
         </div>
       </div>
     </div>
@@ -44,34 +44,37 @@ export default {
   
 <style scoped>
 /* Styles for the Component */
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+}
 
 .service-section {
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
 /* Component Header */
 .component-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  margin-top: 40px;
 }
 
 .component-header h1 {
-  font-size: 2em;
+  font-size: 3em;
   margin: 0;
+  color: rgb(1, 59, 1);
 }
 
 .component-header p {
-  font-size: 1.1em;
+  font-size: 1em;
   color: #666;
 }
 
 /* Flex Container for Services */
 .services-container {
-  /* display: flex;
-  justify-content: space-between;
-  gap: 20px; */
-
   margin: 0 auto;
     padding: 0 2rem;
     height: auto;
@@ -84,9 +87,11 @@ export default {
 
 /* Service Item Styles */
 .service-item {
-  width: 30%;
+  width: 40%;
   text-align: center;
-  border: 5px rgb(11, 77, 27);
+  border: solid 5px rgb(188, 212, 188);
+  border-radius: 15px;
+  padding: 20px; /* Space between the border and the content */
 }
 
 .service-item h2 {
@@ -104,17 +109,25 @@ export default {
 .service-item p {
   font-size: 1em;
   color: #444;
+  font-size: 1rem;
 }
 
 /* Media Query for Mobile View */
 @media (max-width: 768px) {
   .services-container {
     flex-wrap: wrap; /* Allow items to wrap to the next line */
+    padding: 10px;
   }
 
   .service-item {
     width: 100%; /* Make each service take the full width on small screens */
-    margin-bottom: 20px; /* Add space between items */
+    margin-bottom: 3px; /* Add space between items */
   }
+
+  .service-item p {
+  font-size: 1em;
+  color: #000000;
+  font-size: 1rem;
+}
 }
 </style>

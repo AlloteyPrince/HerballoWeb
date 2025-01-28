@@ -57,6 +57,10 @@
  /* background-color: white; */
 }
 
+.text_left h2{
+    font-size: 2em;
+}
+
 
 .img_right{
 flex: 1;

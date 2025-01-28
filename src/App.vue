@@ -1,10 +1,11 @@
 <template>
 <hero></hero>
 <services></services>
-<appointment></appointment>
+<library></library>
+<!-- <appointment></appointment> -->
 <shop></shop>
 <about></about>
-<library></library>
+
 <!-- <jog></jog> -->
 <blogspace id="blog"></blogspace>
 <contact id="contact"></contact>

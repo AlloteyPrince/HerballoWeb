@@ -48,12 +48,6 @@
 
   </div>
   
-  
-  
-  
- 
-  
-  
 
     
 
@@ -227,8 +221,6 @@ export default {
 
  }
 
-
-
  .hero-section{
   padding-top: 17rem;
  }
@@ -254,12 +246,15 @@ export default {
 @media screen and (max-width: 800px){
 
   .hero-section{
-  padding-top: 18rem;
+  padding-top: 23rem;
+  height: 100vh;
  }
 
 
 .hero-2{
   margin-top: 4rem;
+  padding-left: 15px;
+  padding-right: 15px;
   color: white;
   font-size: 1rem;
   line-height: 1.5rem;
