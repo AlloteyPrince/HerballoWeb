@@ -88,24 +88,23 @@ export default {
   align-items: center; */
  }
 
-header{
-  position: fixed;
-  z-index: 999;
-  width: 100%;
-  background-color: white;
-  text-align: center;
+  header{
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+  }
 
-   
- }
-.hero-section{
-  width: 100%;
-  height: 80vh;
-  background-image: url(../images/ha7.jpg);
-  background-size: cover;                     
-  background-position: center;
-  padding: 2rem 0;
-   
- }
+  .hero-section{
+    width: 100%;
+    height: 80vh;
+    background-image: url(../images/ha7.jpg);
+    background-size: cover;                     
+    background-position: center;
+    padding: 2rem 0;
+    
+  }
 
  nav{
   position: absolute;
@@ -120,8 +119,7 @@ header{
   transform: scale(1,0);
   transform-origin: top;
   transition: transform 200ms ease-in-out;
-  
- }
+  }
 
  nav li{
   margin-left: 2em;
@@ -129,7 +127,7 @@ header{
  }
  nav a{
   color: rgb(44, 44, 44);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   opacity: 0;
   transition: opacity 150ms ease-in-out;
@@ -144,10 +142,10 @@ header{
  .nav-toggle:checked ~ nav{
     /* display: block; */
     transform: scale(1,1);
- }
+  }
 
  #menu-box{
-height: 1.8rem;
+ height: 1.8rem;
  }
 
  .nav-toggle{
@@ -172,13 +170,13 @@ height: 1.8rem;
 
  @media screen and (min-width: 800px){
 
-  header{
-  position:unset;
- }
+      header{
+      position:unset;
+    }
 
-  .nav-toggle-label {
-    display: none;
-  }
+    .nav-toggle-label {
+      display: none;
+    }
 
 
     .logo-in-logo-bar{

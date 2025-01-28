@@ -86,6 +86,7 @@ export default {
 .service-item {
   width: 30%;
   text-align: center;
+  border: 5px rgb(11, 77, 27);
 }
 
 .service-item h2 {
