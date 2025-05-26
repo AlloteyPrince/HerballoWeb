@@ -1,14 +1,16 @@
 <template>
-<homepage/>
+  <SplashScreen/>
+  <HomePage/>
 </template>
 
 <script>
-import HomePage from "./pages/HomePage.vue"
+import HomePage from "@/pages/HomePage.vue";
+import SplashScreen from "@/components/SplashScreen.vue";
 
 export default {
   name: 'App',
   components:{
-    HomePage,
+    HomePage,SplashScreen
   },
   data(){
     return{}

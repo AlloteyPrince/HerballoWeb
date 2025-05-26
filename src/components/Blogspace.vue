@@ -1,4 +1,5 @@
 <template>
+    <div>
     <div id="blog" class="container">
 
         <div class="blogvisit">
@@ -63,6 +64,7 @@
         </div>
         
         
+    </div>
     </div>
 </template>
 
