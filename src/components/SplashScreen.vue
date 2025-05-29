@@ -1,17 +1,21 @@
 <template>
   <Transition name="fade-out">
     <div v-if="showSplash" class="splash-screen-container">
-      <img src="@/images/ha-logo-main.jpg" alt="Your Company Logo" class="splash-logo" />
+      <img
+        src="/herballo-logo.png"
+        alt="Your Company Logo"
+        class="splash-logo"
+      />
     </div>
   </Transition>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 
 const showSplash = ref(true); // Control visibility of the splash screen
 const SPLASH_DURATION = 5000; // 5 seconds in milliseconds
-const SEEN_SPLASH_KEY = 'hasSeenSplash'; // Key for sessionStorage
+const SEEN_SPLASH_KEY = "hasSeenSplash"; // Key for sessionStorage
 
 onMounted(() => {
   // Check if user has seen the splash screen in this session
@@ -24,7 +28,7 @@ onMounted(() => {
     // If not seen, show for the full duration
     setTimeout(() => {
       showSplash.value = false;
-      sessionStorage.setItem(SEEN_SPLASH_KEY, 'true'); // Mark as seen for this session
+      sessionStorage.setItem(SEEN_SPLASH_KEY, "true"); // Mark as seen for this session
     }, SPLASH_DURATION);
   }
 });
