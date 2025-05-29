@@ -38,12 +38,12 @@
               >
             </li>
             <li>
-              <router-link class="link" to="/services" @click="closeMobileNav"
+              <router-link class="link" to="/ulearn" @click="closeMobileNav"
                 >ULearn</router-link
               >
             </li>
             <li>
-              <router-link class="link" to="/services" @click="closeMobileNav"
+              <router-link class="link" to="/consultation" @click="closeMobileNav"
                 >Consultation</router-link
               >
             </li>
@@ -105,12 +105,13 @@ export default {
     handleClickOutside(event) {
       // Check if the click occurred outside the mobile navigation menu AND outside the hamburger icon
       const mobileNavMenu = this.$refs.mobileNavMenu;
-      const hamburgerIcon = this.$refs.hamburgerIcon.$el; // Access the actual DOM element for Font Awesome component
+      // Access the actual DOM element for Font Awesome component
+      const hamburgerIcon = this.$refs.hamburgerIcon ? this.$refs.hamburgerIcon.$el : null; 
 
       if (
         mobileNavMenu &&
         !mobileNavMenu.contains(event.target) &&
-        hamburgerIcon &&
+        hamburgerIcon && // Ensure hamburgerIcon exists
         !hamburgerIcon.contains(event.target)
       ) {
         this.closeMobileNav();
