@@ -1,5 +1,6 @@
 <template>
-  <hero></hero>
+  <navigation/>
+  <hero/>
   <services></services>
   <library></library>
   <blogspace id="blog"></blogspace>
@@ -14,6 +15,7 @@ import Myfooter from "@/components/Myfooter.vue";
 import Contact from "@/components/Contact.vue";
 import Library from "@/components/Library.vue";
 import Services from "@/components/Services.vue";
+import Navigation from "@/components/Navigation.vue";
 
 export default {
   name: "HomePage",
@@ -24,6 +26,7 @@ export default {
     Library,
     Myfooter,
     Contact,
+    Navigation
   },
   data() {
     return {};
