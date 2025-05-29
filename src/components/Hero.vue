@@ -1,246 +1,180 @@
 <template>
   <div>
-    <header>
-      <div class="logo-bar">
-        <img class="logo-in-logo-bar" src="../images/ha-logo-main.jpg" alt="" />
-      </div>
-
-      <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Shop</a></li>
-          <li><a href="#">ULearn</a></li>
-          <li><a href="/consultation">Consultation</a></li>
-          <li><a href="#contact">Contact us</a></li>
-        </ul>
-      </nav>
-
-      <label for="nav-toggle" class="nav-toggle-label">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          id="menu-box"
-          class="bi bi-list"
-          viewBox="0 0 16 16"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
-          />
-        </svg>
-      </label>
-    </header>
-
     <div class="hero-section">
-      <p class="hero-1">HƎRBALLO</p>
-
-      <p class="hero-2">
-        Discover remedies, research, and insights into herbal medicine. Start
-        your journey towards natural health today!
-      </p>
+      <div class="hero-content-wrapper">
+        <p class="hero-1 typed-text"></p>
+        <p class="hero-2 static-text">Explore the world of herbs. Start your journey today!</p>
+        <button class="hero-button" @click="navigateToConsultation">Book a Consultation</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Typed from 'typed.js';
+
 export default {
   name: "Hero",
-  props: "",
+  props: {},
   data() {
-    return {};
+    return {
+      typed: null
+    };
   },
+  mounted() {
+    this.initTypedAnimation();
+  },
+  beforeUnmount() {
+    if (this.typed) {
+      this.typed.destroy();
+    }
+  },
+  methods: {
+    initTypedAnimation() {
+      const options = {
+        strings: [
+          "Research Herbal Medicines",
+          "Discover Natural Remedies",
+          "Book Your Consultation Now"
+        ],
+        typeSpeed: 50,
+        backSpeed: 25,
+        startDelay: 500,
+        backDelay: 1500,
+        loop: true,
+        loopCount: Infinity,
+        showCursor: true,
+        cursorChar: '|',
+      };
+      this.typed = new Typed('.typed-text', options);
+    },
+    navigateToConsultation() {
+      this.$router.push('/consultation');
+    }
+  }
 };
 </script>
 
 <style scoped>
-.logo-bar {
-  width: 100%;
-  height: 50px;
-  border-bottom: 1px solid rgb(224, 224, 224);
-}
-
-.logo-in-logo-bar {
-  height: 3rem;
-  display: block;
-  margin-left: 1rem;
-  /* margin-left: auto;
-  margin-right: auto; */
-  /* height: 80%;
-  display: flex;
-  align-items: center; */
-}
-
-header {
-  position: fixed;
-  z-index: 999;
-  width: 100%;
-  background-color: white;
-  text-align: center;
-}
-
 .hero-section {
   width: 100%;
-  height: 80vh;
+  min-height: 80vh;
   background-image: url(../images/ha7.jpg);
   background-size: cover;
   background-position: center;
-  padding: 2rem 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
 }
 
-nav {
-  position: absolute;
-  text-align: left;
-  top: 100%;
-  left: 0;
-  background-color: rgb(255, 255, 255);
-  width: 100%;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  /* display: none; */
-  transform: scale(1, 0);
-  transform-origin: top;
-  transition: transform 200ms ease-in-out;
-}
-
-nav li {
-  margin-left: 2em;
-  line-height: 2rem;
-}
-nav a {
-  color: rgb(44, 44, 44);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: opacity 150ms ease-in-out;
-}
-nav a:hover {
-  color: rgb(183, 179, 179);
-  font-size: 0.8rem;
-  /* text-transform: uppercase; */
-  transition: 0.3s ease;
-}
-
-.nav-toggle:checked ~ nav {
-  /* display: block; */
-  transform: scale(1, 1);
-}
-
-#menu-box {
-  height: 1.8rem;
-}
-
-.nav-toggle {
-  display: none;
-}
-
-.nav-toggle-label {
+.hero-section::before {
+  content: '';
   position: absolute;
   top: 0;
+  left: 0;
   right: 0;
-  margin-right: 1em;
-  height: 100%;
-  display: flex;
-  align-items: center;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
 }
 
-.nav-toggle:checked ~ nav a {
-  opacity: 1;
-  transition: opacity 150ms ease-in-out 150ms;
+.hero-content-wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+  padding-top: 8rem; /* Reduced to account for fixed navigation */
+  padding-bottom: 5rem;
+  text-align: left;
 }
 
-@media screen and (min-width: 800px) {
-  header {
-    position: unset;
-  }
-
-  .nav-toggle-label {
-    display: none;
-  }
-
-  .logo-in-logo-bar {
-    /* grid-column: 2 / 4; */
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  nav {
-    all: unset;
-  }
-
-  nav ul {
-    display: flex;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0);
-    gap: 5rem;
-    margin-right: 7.5rem;
-  }
-
-  nav a {
-    opacity: 1;
-    color: rgb(255, 255, 255);
-    position: absolute;
-    top: 150;
-  }
-
-  nav a::before {
-    content: "";
-    display: block;
-    height: 2px;
-    background: white;
-    position: absolute;
-    top: 2em;
-    left: 0;
-    right: 0;
-    transform: scale(0, 1);
-    /* transform-origin: right; */
-    transition: transform ease-in-out 250ms;
-  }
-
-  nav a:hover::before {
-    transform: scale(1, 1);
-  }
-}
-
-.hero-section {
-  padding-top: 17rem;
+.hero-1, .static-text, .hero-button {
+  position: relative;
+  text-align: left;
 }
 
 .hero-1 {
   color: white;
   font-size: 3rem;
-  line-height: 0rem;
-  text-align: center;
+  line-height: 1.2;
   font-weight: bolder;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.8rem;
+  /* Minimal fixed height - just enough for one line to prevent glitch */
+  height: calc(3rem * 1.3);
+  display: flex;
+  align-items: flex-start;
 }
 
-.hero-2 {
-  margin-top: 2rem;
+.typed-cursor {
   color: white;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  text-align: center;
+  opacity: 1;
+  font-weight: normal;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.static-text {
+  color: white;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 600px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1.5rem;
+  margin-top: 0; /* Ensure no extra top margin */
+}
+
+.hero-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #45a049;
 }
 
 @media screen and (max-width: 800px) {
   .hero-section {
-    padding-top: 23rem;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 0 1rem;
   }
-
-  .hero-2 {
-    margin-top: 4rem;
-    padding-left: 15px;
-    padding-right: 15px;
-    color: white;
+  
+  .hero-content-wrapper {
+    padding-top: 5rem; /* Reduced for mobile to account for fixed navigation */
+    padding-bottom: 3rem;
+  }
+  
+  .hero-1 {
+    font-size: 2rem;
+    margin-bottom: 0.6rem;
+    /* Minimal fixed height for mobile - just enough for one line */
+    height: calc(2rem * 1.3);
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .static-text {
     font-size: 1rem;
-    line-height: 1.5rem;
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+  }
+  
+  .hero-button {
+    padding: 12px 25px;
+    font-size: 1rem;
   }
 }
 </style>

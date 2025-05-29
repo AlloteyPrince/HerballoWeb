@@ -1,19 +1,12 @@
 <template>
-    <div>
-Page setup in progress
-    </div>
+  <UnderConstruction />
 </template>
 
-<script>
-export default {
-    setup () {
-        
+<script setup>
+import UnderConstruction from '@/components/UnderConstruction.vue';
 
-        return {}
-    }
-}
+
+
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
