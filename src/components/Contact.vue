@@ -69,14 +69,14 @@ input{
 
 
 .black-button{
-    color: rgb(71, 232, 119);
-    border: none;
-    background-color: black;
-    width: 7.5rem;
-    height: 2rem;
-    font-family: Poppins, serif;
-    border-radius: 0.3rem;
-    padding: 5px 5px 5px 5px;
+     background-color: #105212;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 @media screen and (max-width: 800px){

@@ -3,7 +3,9 @@
   <navigation/>
   <hero/>
   <services></services>
+  
   <library></library>
+  <FixedBackgroundScroll/>
   <blogspace id="blog"></blogspace>
   <contact id="contact"></contact>
   <myfooter></myfooter>
@@ -17,6 +19,7 @@ import Contact from "@/components/Contact.vue";
 import Library from "@/components/Library.vue";
 import Services from "@/components/Services.vue";
 import Navigation from "@/components/Navigation.vue";
+import FixedBackgroundScroll from "@/components/FixedBackgroundScroll.vue";
 
 export default {
   name: "HomePage",
@@ -27,7 +30,8 @@ export default {
     Library,
     Myfooter,
     Contact,
-    Navigation
+    Navigation,
+    FixedBackgroundScroll
   },
   data() {
     return {};

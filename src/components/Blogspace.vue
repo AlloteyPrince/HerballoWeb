@@ -80,6 +80,7 @@ export default {
 
 <style>
 .container{
+    background-color: white;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -148,7 +149,8 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    background-color: rgb(238, 238, 238);
+    background-color: rgb(239, 245, 224);
+    
 }
 
 .socials img{

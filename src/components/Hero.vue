@@ -33,9 +33,9 @@ export default {
     initTypedAnimation() {
       const options = {
         strings: [
-          "Research Herbal Medicines",
-          "Discover Natural Remedies",
-          "Book Your Consultation Now"
+          "Research herbal medicines",
+          "Discover natural remedies",
+          "Book your consultation now!"
         ],
         typeSpeed: 50,
         backSpeed: 25,
@@ -43,7 +43,7 @@ export default {
         backDelay: 1500,
         loop: true,
         loopCount: Infinity,
-        showCursor: true,
+        showCursor: false,
         cursorChar: '|',
       };
       this.typed = new Typed('.typed-text', options);
@@ -133,7 +133,7 @@ export default {
 }
 
 .hero-button {
-  background-color: #4CAF50;
+  background-color: #105212;
   color: white;
   padding: 15px 30px;
   border: none;

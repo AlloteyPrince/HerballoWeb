@@ -1,97 +1,125 @@
 <template>
-    <div class="main">
-
+  <div class="main">
     <div class="container">
-
-        <div class="text_left">
-            <h2>Knowledge is the best medicine</h2>
-            <p class="text-sub">Explore our extensive library to discover herbs that are touching and transforming lives worldwide. Whether you're seeking healing, inspiration, or knowledge, this is the place to start."</p>
-            <button>Check it here</button>
-        </div>
-
-        <div 
-        class="img_right">
-            <img  class="library-img" src="/src/images/hmkl.jpg" alt="">
-        </div>
-
+      <div class="text_content">
+        <font-awesome-icon :icon="['fas', 'book-open']" class="library-icon" />
+        <h2>Knowledge is the best medicine</h2>
+        <p class="text-sub">Explore our extensive library to discover herbs that are touching and transforming lives worldwide. Whether you're seeking healing, inspiration, or knowledge, this is the place to start.</p>
+        <button>Check it here</button>
+      </div>
     </div>
-
-</div>
+  </div>
 </template>
 
-<script>export default {
-    name: "Library",
-    props:'',
-    data(){
-      return{}
-    }
+<script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+export default {
+  name: "Library",
+  components: {
+    FontAwesomeIcon
+  },
+  props: '',
+  data() {
+    return {}
   }
-  </script>
+}
+</script>
 
 <style scoped>
-*{
-    padding: 0;
+* {
+  padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
-.main{
-    background-color: rgb(218, 214, 214);
-    padding: 2rem 0;
+.main {
+  background: none !important;
+  background-color: transparent !important;
+  padding: 2rem 0;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
 }
 
-.container{
-    margin: 0 auto;
-    padding: 0 2rem;
-    height: auto;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 2rem;
-  
+.container {
+  background: none !important;
+  background-color: transparent !important;
+  margin: 0 auto;
+  padding: 0 2rem;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.text_left {
- flex: 1;
- /* background-color: white; */
+.text_content {
+  background: none !important;
+  background-color: transparent !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: white;
 }
 
-.text_left h2{
-    font-size: 2em;
+.library-icon {
+  font-size: 100px;
+  color: white;
+  margin-bottom: 20px;
 }
 
-
-.img_right{
-flex: 1;
-display: flex;
-justify-content: center;
-align-items: center;
+.text_content h2 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
 }
 
-.library-img{
-   max-width: 100%;
-   height: auto;
-}
-
-.text-sub{
-    margin-top: 1rem;
-    line-height: 1.6;
-}
-
-button{
+.text-sub {
   margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #007bff;
-  color: #fff;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+button {
+  background-color: #105212;
+  color: white;
+  padding: 15px 30px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 1.1rem;
   cursor: pointer;
-  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #0d420f;
+  transform: translateY(-2px);
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .library-icon {
+    font-size: 80px;
+    margin-bottom: 15px;
+  }
+
+  .text_content h2 {
+    font-size: 2em;
+  }
+
+  .text-sub {
+    font-size: 0.95em;
+    margin-bottom: 15px;
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+}
 </style>

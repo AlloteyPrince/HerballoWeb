@@ -5,42 +5,71 @@
     <div v-else class="main-app-content">
       <router-view />
     </div>
+
+    <HerbPopUp
+      v-if="showPopup"
+      @close="closePopup"
+    />
   </div>
 </template>
 
 <script>
 import SplashScreen from "@/components/SplashScreen.vue";
+import HerbPopUp from './components/HerbPopUp.vue'; // Import the HerbPopUp component
 
 export default {
-  name: 'App',
-  components: { SplashScreen },
+  name: "App",
+  components: {
+    SplashScreen,
+    HerbPopUp
+  },
   data() {
     return {
-      // Initialize showSplash based on sessionStorage
-      // It will be true if 'splashShown' is NOT in sessionStorage,
-      // meaning it's the first load in this session.
-      showSplash: !sessionStorage.getItem('splashShown')
+      showSplash: !sessionStorage.getItem("splashShown"),
+      showPopup: false, // Data property for the pop-up visibility
+      // Removed popupContent and herbData from here, they are now in HerbPopUp.vue
     };
   },
   mounted() {
-    // If the splash screen is set to show, hide it after a delay
+    // Logic for SplashScreen
     if (this.showSplash) {
       setTimeout(() => {
-        this.showSplash = false; // Hide the splash screen
-        // Mark that the splash screen has been shown in this session
-        sessionStorage.setItem('splashShown', 'true');
-      }, 3000); // Adjust this duration (in milliseconds) as needed
-                // This is the time your splash screen animation should run
+        this.showSplash = false;
+        sessionStorage.setItem("splashShown", "true");
+        // After splash screen hides, initiate the pop-up logic
+        this.initiatePopup();
+      }, 3000); // SplashScreen duration
+    } else {
+      // If splash screen is not shown (e.g., user revisited), initiate pop-up immediately
+      this.initiatePopup();
     }
-    // If showSplash is already false (because 'splashShown' was found in sessionStorage),
-    // then no action is needed, and the main content will render immediately.
   },
-  methods: {}
+  methods: {
+    initiatePopup() {
+      // Check if the pop-up has already been shown in this browser/device
+      const hasPopupBeenShown = localStorage.getItem('herbPopupShown');
+
+      if (!hasPopupBeenShown) {
+        // If not shown, set a timer to display it after 30 seconds (30,000 milliseconds)
+        setTimeout(() => {
+          this.showPopup = true; // Show the pop-up
+
+          // Set a flag in localStorage so it doesn't appear again on this device/browser
+          localStorage.setItem('herbPopupShown', 'true');
+        }, 30000); // Delay for pop-up after main content loads
+      }
+    },
+    // Method to close the pop-up when the close button is clicked
+    closePopup() {
+      this.showPopup = false;
+    },
+    // Removed fetchRandomHerbData() from here, it is now in HerbPopUp.vue
+  },
 };
 </script>
 
 <style>
-/* Global styles for your entire application */
+/* Global styles for the entire application */
 * {
   margin: 0;
   padding: 0;
@@ -51,13 +80,12 @@ export default {
 }
 
 body {
-  font-family: 'Poppins', sans-serif; /* Ensure Poppins is correctly imported/linked in your project */
+  font-family: "Poppins", sans-serif; /* Using Poppins as per your existing body font */
 }
 
-/* Optional: Add some basic styling for your main app content if needed */
 .main-app-content {
-  min-height: 100vh; /* Ensure the main content takes full height after splash screen */
-  display: flex; /* Use flexbox for your main layout */
-  flex-direction: column; /* Stack children vertically */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>
