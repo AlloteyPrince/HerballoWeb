@@ -3,22 +3,26 @@
     <div class="hero-section">
       <div class="hero-content-wrapper">
         <p class="hero-1 typed-text"></p>
-        <p class="hero-2 static-text">Explore the world of herbs. Start your journey today!</p>
-        <button class="hero-button" @click="navigateToConsultation">Book a Consultation</button>
+        <p class="hero-2 static-text">
+          Explore the world of herbs. Start your journey today!
+        </p>
+        <button class="hero-button" @click="navigateToConsultation">
+          Book a Consultation
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Typed from 'typed.js';
+import Typed from "typed.js";
 
 export default {
   name: "Hero",
   props: {},
   data() {
     return {
-      typed: null
+      typed: null,
     };
   },
   mounted() {
@@ -35,7 +39,7 @@ export default {
         strings: [
           "Research herbal medicines",
           "Discover natural remedies",
-          "Book your consultation now!"
+          "Book your consultation now!",
         ],
         typeSpeed: 50,
         backSpeed: 25,
@@ -43,15 +47,15 @@ export default {
         backDelay: 1500,
         loop: true,
         loopCount: Infinity,
-        showCursor: false,
-        cursorChar: '|',
+        showCursor: true,
+        cursorChar: "|",
       };
-      this.typed = new Typed('.typed-text', options);
+      this.typed = new Typed(".typed-text", options);
     },
     navigateToConsultation() {
-      this.$router.push('/consultation');
-    }
-  }
+      this.$router.push("/consultation");
+    },
+  },
 };
 </script>
 
@@ -70,7 +74,7 @@ export default {
 }
 
 .hero-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -91,7 +95,9 @@ export default {
   text-align: left;
 }
 
-.hero-1, .static-text, .hero-button {
+.hero-1,
+.static-text,
+.hero-button {
   position: relative;
   text-align: left;
 }
@@ -117,9 +123,15 @@ export default {
 }
 
 @keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .static-text {
@@ -152,12 +164,12 @@ export default {
     min-height: 100vh;
     padding: 0 1rem;
   }
-  
+
   .hero-content-wrapper {
     padding-top: 5rem; /* Reduced for mobile to account for fixed navigation */
     padding-bottom: 3rem;
   }
-  
+
   .hero-1 {
     font-size: 2rem;
     margin-bottom: 0.6rem;
@@ -166,12 +178,12 @@ export default {
     display: flex;
     align-items: flex-start;
   }
-  
+
   .static-text {
     font-size: 1rem;
     margin-bottom: 1rem;
   }
-  
+
   .hero-button {
     padding: 12px 25px;
     font-size: 1rem;
