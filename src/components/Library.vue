@@ -2,10 +2,10 @@
   <div class="main">
     <div class="container">
       <div class="text_content">
-        <font-awesome-icon :icon="['fas', 'book-open']" class="library-icon" />
+        <font-awesome-icon :icon="['fas', 'book-reader']" class="library-icon" />
         <h2>Knowledge is the best medicine</h2>
         <p class="text-sub">Explore our extensive library to discover herbs that are touching and transforming lives worldwide. Whether you're seeking healing, inspiration, or knowledge, this is the place to start.</p>
-        <button>Check it here</button>
+        <button @click="navigateToLearn">Check it here</button>
       </div>
     </div>
   </div>
@@ -22,6 +22,11 @@ export default {
   props: '',
   data() {
     return {}
+  },
+  methods: {
+    navigateToLearn() {
+      this.$router.push('/ulearn');
+    }
   }
 }
 </script>

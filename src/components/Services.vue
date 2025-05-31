@@ -8,25 +8,66 @@
     <div class="services-container">
       <div class="service-item">
         <h2>Online Herbal Medicine Consultation</h2>
-        <img src="../images/herbal-education.jpg" alt="Service 1 Image" />
-        <p>Our online consultation sessions are tailored to vast health needs. Whether you're seeking guidance on your herbal medicine journey, advice on using herbal remedies effectively, or personalized health insights, our experts are here to help. 
-          <br>
-          <span class="view-more" @click="openDetailPopup('Online Herbal Medicine Consultation', 'Our online consultation sessions are tailored to vast health needs. Whether you\'re seeking guidance on your herbal medicine journey, advice on using herbal remedies effectively, or personalized health insights, our experts are here to help. Explore the natural path to wellness with confidence and clarity')">...View More</span></p>
+        <img src="../images/telemed.jpg" alt="Service 1 Image" />
+        <p>
+          Our online consultation sessions are tailored to vast health needs.
+          Whether you're seeking guidance on your herbal medicine journey,
+          advice on using herbal remedies effectively, or personalized health
+          insights, our experts are here to help.
+          <br />
+          <span
+            class="view-more"
+            @click="
+              openDetailPopup(
+                'Online Herbal Medicine Consultation',
+                'Our online consultation sessions are tailored to vast health needs. Whether you\'re seeking guidance on your herbal medicine journey, advice on using herbal remedies effectively, or personalized health insights, our experts are here to help. Explore the natural path to wellness with confidence and clarity'
+              )
+            "
+            >...View More</span
+          >
+        </p>
       </div>
 
       <div class="service-item">
         <h2>Reach Out Herbal Medicine Education</h2>
         <img src="../images/herbal-education.jpg" alt="Service 2 Image" />
-        <p>Through engaging talks, YouTube, TikTok, and more, we bring herbal medicine education to life. We connect, share insights, and inspire healthier lifestyles through interactive platforms and speaking engagements. 
-          <br><span class="view-more" @click="openDetailPopup('Reach Out Herbal Medicine Education', 'Through engaging talks, YouTube, TikTok, and more, we bring herbal medicine education to life. We connect, share insights, and inspire healthier lifestyles through interactive platforms and speaking engagements. Our comprehensive approach covers everything from basic herbal knowledge to advanced applications, ensuring you have the tools to make informed decisions about your health.')">...View More</span></p>
+        <p>
+          Through engaging talks, YouTube, TikTok, and more, we bring herbal
+          medicine education to life. We connect, share insights, and inspire
+          healthier lifestyles through interactive platforms and speaking
+          engagements. <br /><span
+            class="view-more"
+            @click="
+              openDetailPopup(
+                'Reach Out Herbal Medicine Education',
+                'Through engaging talks, YouTube, TikTok, and more, we bring herbal medicine education to life. We connect, share insights, and inspire healthier lifestyles through interactive platforms and speaking engagements. Our comprehensive approach covers everything from basic herbal knowledge to advanced applications, ensuring you have the tools to make informed decisions about your health.'
+              )
+            "
+            >...View More</span
+          >
+        </p>
       </div>
 
       <div class="service-item">
         <h2>Product Development and Packaging</h2>
         <img src="../images/herbal-pd.jpg" alt="Service 3 Image" />
-        <p>We specialize in product development, FDA-compliant labeling, and modern product design. By blending innovation with current herbal medicine trends, we help create, brand, and position products to thrive in today's.
-          <br>
-          <span class="view-more" @click="openDetailPopup('Product Development and Packaging', 'We specialize in product development, FDA-compliant labeling, and modern product design. By blending innovation with current herbal medicine trends, we help create, brand, and position products to thrive in today\'s market. Our expertise ensures your products are not only effective but also beautifully presented and compliant with all regulations.')">...View More</span></p>
+        <p>
+          We specialize in product development, FDA-compliant labeling, and
+          modern product design. By blending innovation with current herbal
+          medicine trends, we help create, brand, and position products to
+          thrive in today's.
+          <br />
+          <span
+            class="view-more"
+            @click="
+              openDetailPopup(
+                'Product Development and Packaging',
+                'We specialize in product development, FDA-compliant labeling, and modern product design. By blending innovation with current herbal medicine trends, we help create, brand, and position products to thrive in today\'s market. Our expertise ensures your products are not only effective but also beautifully presented and compliant with all regulations.'
+              )
+            "
+            >...View More</span
+          >
+        </p>
       </div>
     </div>
 
@@ -40,7 +81,7 @@
 </template>
 
 <script>
-import ServiceDetailPopup from './ServiceDetailPopup.vue'; // Ensure this path is correct
+import ServiceDetailPopup from "./ServiceDetailPopup.vue"; // Ensure this path is correct
 
 export default {
   name: "Services",
@@ -51,8 +92,8 @@ export default {
     return {
       showDetailPopup: false,
       currentServiceDetail: {
-        title: '',
-        description: '',
+        title: "",
+        description: "",
       },
     };
   },
@@ -79,8 +120,7 @@ export default {
 .service-section {
   padding: 20px;
   background-color: white;
-   padding-bottom: 80px;
-  
+  padding-bottom: 80px;
 }
 
 /* Component Header */
