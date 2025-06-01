@@ -7,7 +7,7 @@
   <library></library>
   <FixedBackgroundScroll/>
   <blogspace id="blog"></blogspace>
-  <contact id="contact"></contact>
+  <!-- <contact id="contact"></contact> -->
   <myfooter></myfooter>
 </template>
 
