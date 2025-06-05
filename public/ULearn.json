@@ -1,0 +1,169 @@
+[
+  {
+    "id": "orange_citrus_sinensis",
+    "commonName": ["Orange, Akutuo, Ankaa"],
+    "scientificName": "Citrus sinensis",
+    "imageUrl": [
+      "/plantImages/orange/orange1.jpg,/plantImages/orange/orange1.jpg"
+    ],
+    "tagline": "A vibrant citrus fruit packed with Vitamin C, widely known for its immune-boosting and antioxidant properties.",
+    "primaryHealthBenefits": [
+      "Immune System Support (high Vitamin C)",
+      "Potent Antioxidant (Flavonoids, Carotenoids)",
+      "Aids Digestive Health (fiber)",
+      "Promotes Skin Health"
+    ],
+    "keyActiveCompounds": [
+      "Vitamin C",
+      "Flavonoids (e.g., Hesperidin)",
+      "Carotenoids"
+    ],
+    "commonPreparations": [
+      "Fresh fruit",
+      "Juice",
+      "Zest (in cooking)",
+      "Essential oil (topical/aromatic)"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "High consumption may cause digestive upset or heartburn in some individuals.",
+      "Orange peel oil may cause mild photosensitivity when applied topically followed by direct sun exposure."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/orange-citrus-sinensis"
+  },
+
+  {
+    "id": "lemon_citrus_limon",
+    "commonName": "Lemon, Limón",
+    "scientificName": "Citrus limon",
+    "imageUrl": "/plantImages/lemon/lemon1.jpg,/plantImages/lemon/lemon1.jpg",
+    "tagline": "A tangy citrus fruit celebrated for its high Vitamin C content and versatile culinary uses.",
+    "primaryHealthBenefits": [
+      "Immune System Support (high Vitamin C)",
+      "Antioxidant Properties (Flavonoids)",
+      "Aids Digestion (citric acid)",
+      "Supports Skin Health"
+    ],
+    "keyActiveCompounds": [
+      "Vitamin C",
+      "Flavonoids (e.g., Hesperidin)",
+      "Citric Acid"
+    ],
+    "commonPreparations": [
+      "Fresh fruit",
+      "Juice",
+      "Zest (in cooking)",
+      "Essential oil (topical/aromatic)"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "High acidity may cause digestive upset or heartburn in some individuals.",
+      "Lemon peel oil may cause mild photosensitivity when applied topically followed by direct sun exposure."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/lemon-citrus-limon"
+  },
+
+  {
+    "id": "tomato_solanum_lycopersicum",
+    "commonName": "Tomato",
+    "scientificName": "Solanum lycopersicum",
+    "imageUrl": "/images/tomato_hero.jpg",
+    "tagline": "A versatile fruit (botanically) celebrated for its high antioxidant content, especially lycopene, supporting heart and skin health.",
+    "primaryHealthBenefits": [
+      "Heart Health (Lycopene, Potassium)",
+      "Powerful Antioxidant (Lycopene, Vitamin C)",
+      "Supports Skin Protection (from sun damage)",
+      "Anti-cancer Potential"
+    ],
+    "keyActiveCompounds": [
+      "Lycopene",
+      "Vitamin C",
+      "Potassium",
+      "Vitamin K",
+      "Folate"
+    ],
+    "commonPreparations": [
+      "Raw (salads)",
+      "Cooked (sauces, stews)",
+      "Juiced",
+      "Dried"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "Raw leaves and stems contain solanine, which can be toxic if consumed in large amounts.",
+      "Allergic reactions are possible in sensitive individuals (e.g., oral allergy syndrome)."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/tomato-solanum-lycopersicum"
+  },
+
+  {
+    "id": "pawpaw_carica_papaya",
+    "commonName": "Pawpaw",
+    "scientificName": "Carica papaya",
+    "imageUrl": "/images/pawpaw_hero.jpg",
+    "tagline": "A tropical fruit renowned for its digestive enzymes, aiding digestion, reducing inflammation, and boosting immunity.",
+    "primaryHealthBenefits": [
+      "Digestive Aid (Papain, Chymopapain enzymes)",
+      "Anti-inflammatory Properties",
+      "Immune System Support (Vitamin C)",
+      "Antioxidant Power (Vitamin A, Vitamin C)"
+    ],
+    "keyActiveCompounds": [
+      "Papain",
+      "Chymopapain",
+      "Vitamin C",
+      "Vitamin A (beta-carotene)",
+      "Folate"
+    ],
+    "commonPreparations": [
+      "Fresh fruit (ripe)",
+      "Green/unripe (cooked like a vegetable)",
+      "Juice",
+      "Enzyme supplements"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption when ripe.",
+      "Unripe pawpaw contains latex that can cause allergic reactions in sensitive individuals (e.g., latex allergy).",
+      "Pregnant women are generally advised to avoid unripe pawpaw due to papain's potential to induce uterine contractions.",
+      "Excessive consumption may cause digestive upset or laxative effects."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/pawpaw-carica-papaya"
+  },
+
+  {
+    "id": "onion_allium_cepa",
+    "commonName": "Onion, Bulb Onion",
+    "scientificName": "Allium cepa",
+    "imageUrl": "/images/onion_hero.jpg",
+    "tagline": "A staple vegetable known for its anti-inflammatory and antioxidant properties, supporting heart health and immune function.",
+    "primaryHealthBenefits": [
+      "Heart Health (Quercetin, Sulfur compounds)",
+      "Anti-inflammatory Properties",
+      "Antioxidant Power (Vitamin C, Flavonoids)",
+      "Supports Immune Function"
+    ],
+    "keyActiveCompounds": [
+      "Quercetin",
+      "Sulfur compounds (e.g., Allicin)",
+      "Vitamin C",
+      "B Vitamins (e.g., B6, Folate)"
+    ],
+    "commonPreparations": [
+      "Raw (salads)",
+      "Cooked (soups, stews, sautés)",
+      "Pickled",
+      "Powdered"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "May cause digestive upset or heartburn in some individuals.",
+      "Onion skin may cause allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/onion-allium-cepa"
+  }
+]
