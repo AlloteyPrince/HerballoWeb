@@ -4,8 +4,9 @@
       <div class="summary-header">
         <h1>Booking Summary</h1>
         <p class="summary-intro">
-          Please review your consultation booking details below. If everything looks correct, 
-          proceed to payment. Otherwise, you can go back to make changes.
+          Please review your consultation booking details below. If everything
+          looks correct, proceed to payment. Otherwise, you can go back to make
+          changes.
         </p>
       </div>
 
@@ -53,11 +54,24 @@
           <h2>Appointment Schedule</h2>
           <div class="schedule-highlight">
             <div class="schedule-item">
-              <svg class="schedule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
-                <line x1="16" y1="2" x2="16" y2="6" stroke-width="2"/>
-                <line x1="8" y1="2" x2="8" y2="6" stroke-width="2"/>
-                <line x1="3" y1="10" x2="21" y2="10" stroke-width="2"/>
+              <svg
+                class="schedule-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <rect
+                  x="3"
+                  y="4"
+                  width="18"
+                  height="18"
+                  rx="2"
+                  ry="2"
+                  stroke-width="2"
+                />
+                <line x1="16" y1="2" x2="16" y2="6" stroke-width="2" />
+                <line x1="8" y1="2" x2="8" y2="6" stroke-width="2" />
+                <line x1="3" y1="10" x2="21" y2="10" stroke-width="2" />
               </svg>
               <div>
                 <strong>Date:</strong>
@@ -65,9 +79,14 @@
               </div>
             </div>
             <div class="schedule-item">
-              <svg class="schedule-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                <polyline points="12,6 12,12 16,14" stroke-width="2"/>
+              <svg
+                class="schedule-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <circle cx="12" cy="12" r="10" stroke-width="2" />
+                <polyline points="12,6 12,12 16,14" stroke-width="2" />
               </svg>
               <div>
                 <strong>Time:</strong>
@@ -78,21 +97,36 @@
         </div>
 
         <!-- Documents -->
-        <div class="summary-section" v-if="bookingData.uploadedFiles && bookingData.uploadedFiles.length > 0">
+        <div
+          class="summary-section"
+          v-if="
+            bookingData.uploadedFiles && bookingData.uploadedFiles.length > 0
+          "
+        >
           <h2>Uploaded Documents</h2>
           <div class="documents-list">
-            <div 
-              v-for="(file, index) in bookingData.uploadedFiles" 
-              :key="index" 
+            <div
+              v-for="(file, index) in bookingData.uploadedFiles"
+              :key="index"
               class="document-item"
             >
-              <svg class="document-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-width="2"/>
-                <polyline points="14,2 14,8 20,8" stroke-width="2"/>
+              <svg
+                class="document-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                  stroke-width="2"
+                />
+                <polyline points="14,2 14,8 20,8" stroke-width="2" />
               </svg>
               <div class="document-info">
                 <span class="document-name">{{ file.name }}</span>
-                <span class="document-size">({{ formatFileSize(file.size) }})</span>
+                <span class="document-size"
+                  >({{ formatFileSize(file.size) }})</span
+                >
               </div>
             </div>
           </div>
@@ -104,7 +138,7 @@
           <div class="summary-grid">
             <div class="summary-item">
               <strong>First-time consultation:</strong>
-              <span>{{ bookingData.isFirstTime ? 'Yes' : 'No' }}</span>
+              <span>{{ bookingData.isFirstTime ? "Yes" : "No" }}</span>
             </div>
             <div class="summary-item">
               <strong>How did you hear about us:</strong>
@@ -118,7 +152,7 @@
         </div>
 
         <!-- Important Notice -->
-        <div class="important-notice">
+        <!-- <div class="important-notice">
           <h3>Important Reminders</h3>
           <ul>
             <li>Session duration is limited to 1 hour maximum</li>
@@ -126,7 +160,7 @@
             <li>You will receive a confirmation email within 24 hours</li>
             <li>Please join the call 5 minutes before your scheduled time</li>
           </ul>
-        </div>
+        </div> -->
       </div>
 
       <div v-else class="no-data">
@@ -136,17 +170,32 @@
       <!-- Action Buttons -->
       <div class="summary-actions">
         <button type="button" @click="goBackToBooking" class="btn-secondary">
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M19 12H5" stroke-width="2"/>
-            <path d="M12 19l-7-7 7-7" stroke-width="2"/>
+          <svg
+            class="btn-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M19 12H5" stroke-width="2" />
+            <path d="M12 19l-7-7 7-7" stroke-width="2" />
           </svg>
           Back to Edit Booking
         </button>
-        <button type="button" @click="proceedToPayment" class="btn-primary" :disabled="!bookingData">
+        <button
+          type="button"
+          @click="proceedToPayment"
+          class="btn-primary"
+          :disabled="!bookingData"
+        >
           Proceed to Payment
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M5 12h14" stroke-width="2"/>
-            <path d="M12 5l7 7-7 7" stroke-width="2"/>
+          <svg
+            class="btn-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M5 12h14" stroke-width="2" />
+            <path d="M12 5l7 7-7 7" stroke-width="2" />
           </svg>
         </button>
       </div>
@@ -168,139 +217,95 @@ export default {
   methods: {
     loadBookingData() {
       try {
-        const storedData = sessionStorage.getItem('bookingData');
+        const storedData = sessionStorage.getItem("bookingData");
         if (storedData) {
           this.bookingData = JSON.parse(storedData);
         } else {
           // If no data found, redirect back to booking form
-          this.$router.push('/consultation/booking');
+          this.$router.push("/consultation/booking");
         }
       } catch (error) {
-        console.error('Error loading booking data:', error);
-        this.$router.push('/consultation/booking');
+        console.error("Error loading booking data:", error);
+        this.$router.push("/consultation/booking");
       }
     },
-    
+
     getPurposeLabel(purpose) {
       const purposes = {
-        'general': 'General Enquiries About Herbal Medicines',
-        'research': 'Research Collaborations',
-        'clinical': 'Clinical / Health Consultations'
+        general: "General Enquiries About Herbal Medicines",
+        research: "Research Collaborations",
+        clinical: "Clinical / Health Consultations",
       };
       return purposes[purpose] || purpose;
     },
 
     getCallTypeLabel(callType) {
       const types = {
-        'voice': 'Voice Call (Audio only)',
-        'video': 'Video Call'
+        voice: "Voice Call (Audio only)",
+        video: "Video Call",
       };
       return types[callType] || callType;
     },
 
     getHearAboutLabel(hearAbout) {
       const sources = {
-        'google': 'Google Search',
-        'social-media': 'Social Media (Facebook, Instagram, Twitter)',
-        'referral': 'Referral from Friend/Family',
-        'healthcare-provider': 'Healthcare Provider',
-        'online-article': 'Online Article/Blog',
-        'advertisement': 'Advertisement',
-        'conference': 'Conference/Event',
-        'university': 'University/Academic Institution',
-        'other': 'Other'
+        google: "Google Search",
+        "social-media": "Social Media (Facebook, Instagram, Twitter)",
+        referral: "Referral from Friend/Family",
+        "healthcare-provider": "Healthcare Provider",
+        "online-article": "Online Article/Blog",
+        advertisement: "Advertisement",
+        conference: "Conference/Event",
+        university: "University/Academic Institution",
+        other: "Other",
       };
       return sources[hearAbout] || hearAbout;
     },
 
     formatDate(dateString) {
-      if (!dateString) return '';
+      if (!dateString) return "";
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      return date.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     },
 
     formatTime(timeString) {
-      if (!timeString) return '';
-      const [startTime, endTime] = timeString.split('-');
-      return `${this.convertTo12Hour(startTime)} - ${this.convertTo12Hour(endTime)}`;
+      if (!timeString) return "";
+      const [startTime, endTime] = timeString.split("-");
+      return `${this.convertTo12Hour(startTime)} - ${this.convertTo12Hour(
+        endTime
+      )}`;
     },
 
     convertTo12Hour(time24) {
-      const [hours, minutes] = time24.split(':');
+      const [hours, minutes] = time24.split(":");
       const hour12 = hours % 12 || 12;
-      const ampm = hours < 12 ? 'AM' : 'PM';
+      const ampm = hours < 12 ? "AM" : "PM";
       return `${hour12}:${minutes} ${ampm}`;
     },
 
     formatFileSize(bytes) {
-      if (bytes === 0) return '0 Bytes';
+      if (bytes === 0) return "0 Bytes";
       const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const sizes = ["Bytes", "KB", "MB", "GB"];
       const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     },
 
     goBackToBooking() {
       // Keep the data in session storage so user can continue editing
-      this.$router.push('/consultation/booking');
+      this.$router.push("/consultation/booking");
     },
 
-    async proceedToPayment() {
+    proceedToPayment() {
       if (!this.bookingData) return;
 
-      try {
-        // Now submit the actual booking data to the server
-        const userTimezone = this.getUserTimezone();
-        const bookingData = {
-          ...this.bookingData,
-          userTimezone: userTimezone.timezone,
-          userOffsetFromGMT: userTimezone.offsetFromGMT,
-          submittedAt: new Date().toISOString(),
-        };
-
-        // Create FormData for file upload
-        const formData = new FormData();
-        Object.keys(bookingData).forEach((key) => {
-          if (key !== 'uploadedFiles') {
-            formData.append(key, bookingData[key]);
-          }
-        });
-
-        // Add uploaded files (you may need to handle this differently based on your file storage)
-        // For now, we'll just send the file information
-        if (this.bookingData.uploadedFiles) {
-          formData.append('fileInfo', JSON.stringify(this.bookingData.uploadedFiles));
-        }
-
-        // Submit booking
-        const response = await fetch("/api/bookings", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (response.ok) {
-          // Clear session storage after successful submission
-          sessionStorage.removeItem('bookingData');
-          sessionStorage.removeItem('bookingFiles');
-          
-          alert(
-            "Consultation booking submitted successfully! We will contact you soon to confirm your appointment."
-          );
-          this.$router.push("/consultation/payment");
-        } else {
-          throw new Error("Booking submission failed");
-        }
-      } catch (error) {
-        console.error("Booking submission error:", error);
-        alert(
-          "There was an error submitting your booking. Please try again or contact us directly."
-        );
-      }
+      // Navigate to payment page
+      this.$router.push("/consultation/payment");
     },
 
     getUserTimezone() {

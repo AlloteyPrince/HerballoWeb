@@ -7,7 +7,9 @@
         herbal medicine experts.
       </p>
 
-      <form @submit.prevent="submitBooking" class="booking-form">
+      <pre>{{ form }}</pre>
+
+      <form @submit.prevent="submitBookingInfo" class="booking-form" action="https://formsubmit.co/info@herballo.co" method="POST">
         <!-- Personal Information -->
         <div class="form-section">
           <h2>Personal Information</h2>
@@ -44,7 +46,8 @@
               placeholder="Enter your phone number"
             />
             <p class="phone-notice">
-              <strong>Note:</strong> We may contact you via WhatsApp or schedule a video call based on your preference and availability.
+              <strong>Note:</strong> We may contact you via WhatsApp or schedule
+              a video call based on your preference and availability.
             </p>
           </div>
         </div>
@@ -57,7 +60,9 @@
             <label for="purpose">Purpose of Consultation *</label>
             <select id="purpose" v-model="form.purpose" required>
               <option value="">Select consultation type</option>
-              <option value="general">General Enquiries About Herbal Medicines</option>
+              <option value="general">
+                General Enquiries About Herbal Medicines
+              </option>
               <option value="research">Research Collaborations</option>
               <option value="clinical">Clinical / Health Consultations</option>
             </select>
@@ -91,13 +96,23 @@
                 style="display: none"
               />
               <div class="upload-content">
-                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke-width="2" />
+                <svg
+                  class="upload-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                    stroke-width="2"
+                  />
                   <polyline points="7,10 12,15 17,10" stroke-width="2" />
                   <line x1="12" y1="15" x2="12" y2="3" stroke-width="2" />
                 </svg>
                 <p>Click to upload files or drag and drop</p>
-                <p class="upload-hint">PDF, DOC, DOCX, JPG, PNG, TXT (Max 10MB each)</p>
+                <p class="upload-hint">
+                  PDF, DOC, DOCX, JPG, PNG, TXT (Max 10MB each)
+                </p>
               </div>
             </div>
 
@@ -130,30 +145,62 @@
             <h3>Important Information</h3>
             <ul class="notice-list">
               <li class="notice-item">
-                <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <svg
+                  class="notice-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
                   <circle cx="12" cy="12" r="10" stroke-width="2" />
                   <path d="M12 6v6l4 2" stroke-width="2" />
                 </svg>
-                <span><strong>Session Duration:</strong> All consultation sessions are limited to a maximum of 1 hour</span>
+                <span
+                  ><strong>Session Duration:</strong> All consultation sessions
+                  are limited to a maximum of 1 hour</span
+                >
               </li>
               <li class="notice-item">
-                <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <svg
+                  class="notice-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
                   <circle cx="12" cy="12" r="10" stroke-width="2" />
                   <polyline points="12,6 12,12 16,14" stroke-width="2" />
                 </svg>
-                <span><strong>Timezone:</strong> All times are in Ghana Standard Time (GMT)</span>
+                <span
+                  ><strong>Timezone:</strong> All times are in Ghana Standard
+                  Time (GMT)</span
+                >
               </li>
               <li class="notice-item">
-                <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <svg
+                  class="notice-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
                   <circle cx="12" cy="12" r="10" stroke-width="2" />
                   <path d="m9 12 2 2 4-4" stroke-width="2" />
                 </svg>
-                <span><strong>Advance Booking Required:</strong> Appointments must be booked at least 24 hours in advance</span>
+                <span
+                  ><strong>Advance Booking Required:</strong> Appointments must
+                  be booked at least 24 hours in advance</span
+                >
               </li>
             </ul>
           </div>
 
-          <TimeDate />
+          <TimeDate
+            :date="form.date"
+            :time="form.time"
+            :available-slots="availableSlots"
+            :loading="loadingSlots"
+            :min-date="minDate"
+            @update:date="onDateChange"
+            @update:time="onTimeChange"
+          />
         </div>
 
         <!-- Additional Information -->
@@ -178,7 +225,9 @@
           </div>
 
           <div class="form-group">
-            <label for="specialRequests">Special Requests or Accessibility Needs</label>
+            <label for="specialRequests"
+              >Special Requests or Accessibility Needs</label
+            >
             <textarea
               id="specialRequests"
               v-model="form.specialRequests"
@@ -193,13 +242,17 @@
             <select id="hearAbout" v-model="form.hearAbout" required>
               <option value="">Select an option</option>
               <option value="google">Google Search</option>
-              <option value="social-media">Social Media (Facebook, Instagram, Twitter)</option>
+              <option value="social-media">
+                Social Media (Facebook, Instagram, Twitter)
+              </option>
               <option value="referral">Referral from Friend/Family</option>
               <option value="healthcare-provider">Healthcare Provider</option>
               <option value="online-article">Online Article/Blog</option>
               <option value="advertisement">Advertisement</option>
               <option value="conference">Conference/Event</option>
-              <option value="university">University/Academic Institution</option>
+              <option value="university">
+                University/Academic Institution
+              </option>
               <option value="other">Other</option>
             </select>
           </div>
@@ -211,7 +264,7 @@
             Back to Consent
           </button>
           <button type="submit" class="btn-primary" :disabled="!isFormValid">
-            Book Consultation
+            Continue
           </button>
         </div>
       </form>
@@ -219,13 +272,12 @@
   </div>
 </template>
 
-
 <script>
 import TimeDate from "@/components/TimeDate.vue";
 
 export default {
   name: "BookingForm",
-  components: {TimeDate},
+  components: { TimeDate },
   data() {
     return {
       form: {
@@ -298,15 +350,27 @@ export default {
     },
   },
   methods: {
+    onDateChange(date) {
+      this.form.date = date;
+      this.fetchAvailableSlots();
+      this.form.time = ""; // Reset time when date changes
+    },
+    onTimeChange(time) {
+      this.form.time = time;
+    },
+
     getTimeSlotsForDate(date) {
       const selectedDate = new Date(date);
       const dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-      
-      if (dayOfWeek === 0) { // Sunday
+
+      if (dayOfWeek === 0) {
+        // Sunday
         return this.sundayTimeSlots;
-      } else if (dayOfWeek === 6) { // Saturday
+      } else if (dayOfWeek === 6) {
+        // Saturday
         return this.saturdayTimeSlots;
-      } else { // Monday to Friday
+      } else {
+        // Monday to Friday
         return this.weekdayTimeSlots;
       }
     },
@@ -401,14 +465,14 @@ export default {
     },
 
     getScheduleTypeLabel() {
-      if (!this.form.date) return '';
-      
+      if (!this.form.date) return "";
+
       const selectedDate = new Date(this.form.date);
       const dayOfWeek = selectedDate.getDay();
-      
-      if (dayOfWeek === 0) return 'Sunday Schedule';
-      if (dayOfWeek === 6) return 'Saturday Schedule';
-      return 'Weekday Schedule';
+
+      if (dayOfWeek === 0) return "Sunday Schedule";
+      if (dayOfWeek === 6) return "Saturday Schedule";
+      return "Weekday Schedule";
     },
 
     getUserTimezone() {
@@ -451,10 +515,10 @@ export default {
     removeFile(index) {
       this.uploadedFiles.splice(index, 1);
     },
-    submitBooking() {
+    submitBookingInfo() {
       if (this.isFormValid) {
         // Validate advance booking requirement before proceeding
-        if (!this.isDateValid()) {
+        if (!this.isDateValid) {
           alert(
             "Appointments must be booked at least 24 hours in advance. Please select a different date and time."
           );
@@ -473,17 +537,23 @@ export default {
 
         // Store booking data in session storage or pass as route params
         // Using sessionStorage to handle file objects
-        sessionStorage.setItem('bookingData', JSON.stringify({
-          ...bookingData,
-          uploadedFiles: this.uploadedFiles.map(file => ({
-            name: file.name,
-            size: file.size,
-            type: file.type
-          }))
-        }));
+        sessionStorage.setItem(
+          "bookingData",
+          JSON.stringify({
+            ...bookingData,
+            uploadedFiles: this.uploadedFiles.map((file) => ({
+              name: file.name,
+              size: file.size,
+              type: file.type,
+            })),
+          })
+        );
 
         // Store actual files separately if needed for the actual submission
-        sessionStorage.setItem('bookingFiles', JSON.stringify(this.uploadedFiles.length));
+        sessionStorage.setItem(
+          "bookingFiles",
+          JSON.stringify(this.uploadedFiles.length)
+        );
 
         // Navigate to booking summary page
         this.$router.push("/consultation/summary");
