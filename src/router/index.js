@@ -7,6 +7,7 @@ import Shop from "@/pages/Shop.vue";
 import Consultation from "@/pages/Consultation/Consultation.vue";
 import Payment from "@/pages/Consultation/Payment.vue";
 import Booking from "@/pages/Consultation/Booking.vue";
+import Summary from "@/pages/Consultation/Summary.vue";
 
 const routes = [
   {
@@ -43,6 +44,11 @@ const routes = [
         path: "booking",
         name: "booking",
         component: Booking,
+      },
+      {
+        path: "summary",
+        name: "summary",
+        component: Summary,
       },
     ],
   },

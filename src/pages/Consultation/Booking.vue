@@ -125,34 +125,32 @@
         <div class="form-section">
           <h2>Schedule Your Appointment</h2>
 
-          <div class="duration-notice">
-            <div class="notice-info">
-              <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <path d="M12 6v6l4 2" stroke-width="2" />
-              </svg>
-              <span><strong>Session Duration:</strong> All consultation sessions are limited to a maximum of 1 hour</span>
-            </div>
-          </div>
-
-          <div class="timezone-notice">
-            <div class="timezone-info">
-              <svg class="timezone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <polyline points="12,6 12,12 16,14" stroke-width="2" />
-              </svg>
-              <span>All times are in <strong>Ghana Standard Time (GMT)</strong></span>
-            </div>
-          </div>
-
-          <div class="booking-notice">
-            <div class="notice-info">
-              <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <path d="m9 12 2 2 4-4" stroke-width="2" />
-              </svg>
-              <span><strong>Advance Booking Required:</strong> Appointments must be booked at least 24 hours in advance</span>
-            </div>
+          <!-- Combined Notice Card -->
+          <div class="combined-notice">
+            <h3>Important Information</h3>
+            <ul class="notice-list">
+              <li class="notice-item">
+                <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="10" stroke-width="2" />
+                  <path d="M12 6v6l4 2" stroke-width="2" />
+                </svg>
+                <span><strong>Session Duration:</strong> All consultation sessions are limited to a maximum of 1 hour</span>
+              </li>
+              <li class="notice-item">
+                <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="10" stroke-width="2" />
+                  <polyline points="12,6 12,12 16,14" stroke-width="2" />
+                </svg>
+                <span><strong>Timezone:</strong> All times are in Ghana Standard Time (GMT)</span>
+              </li>
+              <li class="notice-item">
+                <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="10" stroke-width="2" />
+                  <path d="m9 12 2 2 4-4" stroke-width="2" />
+                </svg>
+                <span><strong>Advance Booking Required:</strong> Appointments must be booked at least 24 hours in advance</span>
+              </li>
+            </ul>
           </div>
 
           <TimeDate />
@@ -167,6 +165,16 @@
               <input type="checkbox" v-model="form.isFirstTime" />
               This is my first consultation with Herballo
             </label>
+          </div>
+
+          <!-- Call Type Preference -->
+          <div class="form-group">
+            <label for="callType">Preferred Call Type *</label>
+            <select id="callType" v-model="form.callType" required>
+              <option value="">Select your preference</option>
+              <option value="voice">Voice Call (Audio only)</option>
+              <option value="video">Video Call</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -230,6 +238,7 @@ export default {
         date: "",
         time: "",
         isFirstTime: false,
+        callType: "",
         specialRequests: "",
       },
       uploadedFiles: [],
@@ -268,14 +277,14 @@ export default {
     },
     isFormValid() {
       return (
-        this.form.name &&
-        this.form.email &&
-        this.form.phone &&
-        this.form.purpose &&
-        this.form.hearAbout &&
-        this.form.date &&
-        this.form.time &&
-        this.isDateValid()
+        this.form.name.trim() !== "" &&
+        this.form.email.trim() !== "" &&
+        this.form.phone.trim() !== "" &&
+        this.form.purpose !== "" &&
+        this.form.hearAbout !== "" &&
+        this.form.callType !== "" &&
+        this.form.date !== "" &&
+        this.form.time !== ""
       );
     },
     isDateValid() {
@@ -426,7 +435,7 @@ export default {
     },
     handleFileDrop(event) {
       event.preventDefault();
-      const files = Array.from(event.dataTransfer.data);
+      const files = Array.from(event.dataTransfer.files);
       this.addFiles(files);
     },
     addFiles(files) {
@@ -442,9 +451,9 @@ export default {
     removeFile(index) {
       this.uploadedFiles.splice(index, 1);
     },
-    async submitBooking() {
+    submitBooking() {
       if (this.isFormValid) {
-        // Validate advance booking requirement before submission
+        // Validate advance booking requirement before proceeding
         if (!this.isDateValid()) {
           alert(
             "Appointments must be booked at least 24 hours in advance. Please select a different date and time."
@@ -452,77 +461,32 @@ export default {
           return;
         }
 
-        try {
-          // Double-check slot availability before submitting
-          const slotCheckResponse = await fetch(`/api/bookings/check-slot`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              date: this.form.date,
-              time: this.form.time,
-            }),
-          });
+        // Prepare booking data with user timezone info
+        const userTimezone = this.getUserTimezone();
+        const bookingData = {
+          ...this.form,
+          uploadedFiles: this.uploadedFiles,
+          userTimezone: userTimezone.timezone,
+          userOffsetFromGMT: userTimezone.offsetFromGMT,
+          submittedAt: new Date().toISOString(),
+        };
 
-          if (!slotCheckResponse.ok) {
-            const errorData = await slotCheckResponse.json();
-            if (errorData.message === "SLOT_TAKEN") {
-              alert(
-                "Sorry, this time slot has just been booked by someone else. Please select another time."
-              );
-              this.fetchAvailableSlots(); // Refresh available slots
-              return;
-            }
-            if (errorData.message === "ADVANCE_BOOKING_REQUIRED") {
-              alert(
-                "This appointment does not meet the 24-hour advance booking requirement. Please select a different time."
-              );
-              this.fetchAvailableSlots(); // Refresh available slots
-              return;
-            }
-          }
+        // Store booking data in session storage or pass as route params
+        // Using sessionStorage to handle file objects
+        sessionStorage.setItem('bookingData', JSON.stringify({
+          ...bookingData,
+          uploadedFiles: this.uploadedFiles.map(file => ({
+            name: file.name,
+            size: file.size,
+            type: file.type
+          }))
+        }));
 
-          // Prepare form data with user timezone info
-          const userTimezone = this.getUserTimezone();
-          const bookingData = {
-            ...this.form,
-            userTimezone: userTimezone.timezone,
-            userOffsetFromGMT: userTimezone.offsetFromGMT,
-            submittedAt: new Date().toISOString(),
-          };
+        // Store actual files separately if needed for the actual submission
+        sessionStorage.setItem('bookingFiles', JSON.stringify(this.uploadedFiles.length));
 
-          // Create FormData for file upload
-          const formData = new FormData();
-          Object.keys(bookingData).forEach((key) => {
-            formData.append(key, bookingData[key]);
-          });
-
-          // Add uploaded files
-          this.uploadedFiles.forEach((file, index) => {
-            formData.append(`documents[${index}]`, file);
-          });
-
-          // Submit booking
-          const response = await fetch("/api/bookings", {
-            method: "POST",
-            body: formData,
-          });
-
-          if (response.ok) {
-            alert(
-              "Consultation booking submitted successfully! We will contact you soon to confirm your appointment."
-            );
-            this.$router.push("/consultation/payment");
-          } else {
-            throw new Error("Booking submission failed");
-          }
-        } catch (error) {
-          console.error("Booking submission error:", error);
-          alert(
-            "There was an error submitting your booking. Please try again or contact us directly."
-          );
-        }
+        // Navigate to booking summary page
+        this.$router.push("/consultation/summary");
       }
     },
     goBack() {
@@ -698,55 +662,55 @@ h1 {
   line-height: 1;
 }
 
-.duration-notice {
-  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-  border: 1px solid #2196f3;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
-.timezone-notice {
+/* Combined Notice Card Styles */
+.combined-notice {
   background: linear-gradient(135deg, #e8f5e8, #f0fdf0);
-  border: 1px solid #105212;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
-.booking-notice {
-  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-  border: 1px solid #d4a574;
-  border-radius: 8px;
-  padding: 1rem;
+  border: 2px solid #105212;
+  border-radius: 12px;
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.timezone-info,
-.notice-info {
+.combined-notice h3 {
+  color: #105212;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.combined-notice h3::before {
+  content: "ℹ️";
+  font-size: 1.2rem;
+}
+
+.notice-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notice-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  color: #105212;
   font-size: 0.95rem;
 }
 
-.timezone-info {
-  color: #105212;
+.notice-item:last-child {
+  margin-bottom: 0;
 }
 
-.notice-info {
-  color: #856404;
-}
-
-.duration-notice .notice-info {
-  color: #1976d2;
-}
-
-.timezone-icon,
 .notice-icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  margin-top: 2px;
+  color: #105212;
 }
 
 .loading-slots {
@@ -845,6 +809,16 @@ h1 {
   .btn-primary,
   .btn-secondary {
     width: 100%;
+  }
+
+  .notice-item {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .notice-icon {
+    margin-top: 0;
   }
 }
 </style>
