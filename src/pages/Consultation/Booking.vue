@@ -7,7 +7,7 @@
         herbal medicine experts.
       </p>
 
-      <pre>{{ form }}</pre>
+      <!-- <pre>{{ form }}</pre> -->
 
       <form @submit.prevent="submitBookingInfo" class="booking-form" action="https://formsubmit.co/info@herballo.co" method="POST">
         <!-- Personal Information -->
