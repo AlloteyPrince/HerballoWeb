@@ -6,46 +6,24 @@
 
       <form @submit.prevent="payWithPaystack">
         <div class="form-group">
-          <label for="amount">Amount (GHS):</label>
-          <input
-            type="number"
-            id="amount"
-            v-model.number="paymentDetails.amount"
-            required
-            min="1"
-            step="any"
-            placeholder="e.g., 100.00"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email Address:</label>
+          <label for="email">Email Address</label>
           <input
             type="email"
             id="email"
             v-model="paymentDetails.email"
             required
+            readonly
             placeholder="e.g., your.email@example.com"
           />
         </div>
 
         <div class="form-group">
-          <label for="firstName">First Name (Optional):</label>
+          <label for="amount">Amount (GHS)</label>
           <input
-            type="text"
-            id="firstName"
-            v-model="paymentDetails.firstName"
-            placeholder="e.g., John"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="lastName">Last Name (Optional):</label>
-          <input
-            type="text"
-            id="lastName"
-            v-model="paymentDetails.lastName"
-            placeholder="e.g., Doe"
+            type="number"
+            id="amount"
+            :value="paymentDetails.amount"
+            readonly
           />
         </div>
 
@@ -69,16 +47,20 @@ export default {
   data() {
     return {
       paymentDetails: {
-        amount: 250, // Default value as per your original code
+        amount: 250, // Static amount
         email: "",
-        firstName: "",
-        lastName: "",
       },
       loading: false,
       errorMessage: "",
-
       paystackPublicKey: "PUBLIC_PAYSTACK_API_KEY",
     };
+  },
+  mounted() {
+    // Get email from bookingData
+    const bookingData = JSON.parse(sessionStorage.getItem("bookingData"));
+    if (bookingData && bookingData.email) {
+      this.paymentDetails.email = bookingData.email;
+    }
   },
   methods: {
     generateReference() {
@@ -128,26 +110,42 @@ export default {
           ref: transactionReference, // Use the generated reference
           first_name: this.paymentDetails.firstName,
           last_name: this.paymentDetails.lastName,
-          // You can add more options here like:
-          // metadata: { custom_fields: [{ display_name: "Order ID", variable_name: "order_id", value: "12345" }] },
-          // channels: ['card', 'bank_transfer', 'ussd'], // Limit payment channels
+
           onClose: () => {
             this.loading = false;
             alert("Payment window closed. You can try again.");
           },
-          callback: (response) => {
+          callback: async (response) => {
             this.loading = false;
-            // This is the client-side success callback.
-            // For full security, you would *still* send response.reference to your backend
-            // for server-side verification using your SECRET_KEY.
-            // If you have no backend, you're relying solely on this client-side callback.
             alert(
               `Payment Successful! Transaction Reference: ${response.reference}`
             );
             console.log("Paystack callback response:", response);
-            this.resetForm(); // Clear the form
-            // You might redirect the user or show a success message here
-            // this.$router.push('/payment-success');
+
+            // Send booking data to FormSubmit
+            const bookingData = JSON.parse(
+              sessionStorage.getItem("bookingData")
+            );
+            const formData = new FormData();
+            Object.entries(bookingData).forEach(([key, value]) => {
+              if (key !== "uploadedFiles") {
+                formData.append(key, value);
+              }
+            });
+            // Only file metadata is available, not actual files
+            bookingData.uploadedFiles.forEach((file, idx) => {
+              formData.append(`file${idx + 1}_name`, file.name);
+              formData.append(`file${idx + 1}_type`, file.type);
+              // You cannot append the actual file content unless you keep it in memory
+            });
+
+            await fetch("https://formsubmit.co/info@herballo.co", {
+              method: "POST",
+              body: formData,
+            });
+
+            this.resetForm();
+            this.$router.push("/consultation/bookpaysuccess");
           },
           onError: (error) => {
             this.loading = false;
@@ -180,7 +178,6 @@ export default {
 </script>
 
 <style scoped>
-/* Main container for the entire payment page, centered */
 .payment-page {
   display: flex;
   justify-content: center; /* Horizontally center */
