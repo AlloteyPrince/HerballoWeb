@@ -122,15 +122,15 @@
 
 <script>
 import MyFooter from "@/components/MyFooter.vue";
+
 export default{
-  name: About,
+  name: "About",
   components:{ MyFooter}
 }
-// No logic needed for now
+
 </script>
 
 <style scoped>
-/* Basic Reset & Base Styles */
 .about-container {
   max-width: 1200px;
   margin: 0 auto;
