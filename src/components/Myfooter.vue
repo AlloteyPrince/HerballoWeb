@@ -22,69 +22,74 @@
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Use</a>
         <a href="#">Contact</a>
-      </div>
+      топ </div>
     </div>
 
     <div v-if="showWelcomePopup" class="welcome-popup-overlay">
       <div class="welcome-popup-content">
         <button class="close-popup-button" @click="closeWelcomePopup">&times;</button>
         <h3>Welcome to the Herballo Family!</h3>
-        <p>Journey with us and let's explore the never-ending limits of herbal medicine.</p>
-        
+        <p>You're in! 💚 Thank you for joining Herballo. Journey with us and let's explore the never-ending limits of herbal medicine.</p>
       </div>
     </div>
   </footer>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script>
+export default {
+  // Data properties are defined here
+  data() {
+    return {
+      email: '',
+      submissionMessage: '',
+      showWelcomePopup: false,
+    };
+  },
+  // Methods for your component
+  methods: {
+    async submitEmail() {
+      // Basic client-side validation
+      if (!this.email || !this.email.includes('@')) {
+        this.submissionMessage = 'Please enter a valid email address.';
+        return;
+      }
 
-const email = ref('')
-const submissionMessage = ref('')
-const showWelcomePopup = ref(false) // New reactive variable to control popup visibility
+      // Clear previous messages and close any existing popup
+      this.submissionMessage = 'Submitting...';
+      this.showWelcomePopup = false; // Ensure popup is hidden during submission
 
-const submitEmail = async () => {
-  // Basic client-side validation
-  if (!email.value || !email.value.includes('@')) {
-    submissionMessage.value = 'Please enter a valid email address.'
-    return
-  }
+      // Prepare form data for FormSubmit.co
+      const formData = new FormData();
+      formData.append('email', this.email);
+      formData.append('_captcha', 'false');
+      formData.append('_subject', 'New Newsletter Subscription from Herballo');
 
-  // Clear previous messages and close any existing popup
-  submissionMessage.value = 'Submitting...'
-  showWelcomePopup.value = false; // Ensure popup is hidden during submission
+      try {
+        const response = await fetch('https://formsubmit.co/info@herballo.co', {
+          // IMPORTANT: Replace 'info@herballo.co' with your actual email address!
+          method: 'POST',
+          body: formData,
+        });
 
-  // Prepare form data for FormSubmit.co
-  const formData = new FormData()
-  formData.append('email', email.value)
-  formData.append('_captcha', 'false')
-  formData.append('_subject', 'New Newsletter Subscription from Herballo')
-
-  try {
-    const response = await fetch('https://formsubmit.co/info@herballo.co', {
-      // IMPORTANT: Replace 'your@email.com' with your actual email address!
-      method: 'POST',
-      body: formData,
-    });
-
-    if (response.ok) {
-      submissionMessage.value = ''; // Clear the text message as popup will handle success
-      showWelcomePopup.value = true; // Show the welcome popup
-      email.value = ''; // Clear the input field
-    } else {
-      submissionMessage.value = 'Subscription failed. Please try again later.'
-      console.error('FormSubmit.co response not OK:', response.status, response.statusText);
-    }
-  } catch (error) {
-    submissionMessage.value = 'Network error. Please check your connection and try again.'
-    console.error('Error submitting form:', error);
-  }
-}
-
-// Function to close the welcome popup
-const closeWelcomePopup = () => {
-  showWelcomePopup.value = false;
-}
+        if (response.ok) {
+          this.submissionMessage = ''; // Clear the text message as popup will handle success
+          this.showWelcomePopup = true; // Show the welcome popup
+          this.email = ''; // Clear the input field
+        } else {
+          this.submissionMessage = 'Subscription failed. Please try again later.';
+          console.error('FormSubmit.co response not OK:', response.status, response.statusText);
+        }
+      } catch (error) {
+        this.submissionMessage = 'Network error. Please check your connection and try again.';
+        console.error('Error submitting form:', error);
+      }
+    },
+    // Function to close the welcome popup
+    closeWelcomePopup() {
+      this.showWelcomePopup = false;
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -202,7 +207,6 @@ const closeWelcomePopup = () => {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
   max-width: 450px;
-  /* NEW: Add horizontal margin to prevent it from touching edges on small screens */
   margin: 0 20px; /* Provides 20px space on left and right */
   position: relative;
   animation: fadeInScale 0.3s ease-out forwards;

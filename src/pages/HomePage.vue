@@ -2,19 +2,18 @@
   
   <navigation/>
   <hero/>
-  <services></services>
-  
+  <services/>
   <library></library>
   <FixedBackgroundScroll/>
   <blogspace id="blog"></blogspace>
   <!-- <contact id="contact"></contact> -->
-  <myfooter></myfooter>
+  <myFooter/>
 </template>
 
 <script>
 import Hero from "@/components/Hero.vue";
 import Blogspace from "@/components/Blogspace.vue";
-import Myfooter from "@/components/Myfooter.vue";
+import MyFooter from "@/components/MyFooter.vue";
 import Contact from "@/components/Contact.vue";
 import Library from "@/components/Library.vue";
 import Services from "@/components/Services.vue";
@@ -28,7 +27,7 @@ export default {
     Services,
     Blogspace,
     Library,
-    Myfooter,
+    MyFooter,
     Contact,
     Navigation,
     FixedBackgroundScroll

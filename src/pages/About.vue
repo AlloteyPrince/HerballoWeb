@@ -117,9 +117,15 @@
       </div>
     </div>
   </section>
+  <MyFooter />
 </template>
 
-<script setup>
+<script>
+import MyFooter from "@/components/MyFooter.vue";
+export default{
+  name: About,
+  components:{ MyFooter}
+}
 // No logic needed for now
 </script>
 
@@ -135,10 +141,7 @@
   line-height: 1.7;
 }
 
-/* --- Global Font Import (add this to your public/index.html or main CSS) --- */
-/*
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-*/
+
 
 /* --- Header Section --- */
 .header-section {
