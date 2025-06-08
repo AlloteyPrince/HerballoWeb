@@ -7,9 +7,12 @@
       </p>
       <form @submit.prevent="submitEmail">
         <div class="form-group">
-          <input type="email" v-model="email" placeholder="Enter your email" required />
-          <button class="subscribe-button">Subscribe</button>
+          <input type="email" v-model="email" name="email" placeholder="Enter your email" required />
+          <button type="submit" class="subscribe-button">Subscribe</button>
         </div>
+        <p v-if="submissionMessage && !showWelcomePopup" :class="{'error-message': submissionMessage.includes('failed') || submissionMessage.includes('error') || submissionMessage.includes('valid')}">
+          {{ submissionMessage }}
+        </p>
       </form>
     </div>
 
@@ -21,6 +24,15 @@
         <a href="#">Contact</a>
       </div>
     </div>
+
+    <div v-if="showWelcomePopup" class="welcome-popup-overlay">
+      <div class="welcome-popup-content">
+        <button class="close-popup-button" @click="closeWelcomePopup">&times;</button>
+        <h3>Welcome to the Herballo Family!</h3>
+        <p>Journey with us and let's explore the never-ending limits of herbal medicine.</p>
+        
+      </div>
+    </div>
   </footer>
 </template>
 
@@ -28,14 +40,55 @@
 import { ref } from 'vue'
 
 const email = ref('')
+const submissionMessage = ref('')
+const showWelcomePopup = ref(false) // New reactive variable to control popup visibility
 
-const submitEmail = () => {
-  alert(`Thanks for subscribing, ${email.value}!`)
-  email.value = ''
+const submitEmail = async () => {
+  // Basic client-side validation
+  if (!email.value || !email.value.includes('@')) {
+    submissionMessage.value = 'Please enter a valid email address.'
+    return
+  }
+
+  // Clear previous messages and close any existing popup
+  submissionMessage.value = 'Submitting...'
+  showWelcomePopup.value = false; // Ensure popup is hidden during submission
+
+  // Prepare form data for FormSubmit.co
+  const formData = new FormData()
+  formData.append('email', email.value)
+  formData.append('_captcha', 'false')
+  formData.append('_subject', 'New Newsletter Subscription from Herballo')
+
+  try {
+    const response = await fetch('https://formsubmit.co/info@herballo.co', {
+      // IMPORTANT: Replace 'your@email.com' with your actual email address!
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      submissionMessage.value = ''; // Clear the text message as popup will handle success
+      showWelcomePopup.value = true; // Show the welcome popup
+      email.value = ''; // Clear the input field
+    } else {
+      submissionMessage.value = 'Subscription failed. Please try again later.'
+      console.error('FormSubmit.co response not OK:', response.status, response.statusText);
+    }
+  } catch (error) {
+    submissionMessage.value = 'Network error. Please check your connection and try again.'
+    console.error('Error submitting form:', error);
+  }
+}
+
+// Function to close the welcome popup
+const closeWelcomePopup = () => {
+  showWelcomePopup.value = false;
 }
 </script>
 
 <style scoped>
+/* Your existing footer styles */
 .footer-container {
   background-color: #ffffff;
   color: #105212;
@@ -119,5 +172,101 @@ const submitEmail = () => {
 
 .footer-links a:hover {
   text-decoration: underline;
+}
+
+/* Styles for submission messages */
+.error-message {
+  color: #dc3545; /* Red for errors */
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* --- Welcome Popup Styles --- */
+.welcome-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.welcome-popup-content {
+  background-color: #ffffff;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 450px;
+  /* NEW: Add horizontal margin to prevent it from touching edges on small screens */
+  margin: 0 20px; /* Provides 20px space on left and right */
+  position: relative;
+  animation: fadeInScale 0.3s ease-out forwards;
+}
+
+.close-popup-button {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-popup-button:hover {
+  color: #333;
+}
+
+.welcome-popup-content h3 {
+  font-family: 'Merriweather', serif;
+  font-size: 2.2rem;
+  color: #105212;
+  margin-bottom: 1rem;
+}
+
+.welcome-popup-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.popup-cta-button {
+  background-color: #38a169;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+}
+
+.popup-cta-button:hover {
+  background-color: #2f855a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(56, 161, 105, 0.4);
+}
+
+/* Animation for popup */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>

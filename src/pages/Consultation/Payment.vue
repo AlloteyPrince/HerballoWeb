@@ -6,7 +6,7 @@
 
       <form @submit.prevent="payWithPaystack">
         <div class="form-group">
-          <label for="email">Email Address</label>
+          <label for="email">Email Address:</label>
           <input
             type="email"
             id="email"
@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-group">
-          <label for="amount">Amount (GHS)</label>
+          <label for="amount">Amount (GHS):</label>
           <input
             type="number"
             id="amount"
@@ -52,7 +52,7 @@ export default {
       },
       loading: false,
       errorMessage: "",
-      paystackPublicKey: "PUBLIC_PAYSTACK_API_KEY",
+      paystackPublicKey: process.env.VUE_APP_PAYSTACK_PUBLIC_API_KEY, // <-- IMPORTANT: REPLACE THIS!
     };
   },
   mounted() {
@@ -80,7 +80,7 @@ export default {
 
       // Basic client-side validation
       if (!this.paymentDetails.amount || this.paymentDetails.amount <= 0) {
-        this.errorMessage = "Please enter a valid amount.";
+        this.errorMessage = "Payment amount cannot be zero or negative.";
         this.loading = false;
         return;
       }
@@ -88,7 +88,7 @@ export default {
         !this.paymentDetails.email ||
         !this.isValidEmail(this.paymentDetails.email)
       ) {
-        this.errorMessage = "Please enter a valid email address.";
+        this.errorMessage = "Please provide a valid email address.";
         this.loading = false;
         return;
       }
@@ -98,7 +98,7 @@ export default {
       try {
         if (typeof PaystackPop === "undefined") {
           this.errorMessage =
-            "Paystack SDK not loaded. Check your public/index.html.";
+            "Paystack SDK not loaded. Please check your public/index.html.";
           this.loading = false;
           return;
         }
@@ -108,41 +108,68 @@ export default {
           email: this.paymentDetails.email,
           amount: this.paymentDetails.amount * 100, // Paystack expects amount in kobo/pesewas
           ref: transactionReference, // Use the generated reference
-          first_name: this.paymentDetails.firstName,
-          last_name: this.paymentDetails.lastName,
+          // Removed first_name and last_name from here
 
           onClose: () => {
             this.loading = false;
-            alert("Payment window closed. You can try again.");
+            console.log("Paystack payment window closed.");
           },
           callback: async (response) => {
             this.loading = false;
-            alert(
-              `Payment Successful! Transaction Reference: ${response.reference}`
-            );
             console.log("Paystack callback response:", response);
+
+            
+            alert(`Payment Successful! Transaction Reference: ${response.reference}`);
 
             // Send booking data to FormSubmit
             const bookingData = JSON.parse(
               sessionStorage.getItem("bookingData")
             );
-            const formData = new FormData();
-            Object.entries(bookingData).forEach(([key, value]) => {
-              if (key !== "uploadedFiles") {
-                formData.append(key, value);
+            if (bookingData) {
+              const formData = new FormData();
+              // Append all bookingData properties (except uploadedFiles)
+              for (const key in bookingData) {
+                if (key !== "uploadedFiles" && bookingData.hasOwnProperty(key)) {
+                  formData.append(key, bookingData[key]);
+                }
               }
-            });
-            // Only file metadata is available, not actual files
-            bookingData.uploadedFiles.forEach((file, idx) => {
-              formData.append(`file${idx + 1}_name`, file.name);
-              formData.append(`file${idx + 1}_type`, file.type);
-              // You cannot append the actual file content unless you keep it in memory
-            });
+              // Append Paystack reference for tracking
+              formData.append('paystack_reference', response.reference);
+              formData.append('payment_status', 'success');
+              formData.append('payment_amount_ghs', this.paymentDetails.amount);
 
-            await fetch("https://formsubmit.co/info@herballo.co", {
-              method: "POST",
-              body: formData,
-            });
+
+              // Note: You can only send metadata about files, not the files themselves
+              // with FormSubmit from the frontend.
+              if (bookingData.uploadedFiles && bookingData.uploadedFiles.length > 0) {
+                 bookingData.uploadedFiles.forEach((file, idx) => {
+                   formData.append(`file_${idx + 1}_name`, file.name);
+                   formData.append(`file_${idx + 1}_type`, file.type);
+                   // If you need the actual file, you need a backend for upload.
+                 });
+              } else {
+                 formData.append('uploaded_files', 'None');
+              }
+
+              try {
+                const formSubmitResponse = await fetch("https://formsubmit.co/info@herballo.co", {
+                  method: "POST",
+                  body: formData,
+                });
+
+                if (formSubmitResponse.ok) {
+                  alert("Booking data successfully sent to FormSubmit.");
+                } else {
+                alert("Failed to send booking data to FormSubmit:", formSubmitResponse.statusText);
+                  this.errorMessage = "Payment successful, but failed to send booking details.";
+                }
+              } catch (formSubmitError) {
+                console.error("Network error sending booking data to FormSubmit:", formSubmitError);
+                this.errorMessage = "Payment successful, but a network error occurred sending booking details.";
+              }
+            } else {
+              console.warn("No booking data found in session storage.");
+            }
 
             this.resetForm();
             this.$router.push("/consultation/bookpaysuccess");
@@ -162,14 +189,11 @@ export default {
         this.errorMessage = "Could not initiate payment. Please try again.";
         console.error("Error during Paystack setup:", error);
       }
-      this.$router.push("/consultation/bookpaysuccess");
     },
     resetForm() {
       this.paymentDetails = {
         amount: 250,
         email: "",
-        firstName: "",
-        lastName: "",
       };
       this.errorMessage = "";
     },
@@ -178,6 +202,7 @@ export default {
 </script>
 
 <style scoped>
+/* Main container for the entire payment page, centered */
 .payment-page {
   display: flex;
   justify-content: center; /* Horizontally center */
