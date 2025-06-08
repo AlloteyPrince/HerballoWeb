@@ -8,6 +8,7 @@ import Consultation from "@/pages/Consultation/Consultation.vue";
 import Payment from "@/pages/Consultation/Payment.vue";
 import Booking from "@/pages/Consultation/Booking.vue";
 import Summary from "@/pages/Consultation/Summary.vue";
+import BookPaySuccess from "@/pages/Consultation/BookPaySuccess.vue";
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
         path: "summary",
         name: "summary",
         component: Summary,
+      },
+      {
+        path: "bookpaysuccess",
+        name: "bookpaysuccess",
+        component: BookPaySuccess,
       },
     ],
   },
