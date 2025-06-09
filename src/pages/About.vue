@@ -121,11 +121,21 @@
 </template>
 
 <script>
+import { useSEO } from '../composables/useSEO'
 import MyFooter from "@/components/MyFooter.vue";
 
 export default{
   name: "About",
-  components:{ MyFooter}
+  components:{ MyFooter},
+  setup() {
+    useSEO({
+      title: 'About Herballo - Herbal Medicine Education & Research',
+      description: 'Learn about Herballo, a health-focused brand specializing in herbal medicine education, research, and product development.',
+      keywords: 'herbal medicine, herbal education, herbal research, natural health',
+      url: 'https://herballo.co/about',
+      image: 'https://herballo.co/about-og.jpg'
+    })
+  }
 }
 
 </script>

@@ -28,10 +28,6 @@ npm run dev
 npm run build
 ```
 
-
-
-
-
 <!-- <div>Herballo is a health-focused brand that specializes in herbal medicine education, research, and product development. We mainly provide natural health solutions, consultations, and educational content and promotion and production of herbal related products and content.
   Our mission is to promote holistic well-being by integrating traditional herbal practices with modern health insights.
   </div> -->
@@ -42,3 +38,8 @@ const bookingDisclaimer = `
 You will receive an email confirmation within 2 hours if your 
 requested time is available.
 `;</div> -->
+
+-0optimizing content for keywords
+-Submit a sitemap and robots.txt to Google Search Console
+-Bonus: Improve page speed and accessibility
+Optional: Consider pre-rendering or SSR if SEO is a top priority

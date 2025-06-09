@@ -1,16 +1,33 @@
 <template>
+  
   <footer class="footer-container">
+    <GetInTouch />
     <div class="signup-box">
       <h2>Live Green! Stay Informed!</h2>
       <p>
-        Get the latest on herbal research, healing stories, exclusive offers, and product news—directly to your inbox.
+        Get the latest on herbal research, healing stories, exclusive offers,
+        and product news—directly to your inbox.
       </p>
       <form @submit.prevent="submitEmail">
         <div class="form-group">
-          <input type="email" v-model="email" name="email" placeholder="Enter your email" required />
+          <input
+            type="email"
+            v-model="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
           <button type="submit" class="subscribe-button">Subscribe</button>
         </div>
-        <p v-if="submissionMessage && !showWelcomePopup" :class="{'error-message': submissionMessage.includes('failed') || submissionMessage.includes('error') || submissionMessage.includes('valid')}">
+        <p
+          v-if="submissionMessage && !showWelcomePopup"
+          :class="{
+            'error-message':
+              submissionMessage.includes('failed') ||
+              submissionMessage.includes('error') ||
+              submissionMessage.includes('valid'),
+          }"
+        >
           {{ submissionMessage }}
         </p>
       </form>
@@ -22,26 +39,37 @@
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Use</a>
         <a href="#">Contact</a>
-      топ </div>
+        топ
+      </div>
     </div>
 
     <div v-if="showWelcomePopup" class="welcome-popup-overlay">
       <div class="welcome-popup-content">
-        <button class="close-popup-button" @click="closeWelcomePopup">&times;</button>
+        <button class="close-popup-button" @click="closeWelcomePopup">
+          &times;
+        </button>
         <h3>Welcome to the Herballo Family!</h3>
-        <p>You're in! 💚 Thank you for joining Herballo. Journey with us and let's explore the never-ending limits of herbal medicine.</p>
+        <p>
+          You're in! 💚 Thank you for joining Herballo. Journey with us and
+          let's explore the never-ending limits of herbal medicine.
+        </p>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
+import GetInTouch from "@/components/GetInTouch.vue";
+
 export default {
-  // Data properties are defined here
+  name: "MyFooter",
+  components: {
+    GetInTouch,
+  },
   data() {
     return {
-      email: '',
-      submissionMessage: '',
+      email: "",
+      submissionMessage: "",
       showWelcomePopup: false,
     };
   },
@@ -49,39 +77,45 @@ export default {
   methods: {
     async submitEmail() {
       // Basic client-side validation
-      if (!this.email || !this.email.includes('@')) {
-        this.submissionMessage = 'Please enter a valid email address.';
+      if (!this.email || !this.email.includes("@")) {
+        this.submissionMessage = "Please enter a valid email address.";
         return;
       }
 
       // Clear previous messages and close any existing popup
-      this.submissionMessage = 'Submitting...';
+      this.submissionMessage = "Submitting...";
       this.showWelcomePopup = false; // Ensure popup is hidden during submission
 
       // Prepare form data for FormSubmit.co
       const formData = new FormData();
-      formData.append('email', this.email);
-      formData.append('_captcha', 'false');
-      formData.append('_subject', 'New Newsletter Subscription from Herballo');
+      formData.append("email", this.email);
+      formData.append("_captcha", "false");
+      formData.append("_subject", "New Newsletter Subscription from Herballo");
 
       try {
-        const response = await fetch('https://formsubmit.co/info@herballo.co', {
+        const response = await fetch("https://formsubmit.co/info@herballo.co", {
           // IMPORTANT: Replace 'info@herballo.co' with your actual email address!
-          method: 'POST',
+          method: "POST",
           body: formData,
         });
 
         if (response.ok) {
-          this.submissionMessage = ''; // Clear the text message as popup will handle success
+          this.submissionMessage = ""; // Clear the text message as popup will handle success
           this.showWelcomePopup = true; // Show the welcome popup
-          this.email = ''; // Clear the input field
+          this.email = ""; // Clear the input field
         } else {
-          this.submissionMessage = 'Subscription failed. Please try again later.';
-          console.error('FormSubmit.co response not OK:', response.status, response.statusText);
+          this.submissionMessage =
+            "Subscription failed. Please try again later.";
+          console.error(
+            "FormSubmit.co response not OK:",
+            response.status,
+            response.statusText
+          );
         }
       } catch (error) {
-        this.submissionMessage = 'Network error. Please check your connection and try again.';
-        console.error('Error submitting form:', error);
+        this.submissionMessage =
+          "Network error. Please check your connection and try again.";
+        console.error("Error submitting form:", error);
       }
     },
     // Function to close the welcome popup
@@ -230,7 +264,7 @@ export default {
 }
 
 .welcome-popup-content h3 {
-  font-family: 'Merriweather', serif;
+  font-family: "Merriweather", serif;
   font-size: 2.2rem;
   color: #105212;
   margin-bottom: 1rem;

@@ -8,7 +8,7 @@
         rel="noopener noreferrer"
         aria-label="YouTube"
       >
-        <img src="/icons/youtube.svg" alt="YouTube" />
+        <img src="/src/images/yt-looo.png" alt="YouTube" />
       </a>
 
       <a
@@ -17,11 +17,11 @@
         rel="noopener noreferrer"
         aria-label="TikTok"
       >
-        <img src="/icons/tiktok.svg" alt="TikTok" />
+        <img src="/src/images/tiktok-logo.png" alt="TikTok" />
       </a>
 
       <a href="mailto:info@herballo.co" aria-label="Email Herballo">
-        <img src="/icons/email.svg" alt="Email" />
+        <img src="/src/images/email-logo.png" alt="Email" />
       </a>
 
       <a
@@ -30,7 +30,7 @@
         rel="noopener noreferrer"
         aria-label="Twitter"
       >
-        <img src="/icons/twitter.svg" alt="Twitter" />
+        <img src="/src/images/x-logo.png" alt="Twitter" />
       </a>
     </div>
   </section>
@@ -46,7 +46,7 @@
   margin: 2rem auto;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2f855a;
+  color: #3e3f3f;
 }
 
 h2 {

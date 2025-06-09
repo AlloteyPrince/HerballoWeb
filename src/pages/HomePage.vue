@@ -1,16 +1,17 @@
 <template>
-  
-  <navigation/>
-  <hero/>
-  <services/>
+  <navigation />
+  <hero />
+  <services />
   <library></library>
-  <FixedBackgroundScroll/>
+  <FixedBackgroundScroll />
   <blogspace id="blog"></blogspace>
   <!-- <contact id="contact"></contact> -->
-  <myFooter/>
+  <myFooter />
 </template>
 
 <script>
+import { useSEO } from "../composables/useSEO";
+
 import Hero from "@/components/Hero.vue";
 import Blogspace from "@/components/Blogspace.vue";
 import MyFooter from "@/components/MyFooter.vue";
@@ -30,12 +31,22 @@ export default {
     MyFooter,
     Contact,
     Navigation,
-    FixedBackgroundScroll
+    FixedBackgroundScroll,
   },
   data() {
     return {};
   },
   methods: {},
+  setup() {
+    useSEO({
+      title: "Herballo - Natural Herbal Medicine Solutions",
+      description:
+        "Welcome to Herballo, your trusted partner in herbal medicine education, consultation, and product development.",
+      keywords: "herbal medicine, natural health, herbal products",
+      url: "https://herballo.co",
+      image: "https://herballo.co/home-og.jpg",
+    });
+  },
 };
 </script>
 

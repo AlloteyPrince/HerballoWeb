@@ -52,19 +52,7 @@
 
 </div>
     
-    <div class="socials">
-        <p class="text-socials">Follow us</p>
-        <div>
-            <img src="../images/yt-looo.png" alt="" class="socials-1">
-            <p class="texts-socials-under">YouTube</p>
-        </div>
-        <div>
-            <img src="../images/tiktok-logo.png" alt="" class="socials-2">
-            <p class="texts-socials-under">TikTok</p>
-        </div>
-        
-        
-    </div>
+    
     </div>
 </template>
 
@@ -143,29 +131,7 @@ export default {
     color: grey;
 } 
 
-.socials{
-    height: 20vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    background-color: rgb(239, 245, 224);
-    
-}
 
-.socials img{
-    height: 50px;
-}
-.texts-socials-under{
-    text-align: center;
-    font-size: 0.8rem
-}
-
-.text-socials{
-    color: gray;
-    font-size: 2rem;
-    font-weight: bolder;
-}
 
 @media screen and (max-width: 800px){
 
