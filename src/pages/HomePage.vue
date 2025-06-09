@@ -20,7 +20,7 @@ import Library from "@/components/Library.vue";
 import Services from "@/components/Services.vue";
 import Navigation from "@/components/Navigation.vue";
 import FixedBackgroundScroll from "@/components/FixedBackgroundScroll.vue";
-import MyFooter from "@/components/MyFooter.vue";
+
 
 export default {
   name: "HomePage",
