@@ -33,6 +33,7 @@
         <img src="/src/images/x-logo.png" alt="Twitter" />
       </a>
     </div>
+    <!-- <hr> -->
   </section>
 </template>
 

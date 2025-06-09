@@ -39,7 +39,12 @@ You will receive an email confirmation within 2 hours if your
 requested time is available.
 `;</div> -->
 
--0optimizing content for keywords
+-0ptimizing content for keywords
 -Submit a sitemap and robots.txt to Google Search Console
 -Bonus: Improve page speed and accessibility
 Optional: Consider pre-rendering or SSR if SEO is a top priority
+Optimize each page for keywords (starting with the homepage)
+Set up sitemap and robots.txt for search engines
+Add schema.org structured data
+Plan content for your Ulearn (herbal medicine library)
+Track visitors with analytics
