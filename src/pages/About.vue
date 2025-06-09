@@ -1,44 +1,70 @@
 <template>
+  <navigation />
   <section class="about-container">
-    <div class="header-section">
-      <img
-        src="/herballo-logo.png"
-        alt="Herballo Logo"
-        class="site-logo fade-in"
-      />
-      <h1 class="section-title fade-in delay-1">About Herballo</h1>
-      <p class="intro fade-in delay-2">
-        Herballo is a health-focused brand specializing in herbal medicine
-        education, research, and product development. We primarily provide
-        natural health solutions, personalized consultations, educational
-        content, and the promotion and production of herbal-related products.
-        Our mission is to promote holistic well-being by integrating traditional
-        herbal practices with modern health insights.
-      </p>
-      <p class="intro fade-in delay-3">
-        We're not just here to sell products — we’re building a future where
-        **herbal medicine is validated, trusted, and accessible** to all.
-      </p>
-      <router-link to="/home" class="cta-button slide-in delay-4">
-        Discover Your Wellness Journey
-      </router-link>
+    <!-- Animated Background -->
+    <div class="bg-decoration">
+      <div class="floating-leaf" style="left: 10%; animation-delay: 0s">🌿</div>
+      <div class="floating-leaf" style="left: 20%; animation-delay: 3s">🍃</div>
+      <div class="floating-leaf" style="left: 70%; animation-delay: 6s">🌱</div>
+      <div class="floating-leaf" style="left: 80%; animation-delay: 9s">🌿</div>
+      <div class="floating-leaf" style="left: 30%; animation-delay: 12s">
+        🍃
+      </div>
+      <div class="floating-leaf" style="left: 60%; animation-delay: 15s">
+        🌱
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <div class="logo-container">
+          <div class="site-logo-new">
+            <span>🌿</span>
+          </div>
+        </div>
+        <h1 class="section-title fade-in delay-1">About Herballo</h1>
+        <p class="hero-subtitle fade-in delay-2">
+          Where Traditional Wisdom Meets Modern Science
+        </p>
+        <p class="intro fade-in delay-3">
+          Herballo is a health-focused brand specializing in herbal medicine
+          education, research, and product development. We primarily provide
+          natural health solutions, personalized consultations, educational
+          content, and the promotion and production of herbal-related products.
+          Our mission is to promote holistic well-being by integrating
+          traditional herbal practices with modern health insights.
+        </p>
+        <p class="intro fade-in delay-4">
+          We're not just here to sell products — we're building a future where
+          **herbal medicine is validated, trusted, and accessible** to all.
+        </p>
+        <router-link to="/home" class="cta-button slide-in delay-5">
+          <span>Discover Your Wellness Journey</span>
+          <span>→</span>
+        </router-link>
+      </div>
     </div>
 
     <div class="content-section">
-      <h2 class="subheading slide-in delay-5">Our Core Pillars</h2>
+      <h2 class="subheading slide-in delay-6">Our Core Pillars</h2>
 
       <div class="pillars-grid">
-        <div class="pillar card slide-in delay-6">
+        <div class="pillar card slide-in delay-7">
           <div class="pillar-icon">🔬</div>
           <h3>Research & Development</h3>
           <p>
-            We explore Africa’s rich medicinal heritage by scientifically
+            We explore Africa's rich medicinal heritage by scientifically
             validating indigenous herbs. Our goal is to bridge the gap between
             traditional practices and modern evidence-based medicine.
           </p>
+          <router-link to="/home" class="pillar-cta-button">
+            <span>Learn More</span>
+            <span>→</span>
+          </router-link>
         </div>
 
-        <div class="pillar card slide-in delay-7">
+        <div class="pillar card slide-in delay-8">
           <div class="pillar-icon">👩🏽‍⚕️</div>
           <h3>Consultation & Care</h3>
           <p>
@@ -47,24 +73,26 @@
             lifestyle, diet, and nature-based remedies.
           </p>
           <router-link to="/home" class="pillar-cta-button">
-            Book a Consultation
-          </router-link>
-        </div>
-
-        <div class="pillar card slide-in delay-8">
-          <div class="pillar-icon">📚</div>
-          <h3>Herbal Education</h3>
-          <p>
-            Our ULearn platform and community resources empower individuals
-            and professionals to understand and use herbs safely, effectively,
-            and confidently.
-          </p>
-          <router-link to="/home" class="pillar-cta-button">
-            Explore ULearn
+            <span>Book a Consultation</span>
+            <span>→</span>
           </router-link>
         </div>
 
         <div class="pillar card slide-in delay-9">
+          <div class="pillar-icon">📚</div>
+          <h3>Herbal Education</h3>
+          <p>
+            Our ULearn platform and community resources empower individuals and
+            professionals to understand and use herbs safely, effectively, and
+            confidently.
+          </p>
+          <router-link to="/home" class="pillar-cta-button">
+            <span>Explore ULearn</span>
+            <span>→</span>
+          </router-link>
+        </div>
+
+        <div class="pillar card slide-in delay-10">
           <div class="pillar-icon">🧪</div>
           <h3>Product Development</h3>
           <p>
@@ -73,42 +101,91 @@
             formulations.
           </p>
           <router-link to="/home" class="pillar-cta-button">
-            View Products
+            <span>View Products</span>
+            <span>→</span>
+          </router-link>
+        </div>
+
+        <div class="pillar card slide-in delay-10">
+          <div class="pillar-icon">📲</div>
+          <h3>Herballo Media</h3>
+          <p>
+            Our media platform shares stories, insights, and the latest in
+            herbal research. We aim to inspire and educate through engaging
+            content that connects people with nature's wisdom.
+          </p>
+          <router-link to="/home" class="pillar-cta-button">
+            <span>View Products</span>
+            <span>→</span>
+          </router-link>
+        </div>
+
+        <div class="pillar card slide-in delay-10">
+          <div class="pillar-icon">🪴</div>
+          <h3>Herballo Farms</h3>
+          <p>
+            Our sustainable farms cultivate medicinal herbs with care for the
+            environment and community. We practice regenerative agriculture to
+            ensure the health of our planet while providing high-quality herbal
+            ingredients for both our products and the wider herbal community.
+          </p>
+          <router-link to="/home" class="pillar-cta-button">
+            <span>View Products</span>
+            <span>→</span>
           </router-link>
         </div>
       </div>
 
-      <h2 class="subheading slide-in delay-10">Our Philosophy</h2>
-      <ul class="philosophy fade-in delay-11">
-        <li>
-          <strong>Integrity</strong>: Transparent sourcing, scientific
-          validation, and ethical care.
+      <h2 class="subheading slide-in delay-11">Our Philosophy</h2>
+      <ul class="philosophy fade-in delay-12">
+        <li class="philosophy-item">
+          <div class="philosophy-icon">🤝</div>
+          <div class="philosophy-content">
+            <strong>Integrity</strong>: Transparent sourcing, scientific
+            validation, and ethical care in everything we do. We believe in
+            honest communication about our processes, ingredients, and research
+            findings.
+          </div>
         </li>
-        <li>
-          <strong>Education</strong>: Empowering informed wellness decisions.
+        <li class="philosophy-item">
+          <div class="philosophy-icon">📖</div>
+          <div class="philosophy-content">
+            <strong>Education</strong>: Empowering informed wellness decisions
+            through knowledge and understanding. We make complex herbal science
+            accessible to everyone, fostering a community of informed
+            practitioners.
+          </div>
         </li>
-        <li>
-          <strong>Sustainability</strong>: Honoring the earth as a source of
-          healing.
+        <li class="philosophy-item">
+          <div class="philosophy-icon">🌍</div>
+          <div class="philosophy-content">
+            <strong>Sustainability</strong>: Honoring the earth as a source of
+            healing for generations to come. Our practices prioritize
+            environmental stewardship and the long-term health of our
+            ecosystems.
+          </div>
         </li>
       </ul>
 
-      <h2 class="subheading slide-in delay-12">Our Vision</h2>
-      <p class="vision-text fade-in delay-13">
+      <h2 class="subheading slide-in delay-13">Our Vision</h2>
+      <p class="vision-text fade-in delay-14">
         Herballo aims to become a center of herbal excellence — a hub of
         research, education, and innovation much like **KEMRI**, but rooted in
         African herbal tradition. We're working toward a future where herbal
         medicine has its rightful place in mainstream healthcare.
       </p>
 
-      <blockquote class="quote fade-in delay-14">
-        “Whether you're seeking personal healing, professional insight, or just
+      <blockquote class="quote fade-in delay-15">
+        "Whether you're seeking personal healing, professional insight, or just
         beginning your herbal journey — welcome to Herballo. This is where
-        tradition meets science, and nature meets you.”
+        tradition meets science, and nature meets you."
       </blockquote>
 
-      <h2 class="subheading slide-in delay-15">Meet the Team</h2>
-      <div class="team-member fade-in delay-16">
+      <h2 class="subheading slide-in delay-16">Meet the Team</h2>
+      <div class="team-member fade-in delay-17">
+        <div class="team-avatar">
+          <span>DA</span>
+        </div>
         <div class="team-info">
           <h3>Dr MH Prince Allotey</h3>
           <p class="role">Founder of Herballo</p>
@@ -117,378 +194,609 @@
       </div>
     </div>
   </section>
-  <MyFooter />
+  <VFooter />
 </template>
 
 <script>
-import { useSEO } from '../composables/useSEO'
-import MyFooter from "@/components/MyFooter.vue";
+import { useSEO } from "../composables/useSEO";
+import Navigation from "@/components/Navigation.vue";
+import VFooter from "@/components/VFooter.vue";
+import { onMounted, nextTick } from "vue";
 
-export default{
+export default {
   name: "About",
-  components:{ MyFooter},
+  components: { VFooter, Navigation },
   setup() {
     useSEO({
-      title: 'About Herballo - Herbal Medicine Education & Research',
-      description: 'Learn about Herballo, a health-focused brand specializing in herbal medicine education, research, and product development.',
-      keywords: 'herbal medicine, herbal education, herbal research, natural health',
-      url: 'https://herballo.co/about',
-      image: 'https://herballo.co/about-og.jpg'
-    })
-  }
-}
+      title: "About Herballo - Herbal Medicine Education & Research",
+      description:
+        "Learn about Herballo, a health-focused brand specializing in herbal medicine education, research, and product development.",
+      keywords:
+        "herbal medicine, herbal education, herbal research, natural health",
+      url: "https://herballo.co/about",
+      image: "https://herballo.co/about-og.jpg",
+    });
 
+    const initializeAnimations = () => {
+      // Scroll animation observer
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".fade-in, .slide-in").forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Dynamic floating leaves
+      const createFloatingLeaf = () => {
+        const bgDecoration = document.querySelector(".bg-decoration");
+        if (!bgDecoration) return;
+
+        const leaf = document.createElement("div");
+        leaf.className = "floating-leaf";
+        leaf.innerHTML = ["🌿", "🍃", "🌱"][Math.floor(Math.random() * 3)];
+        leaf.style.left = Math.random() * 100 + "%";
+        leaf.style.animationDelay = "0s";
+        leaf.style.animationDuration = 15 + Math.random() * 10 + "s";
+
+        bgDecoration.appendChild(leaf);
+
+        // Remove leaf after animation
+        setTimeout(() => {
+          if (leaf.parentNode) {
+            leaf.remove();
+          }
+        }, 25000);
+      };
+
+      // Create new floating leaves periodically
+      setInterval(createFloatingLeaf, 4000);
+    };
+
+    onMounted(() => {
+      nextTick(() => {
+        initializeAnimations();
+      });
+    });
+
+    return {};
+  },
+};
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap");
+
 .about-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px; /* Reduced overall container padding */
-  font-family: "Open Sans", sans-serif;
-  color: #333;
-  background: #fdfdfd;
-  line-height: 1.7;
+  font-family: "Inter", sans-serif;
+  color: #1a1a1a;
+  background: linear-gradient(135deg, #f8fcf9 0%, #e8f5e8 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
+/* Animated background elements */
+.bg-decoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
 
+.floating-leaf {
+  position: absolute;
+  color: rgba(72, 187, 120, 0.1);
+  font-size: 2rem;
+  animation: float 20s infinite linear;
+}
 
-/* --- Header Section --- */
-.header-section {
+@keyframes float {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin-bottom: 40px; /* Reduced margin */
-  padding: 30px 20px; /* Reduced padding */
-  background: linear-gradient(145deg, #e7f7ed, #f3fff5);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(56, 161, 105, 0.1) 0%,
+    rgba(72, 187, 120, 0.05) 100%
+  );
+  padding: 2rem 1rem;
+}
+
+.hero-content {
+  max-width: 800px;
+  padding: 2rem;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.site-logo-new {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #38a169, #48bb78);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 20px 40px rgba(56, 161, 105, 0.3);
+  animation: logoFloat 6s ease-in-out infinite;
+}
+
+.site-logo-new span {
+  font-size: 3rem;
+  color: white;
+}
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.section-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #1a5e2f, #38a169);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #4a5568;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+.intro {
+  font-size: 1.1rem;
+  color: #718096;
+  margin-bottom: 2rem;
+  line-height: 1.8;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #38a169, #48bb78);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(56, 161, 105, 0.4);
   position: relative;
   overflow: hidden;
 }
 
-.site-logo {
-  max-width: 130px; /* Slightly smaller logo */
-  height: auto;
-  margin-bottom: 20px; /* Reduced margin */
-  animation: fadeIn 1s ease-out forwards;
+.cta-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
 }
 
-.section-title {
-  font-family: "Merriweather", serif;
-  font-size: 3.5rem; /* Slightly reduced font size for balance */
-  font-weight: 700;
-  color: #1a5e2f;
-  margin-bottom: 15px; /* Reduced margin */
-  letter-spacing: 0.03em;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.intro {
-  font-size: 1.15rem; /* Slightly reduced font size */
-  line-height: 1.7;
-  margin-bottom: 20px; /* Reduced margin */
-  color: #4f4f4f;
-  max-width: 800px; /* Adjusted max-width */
-  margin-left: auto;
-  margin-right: auto;
-  font-weight: 300;
-}
-
-.cta-button {
-  display: inline-block;
-  background-color: #38a169;
-  color: white;
-  padding: 14px 28px; /* Slightly smaller padding */
-  border-radius: 50px;
-  text-decoration: none;
-  font-size: 1.1rem; /* Slightly smaller font size */
-  font-weight: 600;
-  margin-top: 25px; /* Reduced margin */
-  transition: background-color 0.3s ease, transform 0.2s ease,
-    box-shadow 0.3s ease;
-  box-shadow: 0 5px 15px rgba(56, 161, 105, 0.4);
+.cta-button:hover::before {
+  left: 100%;
 }
 
 .cta-button:hover {
-  background-color: #2f855a;
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(56, 161, 105, 0.5);
+  box-shadow: 0 15px 40px rgba(56, 161, 105, 0.5);
 }
 
-/* --- Content Sections --- */
+/* Content Sections */
 .content-section {
-  padding: 20px 0; /* Reduced padding */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
 }
 
 .subheading {
-  font-family: "Merriweather", serif;
-  font-size: 2.2rem; /* Slightly reduced font size */
-  color: #2f855a;
-  margin-top: 50px; /* Reduced margin */
-  margin-bottom: 25px; /* Reduced margin */
-  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 600;
   text-align: center;
+  margin: 5rem 0 3rem;
+  color: #1a5e2f;
   position: relative;
-  padding-bottom: 10px; /* Reduced padding */
 }
 
 .subheading::after {
   content: "";
   position: absolute;
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 0;
-  width: 80px; /* Adjusted width */
-  height: 4px; /* Adjusted thickness */
-  background-color: #48bb78;
-  border-radius: 3px;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, #38a169, #48bb78);
+  border-radius: 2px;
 }
 
-/* --- Pillars Grid (Now a single column) --- */
+/* Pillars Grid */
 .pillars-grid {
   display: grid;
-  grid-template-columns: 1fr; /* Force single column */
-  gap: 30px; /* Reduced gap between pillars */
-  margin-top: 40px; /* Reduced margin */
-  max-width: 700px; /* Control width of the single column */
-  margin-left: auto; /* Center the single column */
-  margin-right: auto; /* Center the single column */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
 }
 
-.pillar {
-  padding: 30px; /* Slightly reduced padding */
-  border-radius: 15px;
+.pillar.card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2.5rem;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: #ffffff;
-  border: 1px solid #e0f2e0;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  display: flex; /* Use flexbox for internal alignment */
-  flex-direction: column; /* Stack contents */
-  align-items: center; /* Center horizontally */
+  transition: all 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
-.pillar:hover {
-  transform: translateY(-8px); /* Slightly less pronounced lift */
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12); /* Adjusted hover shadow */
+.pillar.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #38a169, #48bb78);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.pillar.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.pillar.card:hover::before {
+  transform: scaleX(1);
 }
 
 .pillar-icon {
-  font-size: 3.5rem; /* Slightly smaller icons */
-  margin-bottom: 18px; /* Adjusted margin */
-  line-height: 1;
-  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.1));
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: block;
 }
 
 .pillar h3 {
-  font-family: "Merriweather", serif;
-  font-size: 1.8rem; /* Slightly smaller font size */
-  margin-bottom: 10px; /* Reduced margin */
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
   color: #1a5e2f;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .pillar p {
-  font-size: 1rem; /* Slightly smaller text */
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 20px; /* Space for pillar-specific CTA */
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
 }
 
 .pillar-cta-button {
-  display: inline-block;
-  background-color: #48bb78; /* A slightly softer green for pillar CTAs */
-  color: white;
-  padding: 10px 20px; /* Smaller padding for pillar CTAs */
-  border-radius: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #38a169;
   text-decoration: none;
-  font-size: 0.95rem;
   font-weight: 600;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 3px 10px rgba(72, 187, 120, 0.3);
-  margin-top: auto; /* Push to bottom of pillar card */
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  border: 2px solid #38a169;
+  transition: all 0.3s ease;
 }
 
 .pillar-cta-button:hover {
-  background-color: #2f855a;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 12px rgba(72, 187, 120, 0.4);
+  background: #38a169;
+  color: white;
+  transform: translateX(5px);
 }
 
-/* --- Philosophy List --- */
+/* Philosophy Section */
 .philosophy {
   list-style: none;
   padding: 0;
-  margin: 40px auto 40px auto; /* Reduced margins */
-  max-width: 700px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px; /* Reduced gap */
+  margin: 3rem auto 0;
+  max-width: 800px;
 }
 
-.philosophy li {
-  font-size: 1.1rem; /* Slightly reduced font size */
-  line-height: 1.7;
-  color: #4f4f4f;
+.philosophy-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem 0;
   position: relative;
-  padding-left: 30px;
-  text-align: left;
-  font-weight: 400;
 }
 
-.philosophy li::before {
-  content: "🍃";
+.philosophy-item:not(:last-child)::after {
+  content: "";
   position: absolute;
-  left: 0;
-  color: #38a169;
-  font-size: 1.4em;
-  line-height: 1;
-  top: 0;
+  bottom: 0;
+  left: 60px;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(56, 161, 105, 0.3), transparent);
 }
 
-/* --- Vision Text --- */
-.vision-text {
-  font-size: 1.15rem; /* Slightly reduced font size */
+.philosophy-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  width: 60px;
+  text-align: center;
+}
+
+.philosophy-content {
+  color: #4a5568;
+  font-size: 1.1rem;
   line-height: 1.7;
-  margin-bottom: 40px; /* Reduced margin */
+}
+
+.philosophy-content strong {
+  color: #1a5e2f;
+  font-weight: 600;
+}
+
+/* Vision Text */
+.vision-text {
+  font-size: 1.2rem;
+  color: #4a5568;
+  margin-bottom: 2rem;
   text-align: center;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  color: #4f4f4f;
-  font-weight: 300;
+  line-height: 1.8;
 }
 
-/* --- Quote --- */
+/* Quote */
 .quote {
-  border-left: 7px solid #48bb78; /* Slightly thinner border */
-  padding: 25px 30px; /* Reduced padding */
+  background: linear-gradient(
+    135deg,
+    rgba(56, 161, 105, 0.1),
+    rgba(72, 187, 120, 0.05)
+  );
+  border-left: 5px solid #38a169;
+  border-radius: 15px;
+  padding: 2rem;
   font-style: italic;
-  font-size: 1.3rem; /* Slightly reduced font size */
-  color: #2f855a;
-  background-color: #e6ffe6;
-  margin: 50px auto; /* Reduced margins */
+  font-size: 1.3rem;
+  color: #2d3748;
+  margin: 3rem auto;
   max-width: 800px;
-  border-radius: 10px;
-  line-height: 1.6;
-  font-weight: 500;
+  position: relative;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Team Member --- */
+.quote::before {
+  content: '"';
+  font-size: 4rem;
+  color: #38a169;
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-family: "Playfair Display", serif;
+}
+
+/* Team Member */
 .team-member {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 25px; /* Reduced gap */
-  margin-top: 50px; /* Reduced margin */
-  padding: 35px; /* Reduced padding */
-  border-radius: 15px;
-  background-color: #ffffff;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  max-width: 500px; /* Adjusted max-width */
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding: 3rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
 }
 
-.profile-pic {
-  width: 150px; /* Adjusted size */
+.team-avatar {
+  width: 150px;
   height: 150px;
   border-radius: 50%;
-  object-fit: cover;
-  border: 5px solid #48bb78; /* Adjusted border */
-  box-shadow: 0 0 0 5px rgba(72, 187, 120, 0.4);
+  background: linear-gradient(135deg, #38a169, #48bb78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 15px 35px rgba(56, 161, 105, 0.3);
 }
 
 .team-info h3 {
-  margin: 12px 0 6px; /* Adjusted margins */
-  font-size: 2rem; /* Adjusted font size */
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
   color: #1a5e2f;
-  font-weight: 700;
 }
 
 .team-info .role {
-  margin: 0;
-  font-size: 1.15rem; /* Adjusted font size */
-  color: #555;
-  font-style: italic;
+  color: #4a5568;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
 }
 
 .team-info .location {
-  margin: 6px 0 0;
-  font-size: 1rem; /* Adjusted font size */
-  color: #777;
+  color: #718096;
+  font-size: 1rem;
 }
 
-/* --- Animations --- */
-/* (Keeping delays mostly the same, but you might want to adjust if the faster flow makes it feel too quick) */
-.fade-in { opacity: 0; animation: fadeIn 1s ease-out forwards; }
-.fade-in.delay-1 { animation-delay: 0.3s; }
-.fade-in.delay-2 { animation-delay: 0.6s; }
-.fade-in.delay-3 { animation-delay: 0.9s; }
-.fade-in.delay-4 { animation-delay: 1.2s; }
-.fade-in.delay-5 { animation-delay: 0.3s; }
-.fade-in.delay-6 { animation-delay: 0.6s; }
-.fade-in.delay-7 { animation-delay: 0.9s; }
-.fade-in.delay-8 { animation-delay: 1.2s; }
-.fade-in.delay-9 { animation-delay: 1.5s; }
-.fade-in.delay-10 { animation-delay: 1.8s; }
-.fade-in.delay-11 { animation-delay: 2.1s; }
-.fade-in.delay-12 { animation-delay: 2.4s; }
-.fade-in.delay-13 { animation-delay: 2.7s; }
-.fade-in.delay-14 { animation-delay: 3s; }
-.fade-in.delay-15 { animation-delay: 3.3s; }
-.fade-in.delay-16 { animation-delay: 3.6s; }
-
-.slide-in { opacity: 0; transform: translateY(30px); animation: slideIn 0.8s ease-out forwards; }
-.slide-in.delay-4 { animation-delay: 1.5s; }
-.slide-in.delay-5 { animation-delay: 0.3s; }
-.slide-in.delay-6 { animation-delay: 0.6s; }
-.slide-in.delay-7 { animation-delay: 0.8s; }
-.slide-in.delay-8 { animation-delay: 1s; }
-.slide-in.delay-9 { animation-delay: 1.2s; }
-.slide-in.delay-10 { animation-delay: 1.5s; }
-.slide-in.delay-11 { animation-delay: 1.8s; }
-.slide-in.delay-12 { animation-delay: 2.1s; }
-.slide-in.delay-15 { animation-delay: 3s; }
-
-@keyframes fadeIn { to { opacity: 1; } }
-@keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
-
-/* --- Responsive Design --- */
-/* Adjustments for smaller screens to maintain good density */
-@media (max-width: 992px) {
-  .section-title { font-size: 2.8rem; }
-  .intro { font-size: 1.1rem; }
-  .subheading { font-size: 2rem; }
-  .pillar h3 { font-size: 1.6rem; }
-  .pillar-icon { font-size: 3.5rem; }
-  .quote { font-size: 1.1rem; }
-  .team-info h3 { font-size: 1.7rem; }
-  .profile-pic { width: 130px; height: 130px; }
-  .pillar { padding: 25px; } /* Slightly less padding on smaller screens */
+/* Animations */
+.fade-in,
+.slide-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
 }
 
+.fade-in.visible,
+.slide-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animation delays */
+.delay-1 {
+  transition-delay: 0.1s;
+}
+.delay-2 {
+  transition-delay: 0.2s;
+}
+.delay-3 {
+  transition-delay: 0.3s;
+}
+.delay-4 {
+  transition-delay: 0.4s;
+}
+.delay-5 {
+  transition-delay: 0.5s;
+}
+.delay-6 {
+  transition-delay: 0.6s;
+}
+.delay-7 {
+  transition-delay: 0.7s;
+}
+.delay-8 {
+  transition-delay: 0.8s;
+}
+.delay-9 {
+  transition-delay: 0.9s;
+}
+.delay-10 {
+  transition-delay: 1s;
+}
+.delay-11 {
+  transition-delay: 1.1s;
+}
+.delay-12 {
+  transition-delay: 1.2s;
+}
+.delay-13 {
+  transition-delay: 1.3s;
+}
+.delay-14 {
+  transition-delay: 1.4s;
+}
+.delay-15 {
+  transition-delay: 1.5s;
+}
+.delay-16 {
+  transition-delay: 1.6s;
+}
+.delay-17 {
+  transition-delay: 1.7s;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .about-container { padding: 30px 15px; }
-  .section-title { font-size: 2.2rem; }
-  .intro { font-size: 1rem; margin-bottom: 15px; }
-  .subheading { font-size: 1.8rem; margin-top: 40px; margin-bottom: 20px;}
-  .site-logo { max-width: 100px; margin-bottom: 15px; }
-  .cta-button { padding: 12px 24px; font-size: 1rem; margin-top: 20px;}
-  .pillars-grid { gap: 25px; margin-top: 30px; }
-  .pillar h3 { font-size: 1.4rem; }
-  .pillar-icon { font-size: 3rem; margin-bottom: 15px; }
-  .philosophy { margin: 30px auto; gap: 15px; }
-  .philosophy li { font-size: 1rem; padding-left: 25px;}
-  .vision-text { font-size: 1rem; margin-bottom: 30px; }
-  .quote { font-size: 1rem; padding: 20px 25px; margin: 40px auto; }
-  .team-member { padding: 30px; margin-top: 40px; gap: 20px; }
-  .profile-pic { width: 100px; height: 100px; }
-  .team-info h3 { font-size: 1.4rem; margin: 10px 0 5px;}
-  .team-info .role { font-size: 1rem; }
-  .team-info .location { font-size: 0.9rem; }
-  .pillar-cta-button { padding: 8px 16px; font-size: 0.9rem; }
+  .hero-section {
+    min-height: 80vh;
+    padding: 2rem 1rem;
+  }
+
+  .content-section {
+    padding: 2rem 1rem;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .pillar.card {
+    padding: 2rem;
+  }
+
+  .philosophy-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .philosophy-item::after {
+    left: 0 !important;
+  }
+
+  .team-member {
+    padding: 2rem;
+  }
+
+  .team-avatar {
+    width: 120px;
+    height: 120px;
+    font-size: 2.5rem;
+  }
 }
 </style>

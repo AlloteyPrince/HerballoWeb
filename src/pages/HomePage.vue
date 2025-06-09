@@ -5,8 +5,7 @@
   <library></library>
   <FixedBackgroundScroll />
   <blogspace id="blog"></blogspace>
-  <!-- <contact id="contact"></contact> -->
-  <MyFooter />
+  <VFooter/>
 </template>
 
 <script>
@@ -14,12 +13,12 @@ import { useSEO } from "../composables/useSEO";
 
 import Hero from "@/components/Hero.vue";
 import Blogspace from "@/components/Blogspace.vue";
-import MyFooter from "@/components/MyFooter.vue";
 import Contact from "@/components/Contact.vue";
 import Library from "@/components/Library.vue";
 import Services from "@/components/Services.vue";
 import Navigation from "@/components/Navigation.vue";
 import FixedBackgroundScroll from "@/components/FixedBackgroundScroll.vue";
+import VFooter from "@/components/VFooter.vue";
 
 
 export default {
@@ -29,10 +28,10 @@ export default {
     Services,
     Blogspace,
     Library,
-    MyFooter,
     Contact,
     Navigation,
     FixedBackgroundScroll,
+    VFooter
   },
   data() {
     return {};
