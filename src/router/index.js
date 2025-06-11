@@ -27,7 +27,7 @@ const routes = [
     component: ULearn,
     children:[
       {
-        path: "plantdetail",
+        path: ":id",
         name: "plantdetail",
         component: PlantDetail,
       }
