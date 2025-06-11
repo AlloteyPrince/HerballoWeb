@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import NotFound from "@/pages/NotFound.vue";
 import HomePage from "@/pages/HomePage.vue";
-import ULearn from "@/pages/ULearn.vue";
+import ULearn from "@/pages/Library/ULearn.vue";
 import About from "@/pages/About.vue";
 import Shop from "@/pages/Shop.vue";
 import Consultation from "@/pages/Consultation/Consultation.vue";
@@ -9,6 +9,11 @@ import Payment from "@/pages/Consultation/Payment.vue";
 import Booking from "@/pages/Consultation/Booking.vue";
 import Summary from "@/pages/Consultation/Summary.vue";
 import BookPaySuccess from "@/pages/Consultation/BookPaySuccess.vue";
+import ProductDev from "@/pages/ProductDev.vue";
+import PrivacyPolicy from "@/pages/PrivacyPolicy.vue";
+import TermsOfUse from "@/pages/TermsOfUse.vue";
+import Contact from "@/pages/Contact.vue";
+import PlantDetail from "@/pages/Library/PlantDetail.vue";
 
 const routes = [
   {
@@ -20,6 +25,13 @@ const routes = [
     path: "/ulearn",
     name: "ulearn",
     component: ULearn,
+    children:[
+      {
+        path: "plantdetail",
+        name: "plantdetail",
+        component: PlantDetail,
+      }
+    ],
   },
   {
     path: "/about",
@@ -59,28 +71,31 @@ const routes = [
     ],
   },
   {
+    path: "/productdev",
+    name: "productdev",
+    component: ProductDev,
+  },
+  {
+    path: "/privacypolicy",
+    name: "privacypolicy",
+    component: PrivacyPolicy,
+  },
+  {
+    path: "/termsofuse",
+    name: "termsofuse",
+    component: TermsOfUse,
+  },
+  {
+    path: "/contact",
+    name: "contact",
+    component: Contact,
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: NotFound,
   },
 
-  //   // --- Example: Nested Route / Page Group (e.g., Admin Section) ---
-  //   {
-  //     path: '/admin',
-  //     component: AdminLayout,
-  //     children: [
-  //       {
-  //         path: '',
-  //         name: 'admin-dashboard',
-  //         component: AdminDashboard,
-  //       },
-  //       {
-  //         path: 'users',
-  //         name: 'admin-users',
-  //         component: AdminUsers,
-  //       },
-  //     ],
-  //   },
 ];
 
 const router = createRouter({

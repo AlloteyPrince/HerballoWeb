@@ -13,7 +13,6 @@ import { useSEO } from "../composables/useSEO";
 
 import Hero from "@/components/Hero.vue";
 import Blogspace from "@/components/Blogspace.vue";
-import Contact from "@/components/Contact.vue";
 import Library from "@/components/Library.vue";
 import Services from "@/components/Services.vue";
 import Navigation from "@/components/Navigation.vue";
@@ -28,7 +27,6 @@ export default {
     Services,
     Blogspace,
     Library,
-    Contact,
     Navigation,
     FixedBackgroundScroll,
     VFooter
