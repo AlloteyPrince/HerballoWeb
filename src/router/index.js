@@ -25,13 +25,11 @@ const routes = [
     path: "/ulearn",
     name: "ulearn",
     component: ULearn,
-    children:[
-      {
-        path: ":id",
-        name: "plantdetail",
-        component: PlantDetail,
-      }
-    ],
+  },
+  {
+    path: "/ulearn/:id",
+    name: "plantDetail",
+    component: PlantDetail,
   },
   {
     path: "/about",

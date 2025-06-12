@@ -1,78 +1,130 @@
 <template>
-  <div class="library-page">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <h1 class="text-white">ULearn Library</h1>
-        <p class="hero-subtitle hidden md:block">
-          Discover the power of nature through our comprehensive plant database.
-        </p>
-        <div class="search-bar-wrapper">
-          <IconSearch class="search-icon" />
-          <Input
-            placeholder="Search plants..."
-            v-model="searchTerm"
-            class="search-bar-hero"
-            aria-label="Search plants database"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Plants Grid Section -->
-    <section class="plants-grid-section">
-      <div v-if="isLoading" class="loading-state">
-        <div class="loading-spinner"></div>
-        <p>Loading herbal plants...</p>
-      </div>
-
-      <div v-else-if="error" class="error-state">
-        <div class="error-icon">⚠️</div>
-        <p>{{ error }}</p>
-        <button @click="loadPlants" class="retry-btn">Retry Loading</button>
-      </div>
-
-      <div v-else class="plants-grid">
-        <!-- Plant Card -->
-        <div
-          v-for="plant in filteredPlants"
-          :key="plant.id"
-          class="plant-card"
-          @click="goToPlantDetail(plant)"
-        >
-          <div class="plant-image-container">
-            <img
-              :src="getImageUrl(plant)"
-              :alt="formatCommonName(plant.commonName)"
-              class="plant-image"
-              loading="lazy"
+  <div>
+    <div class="library-page">
+      <!-- Fixed Hero Section -->
+      <section class="hero-section">
+        <div class="hero-content">
+          <h1 class="text-white">ULearn Library</h1>
+          <p class="hero-subtitle hidden md:block">
+            Discover the power of nature through our comprehensive plant database.
+          </p>
+          <div class="search-bar-wrapper">
+            <IconSearch class="search-icon" />
+            <Input
+              placeholder="Search plants..."
+              v-model="searchTerm"
+              class="search-bar-hero"
+              aria-label="Search plants database"
+              @input="onSearchInput"
             />
-          </div>
-          <div class="plant-info">
-            <div class="plant-text-content">
-              <h3 class="plant-name">
-                {{ formatCommonName(plant.commonName) }}
-              </h3>
-              <p class="plant-scientific">
-                {{ plant.scientificName || "Scientific name not available" }}
-              </p>
-              <p class="plant-tagline">
-                {{ plant.tagline || "No description available" }}
-              </p>
-            </div>
-            <div class="plant-actions">
-              <Button class="view-more-btn"> View Details </Button>
+            <div v-if="isSearching" class="search-loading">
+              <div class="search-spinner"></div>
             </div>
           </div>
         </div>
+      </section>
 
-        <div v-if="filteredPlants.length === 0" class="no-results">
-          <div class="no-results-icon">🌿</div>
-          <p>No plants found matching your search</p>
-          <p class="text-gray-500 mt-2">Try a different search term</p>
+      <!-- Plants List Section -->
+      <section class="plants-section">
+        <div class="container">
+          <div v-if="isLoading" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading herbal plants...</p>
+          </div>
+
+          <div v-else-if="error" class="error-state">
+            <div class="error-icon">⚠️</div>
+            <p>{{ error }}</p>
+            <button @click="loadPlants" class="retry-btn">Retry Loading</button>
+          </div>
+
+          <div v-else class="plants-list">
+            <!-- Results Summary -->
+            <div class="results-summary">
+              <p>
+                Showing {{ paginatedPlants.length }} of {{ filteredPlants.length }} plants
+                <span v-if="searchTerm" class="search-term">for "{{ searchTerm }}"</span>
+              </p>
+            </div>
+
+            <!-- Plant Cards -->
+            <div
+              v-for="plant in paginatedPlants"
+              :key="plant.id"
+              class="plant-card"
+              @click="goToPlantDetail(plant)"
+            >
+              <div class="plant-image-container">
+                <img
+                  :src="getImageUrl(plant)"
+                  :alt="formatCommonName(plant.commonName)"
+                  class="plant-image"
+                  loading="lazy"
+                />
+              </div>
+              
+              <div class="plant-content">
+                <div class="plant-info">
+                  <h3 class="plant-name">
+                    {{ formatCommonName(plant.commonName) }}
+                  </h3>
+                  <p class="plant-scientific">
+                    {{ plant.scientificName || "Scientific name not available" }}
+                  </p>
+                  <p class="plant-description">
+                    {{ plant.tagline || "No description available" }}
+                  </p>
+                </div>
+              </div>
+              
+              <div class="plant-action">
+                <button class="view-details-btn" @click.stop="goToPlantDetail(plant)">
+                  View Details
+                </button>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div v-if="totalPages > 1" class="pagination">
+              <button 
+                @click="goToPage(currentPage - 1)" 
+                :disabled="currentPage === 1"
+                class="pagination-btn"
+              >
+                Previous
+              </button>
+              
+              <div class="pagination-numbers">
+                <button
+                  v-for="page in visiblePages"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :class="['pagination-number', { active: page === currentPage }]"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              
+              <button 
+                @click="goToPage(currentPage + 1)" 
+                :disabled="currentPage === totalPages"
+                class="pagination-btn"
+              >
+                Next
+              </button>
+            </div>
+
+            <div v-if="filteredPlants.length === 0" class="no-results">
+              <div class="no-results-icon">🌿</div>
+              <p>No plants found matching your search</p>
+              <p class="no-results-subtitle">Try a different search term</p>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
+    
+    <router-view/>
   </div>
 </template>
 
@@ -83,7 +135,7 @@ import { Button } from "@/components/ui/button";
 import { IconSearch } from "@/components/icons";
 
 export default defineComponent({
-  name: "LibraryPage",
+  name: "ULearn",
   components: {
     Input,
     Button,
@@ -95,6 +147,10 @@ export default defineComponent({
       isLoading: true,
       error: null,
       searchTerm: "",
+      isSearching: false,
+      searchTimeout: null,
+      currentPage: 1,
+      itemsPerPage: 10,
     };
   },
   computed: {
@@ -103,9 +159,7 @@ export default defineComponent({
 
       const search = this.searchTerm.toLowerCase();
       return this.plants.filter((plant) => {
-        const commonName = this.formatCommonName(
-          plant.commonName
-        ).toLowerCase();
+        const commonName = this.formatCommonName(plant.commonName).toLowerCase();
         const scientificName = (plant.scientificName || "").toLowerCase();
         const tagline = (plant.tagline || "").toLowerCase();
 
@@ -115,6 +169,40 @@ export default defineComponent({
           tagline.includes(search)
         );
       });
+    },
+    totalPages() {
+      return Math.ceil(this.filteredPlants.length / this.itemsPerPage);
+    },
+    paginatedPlants() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredPlants.slice(start, end);
+    },
+    visiblePages() {
+      const pages = [];
+      const totalPages = this.totalPages;
+      const current = this.currentPage;
+      
+      // Show max 5 page numbers
+      let start = Math.max(1, current - 2);
+      let end = Math.min(totalPages, start + 4);
+      
+      // Adjust start if we're near the end
+      if (end - start < 4) {
+        start = Math.max(1, end - 4);
+      }
+      
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+      
+      return pages;
+    },
+  },
+  watch: {
+    filteredPlants() {
+      // Reset to first page when search results change
+      this.currentPage = 1;
     },
   },
   created() {
@@ -138,16 +226,22 @@ export default defineComponent({
     },
     processPlantData(data) {
       if (Array.isArray(data)) {
-        this.plants = data;
+        this.plants = data.map((plant, index) => ({
+          ...plant,
+          id: plant.id || `plant-${index}` // Ensure each plant has an ID
+        }));
       } else if (data && typeof data === "object") {
         const possibleArrayKeys = ["plants", "data", "items"];
         for (const key of possibleArrayKeys) {
           if (Array.isArray(data[key])) {
-            this.plants = data[key];
+            this.plants = data[key].map((plant, index) => ({
+              ...plant,
+              id: plant.id || `plant-${index}`
+            }));
             return;
           }
         }
-        this.plants = [data];
+        this.plants = [{ ...data, id: data.id || "plant-1" }];
       } else {
         throw new Error("Invalid data format");
       }
@@ -163,8 +257,10 @@ export default defineComponent({
         console.error("Plant missing ID:", plant);
         return;
       }
+      
+      // Navigate to plant detail page
       this.$router.push({
-        name: "PlantDetail",
+        name: "plantDetail", // Make sure this matches your route name
         params: { id: plant.id },
       });
     },
@@ -174,6 +270,30 @@ export default defineComponent({
       }
       return plant.imageUrl || "/images/plant-placeholder.jpg";
     },
+    onSearchInput() {
+      // Clear previous timeout
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout);
+      }
+      
+      // Show loading state
+      this.isSearching = true;
+      
+      // Debounce search to avoid excessive filtering
+      this.searchTimeout = setTimeout(() => {
+        this.isSearching = false;
+        // The computed property will handle the actual filtering
+      }, 300);
+    },
+    goToPage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+        // Scroll to top of results
+        this.$el.querySelector('.plants-section').scrollIntoView({ 
+          behavior: 'smooth' 
+        });
+      }
+    },
   },
 });
 </script>
@@ -181,24 +301,25 @@ export default defineComponent({
 <style scoped>
 .library-page {
   min-height: 100vh;
-  background: white;
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-  animation: fadeIn 0.6s ease-out;
+  background: #fafafa;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  padding-top: 200px; /* Space for fixed hero */
 }
 
-/* Hero Section */
+/* Fixed Hero Section */
 .hero-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   background-image: url("/images/ha7.jpg");
   background-size: cover;
   background-position: center;
   color: white;
-  padding: 6rem 2rem 4rem;
+  padding: 2rem 2rem 1.5rem;
   text-align: center;
-  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .hero-section::before {
@@ -208,7 +329,7 @@ export default defineComponent({
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .hero-content {
@@ -219,16 +340,16 @@ export default defineComponent({
 }
 
 .hero-content h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
+  font-size: 1rem;
   opacity: 0.9;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .search-bar-wrapper {
@@ -257,112 +378,205 @@ export default defineComponent({
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Plants Grid Section */
-.plants-grid-section {
+.search-loading {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.search-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #10b981;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Plants Section */
+.plants-section {
   padding: 2rem 1rem;
-  max-width: 1400px;
+  background: #fafafa;
+}
+
+.container {
+  max-width: 900px;
   margin: 0 auto;
-}
-
-.plants-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.plant-card {
-  display: flex;
   background: white;
   border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+}
+
+.results-summary {
+  padding: 1.5rem 1.5rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 0;
+}
+
+.search-term {
+  font-weight: 500;
+  color: #10b981;
+}
+
+.plants-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Plant Card */
+.plant-card {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
   cursor: pointer;
-  height: 200px;
+  transition: background-color 0.2s ease;
+  min-height: 120px;
 }
 
 .plant-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background-color: #f0fdf4; /* Light green hover */
+}
+
+.plant-card:last-child {
+  border-bottom: none;
 }
 
 .plant-image-container {
-  width: 20%;
-  min-width: 120px;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
   overflow: hidden;
+  flex-shrink: 0;
+  margin-right: 1.5rem;
 }
 
 .plant-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
 }
 
-.plant-card:hover .plant-image {
-  transform: scale(1.05);
+.plant-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .plant-info {
-  width: 80%;
-  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
-
-.plant-text-content {
-  overflow: hidden;
+  gap: 0.25rem;
 }
 
 .plant-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #111827;
+  margin: 0;
+  line-height: 1.4;
 }
 
 .plant-scientific {
   font-style: italic;
-  color: #4b5563;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
-.plant-tagline {
+.plant-description {
   color: #6b7280;
   font-size: 0.9rem;
   line-height: 1.4;
+  margin: 0.5rem 0 0 0;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.plant-actions {
+.plant-action {
+  margin-left: 1.5rem;
+  flex-shrink: 0;
+}
+
+.view-details-btn {
+  background-color: #10b981; /* Green color */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.view-details-btn:hover {
+  background-color: #059669; /* Darker green on hover */
+}
+
+/* Pagination */
+.pagination {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  border-top: 1px solid #e5e7eb;
   margin-top: 1rem;
 }
 
-.view-more-btn {
-  background-color: #105212;
-  color: white;
-  padding: 0.5rem 1.5rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
-.view-more-btn:hover {
-  background-color: #45a049;
-  transform: translateY(-1px);
+.pagination-btn:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #10b981;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.pagination-number {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  min-width: 40px;
+}
+
+.pagination-number:hover {
+  background: #f9fafb;
+  border-color: #10b981;
+}
+
+.pagination-number.active {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
 }
 
 /* Loading and Error States */
@@ -376,7 +590,7 @@ export default defineComponent({
   width: 40px;
   height: 40px;
   border: 3px solid #e5e7eb;
-  border-top: 3px solid #228c8c;
+  border-top: 3px solid #10b981;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -386,19 +600,21 @@ export default defineComponent({
   text-align: center;
   padding: 3rem;
   color: #dc2626;
-  background: #fef2f2;
-  border-radius: 12px;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .retry-btn {
   margin-top: 1rem;
-  padding: 0.5rem 1.5rem;
-  background: #228c8c;
+  padding: 0.75rem 1.5rem;
+  background: #10b981;
   color: white;
+  border: none;
   border-radius: 8px;
   font-weight: 500;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  background: #059669;
 }
 
 .no-results {
@@ -413,76 +629,82 @@ export default defineComponent({
   opacity: 0.6;
 }
 
+.no-results-subtitle {
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
+
 /* Animations */
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Adjustments */
+/* Responsive Design */
 @media (max-width: 768px) {
+  .library-page {
+    padding-top: 180px;
+  }
+
   .hero-section {
-    padding: 4rem 1rem 3rem;
+    padding: 1.5rem 1rem 1rem;
   }
 
   .hero-content h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    display: none;
+  }
+
+  .container {
+    margin: 0 0.5rem;
+    border-radius: 8px;
   }
 
   .plant-card {
+    padding: 1rem;
     flex-direction: column;
-    height: auto;
+    align-items: flex-start;
+    min-height: auto;
   }
 
   .plant-image-container {
     width: 100%;
     height: 180px;
+    margin-right: 0;
+    margin-bottom: 1rem;
   }
 
-  .plant-info {
+  .plant-action {
+    margin-left: 0;
+    margin-top: 1rem;
     width: 100%;
-    padding: 1.25rem;
   }
 
-  .plant-name {
-    white-space: normal;
+  .view-details-btn {
+    width: 100%;
+    padding: 1rem;
   }
 
-  .plant-tagline {
-    -webkit-line-clamp: 2;
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
 
-  .plant-actions {
-    justify-content: stretch;
-  }
-
-  .view-more-btn {
+  .pagination-numbers {
+    order: -1;
     width: 100%;
     justify-content: center;
-    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
   }
 }
 
-@media (min-width: 1200px) {
-  .plants-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+/* Ensure content doesn't hide behind fixed header */
+@media (max-width: 640px) {
+  .library-page {
+    padding-top: 160px;
   }
 }
 </style>
