@@ -5,7 +5,8 @@
     "otherCommonNames": ["Naranja", "Portakal", "Akutuo", "Ankaa"],
     "scientificName": "Citrus sinensis",
     "imageUrl": [
-      "/plantImages/orange/orange1.jpg,/plantImages/orange/orange1.jpg"
+      "/plantImages/orange/orange1.jpg",
+      "/plantImages/orange/orange2.jpg"
     ],
     "tagline": "A vibrant citrus fruit packed with Vitamin C, widely known for its immune-boosting and antioxidant properties.",
     "primaryHealthBenefits": [
@@ -39,7 +40,10 @@
     "commonName": "Lemon",
     "otherCommonNames": ["Limón", "Limon", "Citron", "Limo"],
     "scientificName": "Citrus limon",
-    "imageUrl": "/plantImages/lemon/lemon1.jpg,/plantImages/lemon/lemon1.jpg",
+    "imageUrl": [
+      "/plantImages/lemon/lemon1.jpg",
+      "/plantImages/lemon/lemon1.jpg"
+    ],
     "tagline": "A tangy citrus fruit celebrated for its high Vitamin C content and versatile culinary uses.",
     "primaryHealthBenefits": [
       "Immune System Support (high Vitamin C)",
@@ -72,7 +76,7 @@
     "commonName": "Tomato",
     "otherCommonNames": ["Tomate", "Domates", "Tamatar", "Tamat"],
     "scientificName": "Solanum lycopersicum",
-    "imageUrl": "/images/tomato_hero.jpg",
+    "imageUrl": ["/images/tomato/tomato1.jpg", "/images/tomato/tomato2.jpg"],
     "tagline": "A versatile fruit (botanically) celebrated for its high antioxidant content, especially lycopene, supporting heart and skin health.",
     "primaryHealthBenefits": [
       "Heart Health (Lycopene, Potassium)",
@@ -107,7 +111,7 @@
     "commonName": "Pawpaw",
     "otherCommonNames": ["Papaya", "Papaw", "Paw Paw", "Paw Pah"],
     "scientificName": "Carica papaya",
-    "imageUrl": "/images/pawpaw_hero.jpg",
+    "imageUrl": ["/images/pawpaw/pawpaw1.jpg", "/images/pawpaw/pawpaw2.jpg"],
     "tagline": "A tropical fruit renowned for its digestive enzymes, aiding digestion, reducing inflammation, and boosting immunity.",
     "primaryHealthBenefits": [
       "Digestive Aid (Papain, Chymopapain enzymes)",
@@ -143,7 +147,7 @@
     "commonName": "Onion",
     "otherCommonNames": ["Onion", "Cebolla", "Soğan", "Bawang", "Bulb Onion"],
     "scientificName": "Allium cepa",
-    "imageUrl": "/images/onion_hero.jpg",
+    "imageUrl": ["/images/onion/onion1.jpg", "/images/onion/onion2.jpg"],
     "tagline": "A staple vegetable known for its anti-inflammatory and antioxidant properties, supporting heart health and immune function.",
     "primaryHealthBenefits": [
       "Heart Health (Quercetin, Sulfur compounds)",

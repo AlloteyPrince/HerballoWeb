@@ -34,15 +34,15 @@
 
       <div v-else class="plants-grid">
         <!-- Plant Card -->
-        <div 
-          v-for="plant in filteredPlants" 
-          :key="plant.id" 
+        <div
+          v-for="plant in filteredPlants"
+          :key="plant.id"
           class="plant-card"
           @click="goToPlantDetail(plant)"
         >
           <div class="plant-image-container">
             <img
-              :src="plant.imageUrl || '/images/plant-placeholder.jpg'"
+              :src="getImageUrl(plant)"
               :alt="formatCommonName(plant.commonName)"
               class="plant-image"
               loading="lazy"
@@ -50,7 +50,9 @@
           </div>
           <div class="plant-info">
             <div class="plant-text-content">
-              <h3 class="plant-name">{{ formatCommonName(plant.commonName) }}</h3>
+              <h3 class="plant-name">
+                {{ formatCommonName(plant.commonName) }}
+              </h3>
               <p class="plant-scientific">
                 {{ plant.scientificName || "Scientific name not available" }}
               </p>
@@ -59,9 +61,7 @@
               </p>
             </div>
             <div class="plant-actions">
-              <Button class="view-more-btn">
-                View Details
-              </Button>
+              <Button class="view-more-btn"> View Details </Button>
             </div>
           </div>
         </div>
@@ -103,7 +103,9 @@ export default defineComponent({
 
       const search = this.searchTerm.toLowerCase();
       return this.plants.filter((plant) => {
-        const commonName = this.formatCommonName(plant.commonName).toLowerCase();
+        const commonName = this.formatCommonName(
+          plant.commonName
+        ).toLowerCase();
         const scientificName = (plant.scientificName || "").toLowerCase();
         const tagline = (plant.tagline || "").toLowerCase();
 
@@ -166,6 +168,12 @@ export default defineComponent({
         params: { id: plant.id },
       });
     },
+    getImageUrl(plant) {
+      if (Array.isArray(plant.imageUrl)) {
+        return plant.imageUrl[0] || "/images/plant-placeholder.jpg";
+      }
+      return plant.imageUrl || "/images/plant-placeholder.jpg";
+    },
   },
 });
 </script>
@@ -174,7 +182,11 @@ export default defineComponent({
 .library-page {
   min-height: 100vh;
   background: white;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -403,13 +415,23 @@ export default defineComponent({
 
 /* Animations */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive Adjustments */
@@ -417,30 +439,30 @@ export default defineComponent({
   .hero-section {
     padding: 4rem 1rem 3rem;
   }
-  
+
   .hero-content h1 {
     font-size: 2rem;
   }
-  
+
   .plant-card {
     flex-direction: column;
     height: auto;
   }
-  
+
   .plant-image-container {
     width: 100%;
     height: 180px;
   }
-  
+
   .plant-info {
     width: 100%;
     padding: 1.25rem;
   }
-  
+
   .plant-name {
     white-space: normal;
   }
-  
+
   .plant-tagline {
     -webkit-line-clamp: 2;
   }
