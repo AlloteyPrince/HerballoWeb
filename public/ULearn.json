@@ -76,7 +76,10 @@
     "commonName": "Tomato",
     "otherCommonNames": ["Tomate", "Domates", "Tamatar", "Tamat"],
     "scientificName": "Solanum lycopersicum",
-    "imageUrl": ["/images/tomato/tomato1.jpg", "/images/tomato/tomato2.jpg"],
+    "imageUrl": [
+      "/plantImages/tomato/tomato3.jpg",
+      "/plantImages/tomato/tomato2.jpg"
+    ],
     "tagline": "A versatile fruit (botanically) celebrated for its high antioxidant content, especially lycopene, supporting heart and skin health.",
     "primaryHealthBenefits": [
       "Heart Health (Lycopene, Potassium)",
@@ -111,7 +114,10 @@
     "commonName": "Pawpaw",
     "otherCommonNames": ["Papaya", "Papaw", "Paw Paw", "Paw Pah"],
     "scientificName": "Carica papaya",
-    "imageUrl": ["/images/pawpaw/pawpaw1.jpg", "/images/pawpaw/pawpaw2.jpg"],
+    "imageUrl": [
+      "/plantImages/pawpaw/pawpaw1.jpg",
+      "/plantImages/pawpaw/pawpaw2.jpg"
+    ],
     "tagline": "A tropical fruit renowned for its digestive enzymes, aiding digestion, reducing inflammation, and boosting immunity.",
     "primaryHealthBenefits": [
       "Digestive Aid (Papain, Chymopapain enzymes)",
@@ -147,7 +153,10 @@
     "commonName": "Onion",
     "otherCommonNames": ["Onion", "Cebolla", "Soğan", "Bawang", "Bulb Onion"],
     "scientificName": "Allium cepa",
-    "imageUrl": ["/images/onion/onion1.jpg", "/images/onion/onion2.jpg"],
+    "imageUrl": [
+      "/plantImages/onion/onion1.jpg",
+      "/plantImages/onion/onion2.jpg"
+    ],
     "tagline": "A staple vegetable known for its anti-inflammatory and antioxidant properties, supporting heart health and immune function.",
     "primaryHealthBenefits": [
       "Heart Health (Quercetin, Sulfur compounds)",
