@@ -1,214 +1,394 @@
 <template>
-  <div class="resource-detail-page" v-if="resource">
-    <section class="detail-header">
-      <router-link to="/library" class="back-link">
-        &larr; Back to Library
-      </router-link>
-      <h1>{{ resource.botanicalName }}</h1>
-      <p class="common-name">{{ resource.commonName }}</p>
-      <p class="remedies-summary">{{ resource.remedies }}</p>
-    </section>
+  <div class="plant-detail-page">
+    <!-- Back Button -->
+    <button @click="$router.go(-1)" class="back-button">
+      ← Back to Library
+    </button>
 
-    <section class="detail-content" v-html="resource.content"></section>
+    <!-- Hero Section -->
+    <div class="plant-hero">
+      <!-- Primary Image -->
+      <img 
+        :src="plant.imageUrl?.[0] || '/images/plant-placeholder.jpg'" 
+        :alt="plant.commonName"
+        class="hero-image"
+      />
+      <div class="hero-overlay">
+        <h1>{{ plant.commonName }}</h1>
+        <p class="scientific-name">
+          <em>{{ plant.scientificName }}</em>
+        </p>
+        <p class="other-names" v-if="plant.otherCommonNames?.length">
+          Also known as: {{ plant.otherCommonNames.join(", ") }}
+        </p>
+      </div>
+      <!-- Image Gallery (if multiple images) - moved below overlay -->
+      <div class="image-gallery" v-if="plant.imageUrl?.length > 1">
+        <img 
+          v-for="(img, index) in plant.imageUrl" 
+          :key="index"
+          :src="img" 
+          :alt="plant.commonName"
+          @click="openImageModal(img)"
+          class="gallery-thumbnail"
+        />
+      </div>
+    </div>
 
-    <section class="disclaimer-note">
-      <p><strong>Disclaimer:</strong> The information provided here is for educational purposes only and should not be considered a substitute for professional medical advice, diagnosis, or treatment. Always consult with a licensed Medical Herbalist or conventional healthcare professional for any health concerns or before starting any new treatment.</p>
-    </section>
-  </div>
-  <div v-else-if="loading" class="loading-state">
-    <p>Loading plant details...</p>
-  </div>
-  <div v-else class="error-state">
-    <p>Plant details not found or an error occurred.</p>
-    <p>Please try going back to the <router-link to="/library">Library</router-link>.</p>
+    <!-- Main Content -->
+    <div class="plant-content">
+      <!-- Tagline -->
+      <p class="tagline">{{ plant.tagline }}</p>
+
+      <!-- Health Benefits -->
+      <div class="detail-section" v-if="plant.primaryHealthBenefits?.length">
+        <h2>🌟 Health Benefits</h2>
+        <ul class="benefits-list">
+          <li v-for="(benefit, index) in plant.primaryHealthBenefits" :key="index">
+            {{ benefit }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Active Compounds -->
+      <div class="detail-section" v-if="plant.keyActiveCompounds?.length">
+        <h2>🧪 Key Active Compounds</h2>
+        <div class="compounds-grid">
+          <span v-for="(compound, index) in plant.keyActiveCompounds" :key="index">
+            {{ compound }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Preparations -->
+      <div class="detail-section" v-if="plant.commonPreparations?.length">
+        <h2>🍽️ Common Preparations</h2>
+        <div class="preparations-grid">
+          <span v-for="(prep, index) in plant.commonPreparations" :key="index">
+            {{ prep }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Warnings -->
+      <div class="detail-section warning" v-if="plant.specificWarnings?.length">
+        <h2>⚠️ Warnings</h2>
+        <ul>
+          <li v-for="(warning, index) in plant.specificWarnings" :key="index">
+            {{ warning }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- External Link -->
+      <div class="external-link" v-if="plant.readMoreLink">
+        <a :href="plant.readMoreLink" target="_blank" rel="noopener">
+          Learn more about {{ plant.commonName }} →
+        </a>
+      </div>
+    </div>
+
+    <!-- Image Modal (Optional) -->
+    <div v-if="showImageModal" class="image-modal" @click="closeImageModal">
+      <img :src="selectedImage" :alt="plant.commonName" />
+    </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'; // Import defineComponent for Options API
-
-// Plant Structure (for your reference, not enforced without TypeScript)
-// {
-//   id: string;
-//   botanicalName: string;
-//   commonName: string;
-//   remedies: string;
-//   content: string;
-// }
-
-export default defineComponent({
-  name: 'PlantDetail', // Component name
-
+export default {
+  name: "PlantDetail",
   data() {
     return {
-      resource: null, // Initial state for the plant details
-      loading: true,  // Loading indicator
-      error: null,    // Error message if fetch fails or resource not found
+      plant: {},
+      isLoading: true,
+      error: null,
+      showImageModal: false,
+      selectedImage: "",
     };
   },
-
-  watch: {
-    // Watch for changes in the route parameter 'id'
-    '$route.params.id': {
-      handler(newId) {
-        if (newId) {
-          this.fetchResourceDetails(newId);
-        }
-      },
-      immediate: true, // Run the handler immediately when the component is mounted
-    },
+  async created() {
+    await this.fetchPlantData();
   },
-
-  mounted() {
-    // In a standard Vue.js project, there's no definePageMeta like in Nuxt.js.
-    // The data fetching logic is handled in `watch` or directly in `mounted` if no ID watching is needed.
-  },
-
   methods: {
-    async fetchResourceDetails(plantId) {
-      this.loading = true; // Set loading to true before fetching
-      this.resource = null; // Clear previous resource
-      this.error = null;    // Clear previous error
-
+    async fetchPlantData() {
       try {
-        const response = await fetch('/ULearn.json'); // Fetch your JSON data
-        if (!response.ok) {
-          // Handle HTTP errors (e.g., 404, 500)
-          const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
-          throw new Error(`HTTP error! status: ${response.status} - ${errorData.message || response.statusText}`);
+        const plantId = this.$route.params.id;
+        const response = await fetch("/ULearn.json");
+        const plants = await response.json();
+        this.plant = plants.find((p) => p.id === plantId) || {};
+        
+        if (!this.plant.id) {
+          throw new Error("Plant not found");
         }
-        const allPlants = await response.json(); // Parse the JSON data
-        // Find the specific plant by ID
-        this.resource = allPlants.find(plant => plant.id === plantId) || null;
-
-        if (!this.resource) {
-          this.error = 'Resource not found.'; // Set error if plant ID is not found
-        }
-      } catch (e) {
-        // Catch any network errors or errors from the fetch/parsing
-        this.error = e.message || 'Error fetching resource details.';
-        console.error('Error fetching ULearn.json for resource detail:', e);
+      } catch (err) {
+        this.error = err.message;
+        console.error("Error loading plant:", err);
       } finally {
-        this.loading = false; // Set loading to false after fetch completes (success or failure)
+        this.isLoading = false;
       }
     },
+    openImageModal(img) {
+      this.selectedImage = img;
+      this.showImageModal = true;
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    },
+    closeImageModal() {
+      this.showImageModal = false;
+      document.body.style.overflow = "auto";
+    },
   },
-});
+};
 </script>
 
 <style scoped>
-/* Scoped styles for the PlantDetail component */
-.resource-detail-page {
+.plant-detail-page {
   max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: "Inter", sans-serif;
+  color: #333;
 }
 
-.detail-header {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.back-link {
+/* Back Button */
+.back-button {
+  background: none;
+  border: none;
+  color: #10b981;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 1rem 0;
+  padding: 0.5rem 0;
   display: inline-flex;
   align-items: center;
-  margin-bottom: 20px;
-  color: #228c8c; /* Your primary light color */
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s ease;
+  gap: 0.25rem;
+  transition: opacity 0.2s;
 }
 
-.back-link:hover {
-  color: #1a6f6f; /* A slightly darker shade for hover */
+.back-button:hover {
+  opacity: 0.8;
 }
 
-.back-link svg {
-  margin-right: 8px;
+/* Hero Section */
+.plant-hero {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  height: 350px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  font-size: 2.5em;
-  color: #333;
-  margin-bottom: 10px;
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.common-name {
-  font-size: 1.3em;
-  color: #666;
-  margin-bottom: 15px;
+.hero-overlay {
+  position: absolute;
+  bottom: 80px; /* Moved up to make room for image gallery */
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
 }
 
-.remedies-summary {
-  font-size: 1.1em;
-  color: #555;
+.hero-overlay h1 {
+  font-size: 2.25rem;
+  margin: 0 0 0.25rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.scientific-name {
+  font-style: italic;
+  opacity: 0.9;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.other-names {
+  margin-top: 0.5rem;
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+/* Image Gallery */
+.image-gallery {
+  position: absolute;
+  bottom: 10px; /* Moved to very bottom */
+  left: 0;
+  right: 0;
+  padding: 0 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.image-gallery::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.gallery-thumbnail {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  border: 2px solid white;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex-shrink: 0; /* Prevent thumbnails from shrinking */
+}
+
+.gallery-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+/* Main Content */
+.tagline {
+  font-size: 1.2rem;
+  color: #4b5563;
+  margin: 1.5rem 0;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.detail-section {
+  margin-bottom: 2.5rem;
+}
+
+.detail-section h2 {
+  font-size: 1.5rem;
+  color: #111827;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+/* Health Benefits */
+.benefits-list {
+  padding-left: 1.25rem;
+}
+
+.benefits-list li {
+  margin-bottom: 0.75rem;
   line-height: 1.5;
 }
 
-.detail-content {
-  line-height: 1.7;
-  color: #444;
-  margin-bottom: 30px;
+/* Active Compounds & Preparations Grid */
+.compounds-grid,
+.preparations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
 }
 
-/* Basic styling for content HTML to ensure readability */
-.detail-content h2 {
-  font-size: 1.8em;
-  color: #333;
-  margin-top: 25px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-}
-
-.detail-content h3 {
-  font-size: 1.4em;
-  color: #444;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.detail-content p {
-  margin-bottom: 1em;
-}
-
-.detail-content ul,
-.detail-content ol {
-  margin-left: 25px;
-  margin-bottom: 1em;
-}
-
-.detail-content li {
-  margin-bottom: 0.5em;
-}
-
-.disclaimer-note {
-  background-color: #fcf8e3;
-  border: 1px solid #faebcc;
-  border-radius: 5px;
-  padding: 15px;
-  font-size: 0.9em;
-  color: #8a6d3b;
-  margin-top: 30px;
-}
-
-.disclaimer-note strong {
-  color: #66512c;
-}
-
-.loading-state,
-.error-state {
+.compounds-grid span,
+.preparations-grid span {
+  background: #f3f4f6;
+  padding: 0.75rem;
+  border-radius: 8px;
   text-align: center;
-  padding: 50px;
-  color: #777;
+  font-size: 0.9rem;
 }
 
-.error-state p {
-  color: #d9534f;
-  font-weight: 500;
+/* Warnings */
+.warning {
+  background: #fef2f2;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #ef4444;
+}
+
+.warning h2 {
+  color: #dc2626;
+  border-bottom-color: #fca5a5;
+}
+
+.warning li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+/* External Link */
+.external-link {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.external-link a {
+  color: #10b981;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed #10b981;
+  padding-bottom: 0.1rem;
+  transition: all 0.2s;
+}
+
+.external-link a:hover {
+  color: #059669;
+  border-bottom-color: #059669;
+}
+
+/* Image Modal */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+.image-modal img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .plant-hero {
+    height: 280px;
+  }
+
+  .hero-overlay {
+    bottom: 70px; /* Adjusted for mobile */
+    padding: 1.5rem;
+  }
+
+  .hero-overlay h1 {
+    font-size: 1.8rem;
+  }
+
+  .compounds-grid,
+  .preparations-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .plant-hero {
+    height: 220px;
+  }
+
+  .hero-overlay {
+    bottom: 60px; /* Further adjusted for small screens */
+    padding: 1rem;
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+  }
 }
 </style>
