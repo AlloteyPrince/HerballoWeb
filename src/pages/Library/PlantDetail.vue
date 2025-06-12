@@ -5,6 +5,17 @@
       ← Back to Library
     </button>
 
+    <!-- Plant Names Section -->
+    <div class="plant-names">
+      <h1>{{ plant.commonName }}</h1>
+      <p class="scientific-name">
+        <em>{{ plant.scientificName }}</em>
+      </p>
+      <p class="other-names" v-if="plant.otherCommonNames?.length">
+        Also known as: {{ plant.otherCommonNames.join(", ") }}
+      </p>
+    </div>
+
     <!-- Hero Section -->
     <div class="plant-hero">
       <!-- Primary Image -->
@@ -13,16 +24,8 @@
         :alt="plant.commonName"
         class="hero-image"
       />
-      <div class="hero-overlay">
-        <h1>{{ plant.commonName }}</h1>
-        <p class="scientific-name">
-          <em>{{ plant.scientificName }}</em>
-        </p>
-        <p class="other-names" v-if="plant.otherCommonNames?.length">
-          Also known as: {{ plant.otherCommonNames.join(", ") }}
-        </p>
-      </div>
-      <!-- Image Gallery (if multiple images) - moved below overlay -->
+      <div class="hero-overlay"></div>
+      <!-- Image Gallery (if multiple images) -->
       <div class="image-gallery" v-if="plant.imageUrl?.length > 1">
         <img 
           v-for="(img, index) in plant.imageUrl" 
@@ -169,6 +172,32 @@ export default {
   opacity: 0.8;
 }
 
+/* Plant Names Section */
+.plant-names {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.plant-names h1 {
+  font-size: 2.5rem;
+  color: #111827;
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+
+.plant-names .scientific-name {
+  font-style: italic;
+  color: #6b7280;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.plant-names .other-names {
+  margin-top: 0.5rem;
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
 /* Hero Section */
 .plant-hero {
   position: relative;
@@ -187,31 +216,11 @@ export default {
 
 .hero-overlay {
   position: absolute;
-  bottom: 80px; /* Moved up to make room for image gallery */
+  bottom: 0;
   left: 0;
   right: 0;
-  padding: 2rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-  color: white;
-}
-
-.hero-overlay h1 {
-  font-size: 2.25rem;
-  margin: 0 0 0.25rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.scientific-name {
-  font-style: italic;
-  opacity: 0.9;
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.other-names {
-  margin-top: 0.5rem;
-  opacity: 0.8;
-  font-size: 0.95rem;
+  height: 80px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.3));
 }
 
 /* Image Gallery */
@@ -358,17 +367,16 @@ export default {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .plant-names h1 {
+    font-size: 2rem;
+  }
+
+  .plant-names .scientific-name {
+    font-size: 1.1rem;
+  }
+
   .plant-hero {
     height: 280px;
-  }
-
-  .hero-overlay {
-    bottom: 70px; /* Adjusted for mobile */
-    padding: 1.5rem;
-  }
-
-  .hero-overlay h1 {
-    font-size: 1.8rem;
   }
 
   .compounds-grid,
@@ -378,13 +386,16 @@ export default {
 }
 
 @media (max-width: 480px) {
-  .plant-hero {
-    height: 220px;
+  .plant-names h1 {
+    font-size: 1.7rem;
   }
 
-  .hero-overlay {
-    bottom: 60px; /* Further adjusted for small screens */
-    padding: 1rem;
+  .plant-names .scientific-name {
+    font-size: 1rem;
+  }
+
+  .plant-hero {
+    height: 220px;
   }
 
   .tagline {
