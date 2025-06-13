@@ -504,7 +504,7 @@ export default defineComponent({
 }
 
 .view-details-btn {
-  background-color: #10b981; /* Green color */
+  background-color: #105212; /* Green color */
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -516,7 +516,7 @@ export default defineComponent({
 }
 
 .view-details-btn:hover {
-  background-color: #059669; /* Darker green on hover */
+  background-color: #45a049; /* Darker green on hover */
 }
 
 /* Pagination */

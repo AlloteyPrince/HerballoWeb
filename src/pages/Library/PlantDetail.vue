@@ -5,6 +5,28 @@
       ← Back to Library
     </button>
 
+    <!-- Hero Section -->
+    <div class="plant-hero">
+      <!-- Primary Image -->
+      <img
+        :src="plant.imageUrl?.[0] || '/images/plant-placeholder.jpg'"
+        :alt="plant.commonName"
+        class="hero-image"
+      />
+      <div class="hero-overlay"></div>
+      <!-- Image Gallery (if multiple images) -->
+      <div class="image-gallery" v-if="plant.imageUrl?.length > 1">
+        <img
+          v-for="(img, index) in plant.imageUrl"
+          :key="index"
+          :src="img"
+          :alt="plant.commonName"
+          @click="openImageModal(img)"
+          class="gallery-thumbnail"
+        />
+      </div>
+    </div>
+
     <!-- Plant Names Section -->
     <div class="plant-names">
       <h1>{{ plant.commonName }}</h1>
@@ -16,28 +38,6 @@
       </p>
     </div>
 
-    <!-- Hero Section -->
-    <div class="plant-hero">
-      <!-- Primary Image -->
-      <img 
-        :src="plant.imageUrl?.[0] || '/images/plant-placeholder.jpg'" 
-        :alt="plant.commonName"
-        class="hero-image"
-      />
-      <div class="hero-overlay"></div>
-      <!-- Image Gallery (if multiple images) -->
-      <div class="image-gallery" v-if="plant.imageUrl?.length > 1">
-        <img 
-          v-for="(img, index) in plant.imageUrl" 
-          :key="index"
-          :src="img" 
-          :alt="plant.commonName"
-          @click="openImageModal(img)"
-          class="gallery-thumbnail"
-        />
-      </div>
-    </div>
-
     <!-- Main Content -->
     <div class="plant-content">
       <!-- Tagline -->
@@ -47,7 +47,10 @@
       <div class="detail-section" v-if="plant.primaryHealthBenefits?.length">
         <h2>🌟 Health Benefits</h2>
         <ul class="benefits-list">
-          <li v-for="(benefit, index) in plant.primaryHealthBenefits" :key="index">
+          <li
+            v-for="(benefit, index) in plant.primaryHealthBenefits"
+            :key="index"
+          >
             {{ benefit }}
           </li>
         </ul>
@@ -57,7 +60,10 @@
       <div class="detail-section" v-if="plant.keyActiveCompounds?.length">
         <h2>🧪 Key Active Compounds</h2>
         <div class="compounds-grid">
-          <span v-for="(compound, index) in plant.keyActiveCompounds" :key="index">
+          <span
+            v-for="(compound, index) in plant.keyActiveCompounds"
+            :key="index"
+          >
             {{ compound }}
           </span>
         </div>
@@ -120,7 +126,7 @@ export default {
         const response = await fetch("/ULearn.json");
         const plants = await response.json();
         this.plant = plants.find((p) => p.id === plantId) || {};
-        
+
         if (!this.plant.id) {
           throw new Error("Plant not found");
         }
@@ -180,9 +186,11 @@ export default {
 
 .plant-names h1 {
   font-size: 2.5rem;
-  color: #111827;
+  color: #ffffff;
   margin: 0 0 0.5rem;
   font-weight: 700;
+  background-color:#033726;
+  border-radius: 0.5rem;
 }
 
 .plant-names .scientific-name {
