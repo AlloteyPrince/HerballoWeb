@@ -3,23 +3,34 @@
 </template>
 
 <script>
-import { useSEO } from '../composables/useSEO'
+import { useSEO } from "../composables/useSEO";
 import UnderConstruction from "@/components/UnderConstruction.vue";
 
-export default{
+export default {
   name: "ULearnPage",
   components: {
     UnderConstruction,
   },
   setup() {
     useSEO({
-      title: 'Herballo Ulearn - Herbal Medicine Library & Education',
-      description: 'Explore our comprehensive herbal medicine library and educational content at Herballo Ulearn.',
-      keywords: 'herbal education, herbal library, herbal medicine courses',
-      url: 'https://herballo.co/ulearn'
-    })
-  }
-}
+      title: "Herballo Ulearn - Herbal Medicine Library & Education",
+      description:
+        "Explore our comprehensive herbal medicine library and educational content at Herballo Ulearn.",
+      keywords: "herbal education, herbal library, herbal medicine courses",
+      url: "https://herballo.co/ulearn",
+    });
+  },
+  methods: {
+    trackContactClick() {
+      if (window.gtag) {
+        window.gtag("event", "contact_click", {
+          event_category: "engagement",
+          event_label: "Contact Button",
+        });
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped></style>

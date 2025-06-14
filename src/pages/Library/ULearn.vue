@@ -7,7 +7,8 @@
         <div class="hero-content">
           <h1 class="text-white">ULearn Library</h1>
           <p class="hero-subtitle hidden md:block">
-            Discover the power of nature through our comprehensive plant database.
+            Discover the power of nature through our comprehensive plant
+            database.
           </p>
           <div class="search-bar-wrapper">
             <IconSearch class="search-icon" />
@@ -43,8 +44,11 @@
             <!-- Results Summary -->
             <div class="results-summary">
               <p>
-                Showing {{ paginatedPlants.length }} of {{ filteredPlants.length }} plants
-                <span v-if="searchTerm" class="search-term">for "{{ searchTerm }}"</span>
+                Showing {{ paginatedPlants.length }} of
+                {{ filteredPlants.length }} plants
+                <span v-if="searchTerm" class="search-term"
+                  >for "{{ searchTerm }}"</span
+                >
               </p>
             </div>
 
@@ -63,23 +67,28 @@
                   loading="lazy"
                 />
               </div>
-              
+
               <div class="plant-content">
                 <div class="plant-info">
                   <h3 class="plant-name">
                     {{ formatCommonName(plant.commonName) }}
                   </h3>
                   <p class="plant-scientific">
-                    {{ plant.scientificName || "Scientific name not available" }}
+                    {{
+                      plant.scientificName || "Scientific name not available"
+                    }}
                   </p>
                   <p class="plant-description">
                     {{ plant.tagline || "No description available" }}
                   </p>
                 </div>
               </div>
-              
+
               <div class="plant-action">
-                <button class="view-details-btn" @click.stop="goToPlantDetail(plant)">
+                <button
+                  class="view-details-btn"
+                  @click.stop="goToPlantDetail(plant)"
+                >
                   View Details
                 </button>
               </div>
@@ -87,27 +96,30 @@
 
             <!-- Pagination -->
             <div v-if="totalPages > 1" class="pagination">
-              <button 
-                @click="goToPage(currentPage - 1)" 
+              <button
+                @click="goToPage(currentPage - 1)"
                 :disabled="currentPage === 1"
                 class="pagination-btn"
               >
                 Previous
               </button>
-              
+
               <div class="pagination-numbers">
                 <button
                   v-for="page in visiblePages"
                   :key="page"
                   @click="goToPage(page)"
-                  :class="['pagination-number', { active: page === currentPage }]"
+                  :class="[
+                    'pagination-number',
+                    { active: page === currentPage },
+                  ]"
                 >
                   {{ page }}
                 </button>
               </div>
-              
-              <button 
-                @click="goToPage(currentPage + 1)" 
+
+              <button
+                @click="goToPage(currentPage + 1)"
                 :disabled="currentPage === totalPages"
                 class="pagination-btn"
               >
@@ -124,10 +136,7 @@
         </div>
       </section>
     </div>
-    
-    
   </div>
-  
 </template>
 
 <script>
@@ -143,7 +152,7 @@ export default defineComponent({
     Input,
     Button,
     IconSearch,
-    Navigation
+    Navigation,
   },
   data() {
     return {
@@ -163,7 +172,9 @@ export default defineComponent({
 
       const search = this.searchTerm.toLowerCase();
       return this.plants.filter((plant) => {
-        const commonName = this.formatCommonName(plant.commonName).toLowerCase();
+        const commonName = this.formatCommonName(
+          plant.commonName
+        ).toLowerCase();
         const scientificName = (plant.scientificName || "").toLowerCase();
         const tagline = (plant.tagline || "").toLowerCase();
 
@@ -186,20 +197,20 @@ export default defineComponent({
       const pages = [];
       const totalPages = this.totalPages;
       const current = this.currentPage;
-      
+
       // Show max 5 page numbers
       let start = Math.max(1, current - 2);
       let end = Math.min(totalPages, start + 4);
-      
+
       // Adjust start if we're near the end
       if (end - start < 4) {
         start = Math.max(1, end - 4);
       }
-      
+
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-      
+
       return pages;
     },
   },
@@ -213,6 +224,14 @@ export default defineComponent({
     this.loadPlants();
   },
   methods: {
+    trackContactClick() {
+      if (window.gtag) {
+        window.gtag("event", "contact_click", {
+          event_category: "engagement",
+          event_label: "Contact Button",
+        });
+      }
+    },
     async loadPlants() {
       this.isLoading = true;
       this.error = null;
@@ -232,7 +251,7 @@ export default defineComponent({
       if (Array.isArray(data)) {
         this.plants = data.map((plant, index) => ({
           ...plant,
-          id: plant.id || `plant-${index}` // Ensure each plant has an ID
+          id: plant.id || `plant-${index}`, // Ensure each plant has an ID
         }));
       } else if (data && typeof data === "object") {
         const possibleArrayKeys = ["plants", "data", "items"];
@@ -240,7 +259,7 @@ export default defineComponent({
           if (Array.isArray(data[key])) {
             this.plants = data[key].map((plant, index) => ({
               ...plant,
-              id: plant.id || `plant-${index}`
+              id: plant.id || `plant-${index}`,
             }));
             return;
           }
@@ -261,7 +280,7 @@ export default defineComponent({
         console.error("Plant missing ID:", plant);
         return;
       }
-      
+
       // Navigate to plant detail page
       this.$router.push({
         name: "plantDetail", // Make sure this matches your route name
@@ -279,10 +298,10 @@ export default defineComponent({
       if (this.searchTimeout) {
         clearTimeout(this.searchTimeout);
       }
-      
+
       // Show loading state
       this.isSearching = true;
-      
+
       // Debounce search to avoid excessive filtering
       this.searchTimeout = setTimeout(() => {
         this.isSearching = false;
@@ -293,8 +312,8 @@ export default defineComponent({
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
         // Scroll to top of results
-        this.$el.querySelector('.plants-section').scrollIntoView({ 
-          behavior: 'smooth' 
+        this.$el.querySelector(".plants-section").scrollIntoView({
+          behavior: "smooth",
         });
       }
     },
@@ -306,7 +325,11 @@ export default defineComponent({
 .library-page {
   min-height: 100vh;
   background: #fafafa;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   padding-top: 200px; /* Space for fixed hero */
 }
 
@@ -640,8 +663,12 @@ export default defineComponent({
 
 /* Animations */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive Design */

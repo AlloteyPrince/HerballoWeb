@@ -1,12 +1,12 @@
 <template>
   <navigation />
   <hero />
-  <WhyHerballo/>
+  <WhyHerballo />
   <services />
   <library></library>
   <FixedBackgroundScroll />
   <blogspace id="blog"></blogspace>
-  <VFooter/>
+  <VFooter />
 </template>
 
 <script>
@@ -21,7 +21,6 @@ import FixedBackgroundScroll from "@/components/FixedBackgroundScroll.vue";
 import VFooter from "@/components/VFooter.vue";
 import WhyHerballo from "@/components/WhyHerballo.vue";
 
-
 export default {
   name: "HomePage",
   components: {
@@ -32,12 +31,21 @@ export default {
     Library,
     Navigation,
     FixedBackgroundScroll,
-    VFooter
+    VFooter,
   },
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    trackContactClick() {
+      if (window.gtag) {
+        window.gtag("event", "contact_click", {
+          event_category: "engagement",
+          event_label: "Contact Button",
+        });
+      }
+    },
+  },
   setup() {
     useSEO({
       title: "Herballo - Natural Herbal Medicine Solutions",

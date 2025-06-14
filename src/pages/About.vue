@@ -210,6 +210,16 @@ import { onMounted, nextTick } from "vue";
 export default {
   name: "About",
   components: { VFooter, Navigation },
+  methods:{
+     trackContactClick() {
+    if (window.gtag) {
+      window.gtag('event', 'contact_click', {
+        event_category: 'engagement',
+        event_label: 'Contact Button',
+      })
+    }
+  }
+  },
   setup() {
     useSEO({
       title: "About Herballo - Herbal Medicine Education & Research",

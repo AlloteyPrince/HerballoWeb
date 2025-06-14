@@ -14,10 +14,19 @@ export default {
   name: "Consultation",
   components: {
     Consent,
-    UnderConstruction
-  }
+    UnderConstruction,
+  },
+  method: {
+    trackContactClick() {
+      if (window.gtag) {
+        window.gtag("event", "contact_click", {
+          event_category: "engagement",
+          event_label: "Contact Button",
+        });
+      }
+    },
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
