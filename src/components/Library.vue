@@ -41,7 +41,7 @@ export default {
 .main {
   background: none !important;
   background-color: transparent !important;
-  padding: 2rem 0;
+  padding: 8rem 0;
   min-height: 50vh;
   display: flex;
   align-items: center;

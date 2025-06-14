@@ -1,6 +1,7 @@
 <template>
   <navigation />
   <hero />
+  <WhyHerballo/>
   <services />
   <library></library>
   <FixedBackgroundScroll />
@@ -18,12 +19,14 @@ import Services from "@/components/Services.vue";
 import Navigation from "@/components/Navigation.vue";
 import FixedBackgroundScroll from "@/components/FixedBackgroundScroll.vue";
 import VFooter from "@/components/VFooter.vue";
+import WhyHerballo from "@/components/WhyHerballo.vue";
 
 
 export default {
   name: "HomePage",
   components: {
     Hero,
+    WhyHerballo,
     Services,
     Blogspace,
     Library,

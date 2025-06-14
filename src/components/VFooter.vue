@@ -1,7 +1,8 @@
 <template>
-  
   <footer class="footer-container">
+    <!-- The GetInTouch component is placed here -->
     <GetInTouch />
+
     <div class="signup-box">
       <h2>Live Green! Stay Informed!</h2>
       <p>
@@ -39,10 +40,10 @@
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Use</a>
         <a href="#">Contact</a>
-        топ
       </div>
     </div>
 
+    <!-- Welcome Popup Overlay -->
     <div v-if="showWelcomePopup" class="welcome-popup-overlay">
       <div class="welcome-popup-content">
         <button class="close-popup-button" @click="closeWelcomePopup">
@@ -59,6 +60,7 @@
 </template>
 
 <script>
+// Ensure the path to GetInTouch.vue is correct for your project structure
 import GetInTouch from "@/components/GetInTouch.vue";
 
 export default {
@@ -89,12 +91,13 @@ export default {
       // Prepare form data for FormSubmit.co
       const formData = new FormData();
       formData.append("email", this.email);
-      formData.append("_captcha", "false");
+      formData.append("_captcha", "false"); // Disable captcha for testing, consider re-enabling for production
       formData.append("_subject", "New Newsletter Subscription from Herballo");
 
       try {
+        // IMPORTANT: Replace 'info@herballo.co' with your actual FormSubmit.co endpoint!
+        // This is typically the email address you registered with FormSubmit.co
         const response = await fetch("https://formsubmit.co/info@herballo.co", {
-          // IMPORTANT: Replace 'info@herballo.co' with your actual email address!
           method: "POST",
           body: formData,
         });
@@ -129,8 +132,8 @@ export default {
 <style scoped>
 /* Your existing footer styles */
 .footer-container {
-  background-color: #ffffff;
-  color: #105212;
+  background-color: rgb(247, 250, 229); /* Updated background color */
+  color: #105212; /* Brand green for main text */
   padding: 3rem 1rem 1rem;
   text-align: center;
 }
@@ -138,6 +141,7 @@ export default {
 .signup-box {
   max-width: 600px;
   margin: 0 auto;
+  padding-bottom: 2rem; /* Added padding to separate from footer-info */
 }
 
 .signup-box h2 {
@@ -149,10 +153,10 @@ export default {
 .signup-box p {
   font-size: 1rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: #333; /* Darker grey for body text */
 }
 
-/* NEW FORM STYLE */
+/* Newsletter Form Styles */
 .form-group {
   display: flex;
   justify-content: center;
@@ -174,24 +178,31 @@ export default {
 }
 
 .subscribe-button {
-  background-color: #105212;
+  background-color: #105212; /* Brand green for button */
   color: white;
   border: none;
   padding: 0 1.5rem;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
-  white-space: nowrap;
+  white-space: nowrap; /* Prevents button text from wrapping */
 }
 
 .subscribe-button:hover {
-  background-color: #0c3d0e;
+  background-color: #0c3d0e; /* Darker green on hover */
 }
 
-/* Footer Info */
+/* Submission Message Styles */
+.error-message {
+  color: #dc3545; /* Red for errors */
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* Footer Info (Copyright and Links) */
 .footer-info {
   margin-top: 2rem;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #ccc; /* Separator line */
   padding-top: 1rem;
   font-size: 0.9rem;
 }
@@ -201,23 +212,16 @@ export default {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allows links to wrap on smaller screens */
 }
 
 .footer-links a {
-  color: #105212;
+  color: #105212; /* Brand green for footer links */
   text-decoration: none;
 }
 
 .footer-links a:hover {
   text-decoration: underline;
-}
-
-/* Styles for submission messages */
-.error-message {
-  color: #dc3545; /* Red for errors */
-  font-weight: bold;
-  margin-top: 1rem;
 }
 
 /* --- Welcome Popup Styles --- */
@@ -227,11 +231,11 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000; /* Ensures popup is on top of other content */
 }
 
 .welcome-popup-content {
@@ -241,9 +245,9 @@ export default {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
   max-width: 450px;
-  margin: 0 20px; /* Provides 20px space on left and right */
+  margin: 0 20px; /* Provides 20px space on left and right for mobile */
   position: relative;
-  animation: fadeInScale 0.3s ease-out forwards;
+  animation: fadeInScale 0.3s ease-out forwards; /* Animation for appearance */
 }
 
 .close-popup-button {
@@ -264,21 +268,22 @@ export default {
 }
 
 .welcome-popup-content h3 {
+  /* Consider importing a specific font if "Merriweather" is not globally available */
   font-family: "Merriweather", serif;
   font-size: 2.2rem;
-  color: #105212;
+  color: #105212; /* Brand green for popup heading */
   margin-bottom: 1rem;
 }
 
 .welcome-popup-content p {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #555;
+  color: #555; /* Dark grey for popup body text */
   margin-bottom: 1.5rem;
 }
 
 .popup-cta-button {
-  background-color: #38a169;
+  background-color: #38a169; /* Example green for CTA button */
   color: white;
   padding: 12px 25px;
   border: none;
@@ -296,7 +301,7 @@ export default {
   box-shadow: 0 6px 15px rgba(56, 161, 105, 0.4);
 }
 
-/* Animation for popup */
+/* Animation for popup appearance */
 @keyframes fadeInScale {
   from {
     opacity: 0;
