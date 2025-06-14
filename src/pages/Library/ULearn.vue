@@ -1,4 +1,5 @@
 <template>
+  <!-- <navigation/> -->
   <div>
     <div class="library-page">
       <!-- Fixed Hero Section -->
@@ -124,8 +125,9 @@
       </section>
     </div>
     
-    <router-view/>
+    
   </div>
+  
 </template>
 
 <script>
@@ -133,6 +135,7 @@ import { defineComponent } from "vue";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IconSearch } from "@/components/icons";
+import Navigation from "@/components/Navigation.vue";
 
 export default defineComponent({
   name: "ULearn",
@@ -140,6 +143,7 @@ export default defineComponent({
     Input,
     Button,
     IconSearch,
+    Navigation
   },
   data() {
     return {

@@ -1,206 +1,210 @@
 <template>
-  <navigation />
-  <section class="about-container">
-    <!-- Animated Background -->
-    <div class="bg-decoration">
-      <div class="floating-leaf" style="left: 10%; animation-delay: 0s">🌿</div>
-      <div class="floating-leaf" style="left: 20%; animation-delay: 3s">🍃</div>
-      <div class="floating-leaf" style="left: 70%; animation-delay: 6s">🌱</div>
-      <div class="floating-leaf" style="left: 80%; animation-delay: 9s">🌿</div>
-      <div class="floating-leaf" style="left: 30%; animation-delay: 12s">
-        🍃
+  <div>
+    <!-- Assuming Navigation component is fixed at the top -->
+    <navigation />
+    <section class="about-container">
+      <!-- Animated Background -->
+      <div class="bg-decoration">
+        <div class="floating-leaf" style="left: 10%; animation-delay: 0s">🌿</div>
+        <div class="floating-leaf" style="left: 20%; animation-delay: 3s">🍃</div>
+        <div class="floating-leaf" style="left: 70%; animation-delay: 6s">🌱</div>
+        <div class="floating-leaf" style="left: 80%; animation-delay: 9s">🌿</div>
+        <div class="floating-leaf" style="left: 30%; animation-delay: 12s">
+          🍃
+        </div>
+        <div class="floating-leaf" style="left: 60%; animation-delay: 15s">
+          🌱
+        </div>
       </div>
-      <div class="floating-leaf" style="left: 60%; animation-delay: 15s">
-        🌱
-      </div>
-    </div>
 
-    <!-- Hero Section -->
-    <div class="hero-section">
-      <div class="hero-content">
-        <div class="logo-container">
-          <div class="site-logo-new">
-            <span>🌿</span>
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="logo-container">
+            <div class="site-logo-new">
+              <span>🌿</span>
+            </div>
+          </div>
+          <h1 class="section-title fade-in delay-1">About Herballo</h1>
+          <p class="hero-subtitle fade-in delay-2">
+            Where Traditional Wisdom Meets Modern Science
+          </p>
+          <p class="intro fade-in delay-3">
+            Herballo is a health-focused brand specializing in herbal medicine
+            education, research, and product development. We primarily provide
+            natural health solutions, personalized consultations, educational
+            content, and the promotion and production of herbal-related products.
+            Our mission is to promote holistic well-being by integrating
+            traditional herbal practices with modern health insights.
+          </p>
+          <p class="intro fade-in delay-4">
+            We're not just here to sell products — we're building a future where
+            **herbal medicine is validated, trusted, and accessible** to all.
+          </p>
+          <router-link to="/home" class="cta-button slide-in delay-5">
+            <span>Discover Your Wellness Journey</span>
+            <span>→</span>
+          </router-link>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h2 class="subheading slide-in delay-6">Our Core Pillars</h2>
+
+        <div class="pillars-grid">
+          <div class="pillar card slide-in delay-7">
+            <div class="pillar-icon">🔬</div>
+            <h3>Research & Development</h3>
+            <p>
+              We explore Africa's rich medicinal heritage by scientifically
+              validating indigenous herbs. Our goal is to bridge the gap between
+              traditional practices and modern evidence-based medicine.
+            </p>
+            <router-link to="/home" class="pillar-cta-button">
+              <span>Learn More</span>
+              <span>→</span>
+            </router-link>
+          </div>
+
+          <div class="pillar card slide-in delay-8">
+            <div class="pillar-icon">👩�‍⚕️</div>
+            <h3>Consultation & Care</h3>
+            <p>
+              Through personalized one-on-one sessions, we listen to your unique
+              health story and recommend holistic herbal solutions — integrating
+              lifestyle, diet, and nature-based remedies.
+            </p>
+            <router-link to="/home" class="pillar-cta-button">
+              <span>Book a Consultation</span>
+              <span>→</span>
+            </router-link>
+          </div>
+
+          <div class="pillar card slide-in delay-9">
+            <div class="pillar-icon">📚</div>
+            <h3>Herbal Education</h3>
+            <p>
+              Our ULearn platform and community resources empower individuals and
+              professionals to understand and use herbs safely, effectively, and
+              confidently.
+            </p>
+            <router-link to="/home" class="pillar-cta-button">
+              <span>Explore ULearn</span>
+              <span>→</span>
+            </router-link>
+          </div>
+
+          <div class="pillar card slide-in delay-10">
+            <div class="pillar-icon">🧪</div>
+            <h3>Product Development</h3>
+            <p>
+              Backed by research, our products are crafted for purity, potency,
+              and purpose — using ethically sourced botanicals and verified herbal
+              formulations.
+            </p>
+            <router-link to="/home" class="pillar-cta-button">
+              <span>View Products</span>
+              <span>→</span>
+            </router-link>
+          </div>
+
+          <div class="pillar card slide-in delay-10">
+            <div class="pillar-icon">📲</div>
+            <h3>Herballo Media</h3>
+            <p>
+              Our media platform shares stories, insights, and the latest in
+              herbal research. We aim to inspire and educate through engaging
+              content that connects people with nature's wisdom.
+            </p>
+            <router-link to="/home" class="pillar-cta-button">
+              <span>View Products</span>
+              <span>→</span>
+            </router-link>
+          </div>
+
+          <div class="pillar card slide-in delay-10">
+            <div class="pillar-icon">🪴</div>
+            <h3>Herballo Farms</h3>
+            <p>
+              Our sustainable farms cultivate medicinal herbs with care for the
+              environment and community. We practice regenerative agriculture to
+              ensure the health of our planet while providing high-quality herbal
+              ingredients for both our products and the wider herbal community.
+            </p>
+            <router-link to="/home" class="pillar-cta-button">
+              <span>View Products</span>
+              <span>→</span>
+            </router-link>
           </div>
         </div>
-        <h1 class="section-title fade-in delay-1">About Herballo</h1>
-        <p class="hero-subtitle fade-in delay-2">
-          Where Traditional Wisdom Meets Modern Science
+
+        <h2 class="subheading slide-in delay-11">Our Philosophy</h2>
+        <ul class="philosophy fade-in delay-12">
+          <li class="philosophy-item">
+            <div class="philosophy-icon">🤝</div>
+            <div class="philosophy-content">
+              <strong>Integrity</strong>: Transparent sourcing, scientific
+              validation, and ethical care in everything we do. We believe in
+              honest communication about our processes, ingredients, and research
+              findings.
+            </div>
+          </li>
+          <li class="philosophy-item">
+            <div class="philosophy-icon">📖</div>
+            <div class="philosophy-content">
+              <strong>Education</strong>: Empowering informed wellness decisions
+              through knowledge and understanding. We make complex herbal science
+              accessible to everyone, fostering a community of informed
+              practitioners.
+            </div>
+          </li>
+          <li class="philosophy-item">
+            <div class="philosophy-icon">🌍</div>
+            <div class="philosophy-content">
+              <strong>Sustainability</strong>: Honoring the earth as a source of
+              healing for generations to come. Our practices prioritize
+              environmental stewardship and the long-term health of our
+              ecosystems.
+            (</div>
+          </li>
+        </ul>
+
+        <h2 class="subheading slide-in delay-13">Our Vision</h2>
+        <p class="vision-text fade-in delay-14">
+          Herballo aims to become a center of herbal excellence — a hub of
+          research, education, and innovation much like **KEMRI**, but rooted in
+          African herbal tradition. We're working toward a future where herbal
+          medicine has its rightful place in mainstream healthcare.
         </p>
-        <p class="intro fade-in delay-3">
-          Herballo is a health-focused brand specializing in herbal medicine
-          education, research, and product development. We primarily provide
-          natural health solutions, personalized consultations, educational
-          content, and the promotion and production of herbal-related products.
-          Our mission is to promote holistic well-being by integrating
-          traditional herbal practices with modern health insights.
-        </p>
-        <p class="intro fade-in delay-4">
-          We're not just here to sell products — we're building a future where
-          **herbal medicine is validated, trusted, and accessible** to all.
-        </p>
-        <router-link to="/home" class="cta-button slide-in delay-5">
-          <span>Discover Your Wellness Journey</span>
-          <span>→</span>
-        </router-link>
-      </div>
-    </div>
 
-    <div class="content-section">
-      <h2 class="subheading slide-in delay-6">Our Core Pillars</h2>
+        <blockquote class="quote fade-in delay-15">
+          "Whether you're seeking personal healing, professional insight, or just
+          beginning your herbal journey — welcome to Herballo. This is where
+          tradition meets science, and nature meets you."
+        </blockquote>
 
-      <div class="pillars-grid">
-        <div class="pillar card slide-in delay-7">
-          <div class="pillar-icon">🔬</div>
-          <h3>Research & Development</h3>
-          <p>
-            We explore Africa's rich medicinal heritage by scientifically
-            validating indigenous herbs. Our goal is to bridge the gap between
-            traditional practices and modern evidence-based medicine.
-          </p>
-          <router-link to="/home" class="pillar-cta-button">
-            <span>Learn More</span>
-            <span>→</span>
-          </router-link>
-        </div>
-
-        <div class="pillar card slide-in delay-8">
-          <div class="pillar-icon">👩🏽‍⚕️</div>
-          <h3>Consultation & Care</h3>
-          <p>
-            Through personalized one-on-one sessions, we listen to your unique
-            health story and recommend holistic herbal solutions — integrating
-            lifestyle, diet, and nature-based remedies.
-          </p>
-          <router-link to="/home" class="pillar-cta-button">
-            <span>Book a Consultation</span>
-            <span>→</span>
-          </router-link>
-        </div>
-
-        <div class="pillar card slide-in delay-9">
-          <div class="pillar-icon">📚</div>
-          <h3>Herbal Education</h3>
-          <p>
-            Our ULearn platform and community resources empower individuals and
-            professionals to understand and use herbs safely, effectively, and
-            confidently.
-          </p>
-          <router-link to="/home" class="pillar-cta-button">
-            <span>Explore ULearn</span>
-            <span>→</span>
-          </router-link>
-        </div>
-
-        <div class="pillar card slide-in delay-10">
-          <div class="pillar-icon">🧪</div>
-          <h3>Product Development</h3>
-          <p>
-            Backed by research, our products are crafted for purity, potency,
-            and purpose — using ethically sourced botanicals and verified herbal
-            formulations.
-          </p>
-          <router-link to="/home" class="pillar-cta-button">
-            <span>View Products</span>
-            <span>→</span>
-          </router-link>
-        </div>
-
-        <div class="pillar card slide-in delay-10">
-          <div class="pillar-icon">📲</div>
-          <h3>Herballo Media</h3>
-          <p>
-            Our media platform shares stories, insights, and the latest in
-            herbal research. We aim to inspire and educate through engaging
-            content that connects people with nature's wisdom.
-          </p>
-          <router-link to="/home" class="pillar-cta-button">
-            <span>View Products</span>
-            <span>→</span>
-          </router-link>
-        </div>
-
-        <div class="pillar card slide-in delay-10">
-          <div class="pillar-icon">🪴</div>
-          <h3>Herballo Farms</h3>
-          <p>
-            Our sustainable farms cultivate medicinal herbs with care for the
-            environment and community. We practice regenerative agriculture to
-            ensure the health of our planet while providing high-quality herbal
-            ingredients for both our products and the wider herbal community.
-          </p>
-          <router-link to="/home" class="pillar-cta-button">
-            <span>View Products</span>
-            <span>→</span>
-          </router-link>
+        <h2 class="subheading slide-in delay-16">Meet the Team</h2>
+        <div class="team-member fade-in delay-17">
+          <div class="team-avatar">
+            <span>DA</span>
+          </div>
+          <div class="team-info">
+            <h3>Dr MH Prince Allotey</h3>
+            <p class="role">Founder of Herballo</p>
+            <p class="location">Accra, Ghana</p>
+          </div>
         </div>
       </div>
-
-      <h2 class="subheading slide-in delay-11">Our Philosophy</h2>
-      <ul class="philosophy fade-in delay-12">
-        <li class="philosophy-item">
-          <div class="philosophy-icon">🤝</div>
-          <div class="philosophy-content">
-            <strong>Integrity</strong>: Transparent sourcing, scientific
-            validation, and ethical care in everything we do. We believe in
-            honest communication about our processes, ingredients, and research
-            findings.
-          </div>
-        </li>
-        <li class="philosophy-item">
-          <div class="philosophy-icon">📖</div>
-          <div class="philosophy-content">
-            <strong>Education</strong>: Empowering informed wellness decisions
-            through knowledge and understanding. We make complex herbal science
-            accessible to everyone, fostering a community of informed
-            practitioners.
-          </div>
-        </li>
-        <li class="philosophy-item">
-          <div class="philosophy-icon">🌍</div>
-          <div class="philosophy-content">
-            <strong>Sustainability</strong>: Honoring the earth as a source of
-            healing for generations to come. Our practices prioritize
-            environmental stewardship and the long-term health of our
-            ecosystems.
-          </div>
-        </li>
-      </ul>
-
-      <h2 class="subheading slide-in delay-13">Our Vision</h2>
-      <p class="vision-text fade-in delay-14">
-        Herballo aims to become a center of herbal excellence — a hub of
-        research, education, and innovation much like **KEMRI**, but rooted in
-        African herbal tradition. We're working toward a future where herbal
-        medicine has its rightful place in mainstream healthcare.
-      </p>
-
-      <blockquote class="quote fade-in delay-15">
-        "Whether you're seeking personal healing, professional insight, or just
-        beginning your herbal journey — welcome to Herballo. This is where
-        tradition meets science, and nature meets you."
-      </blockquote>
-
-      <h2 class="subheading slide-in delay-16">Meet the Team</h2>
-      <div class="team-member fade-in delay-17">
-        <div class="team-avatar">
-          <span>DA</span>
-        </div>
-        <div class="team-info">
-          <h3>Dr MH Prince Allotey</h3>
-          <p class="role">Founder of Herballo</p>
-          <p class="location">Accra, Ghana</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <VFooter />
+    </section>
+    <!-- Assuming VFooter component is at the bottom -->
+    <VFooter />
+  </div>
 </template>
 
 <script>
 import { useSEO } from "../composables/useSEO";
-import Navigation from "@/components/Navigation.vue";
-import VFooter from "@/components/VFooter.vue";
+import Navigation from "@/components/Navigation.vue"; // Assuming this is your navigation component
+import VFooter from "@/components/VFooter.vue"; // Assuming this is your footer component
 import { onMounted, nextTick } from "vue";
 
 export default {
@@ -274,15 +278,20 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap");
+/* Ensure HTML and body have scroll-padding-top for fixed headers */
+html {
+  scroll-padding-top: 80px; /* Adjust this value to match your fixed navigation bar's height */
+}
 
+/* Base styling for the About page container */
 .about-container {
-  font-family: "Inter", sans-serif;
+  font-family: "Poppins", sans-serif; /* Changed to Poppins */
   color: #1a1a1a;
   background: linear-gradient(135deg, #f8fcf9 0%, #e8f5e8 100%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  padding-top: 80px; /* Add padding-top to account for fixed navigation bar */
 }
 
 /* Animated background elements */
@@ -376,7 +385,7 @@ export default {
 }
 
 .section-title {
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", sans-serif; /* Changed to Poppins */
   font-size: clamp(3rem, 5vw, 5rem);
   font-weight: 700;
   background: linear-gradient(135deg, #1a5e2f, #38a169);
@@ -416,7 +425,7 @@ export default {
   font-weight: 600;
   font-size: 1.1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(56, 161, 105, 0.4);
+  box-shadow: 0 10px 30px rgba(56, 161, 105, 0.4); /* Enhanced default shadow */
   position: relative;
   overflow: hidden;
 }
@@ -442,8 +451,8 @@ export default {
 }
 
 .cta-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(56, 161, 105, 0.5);
+  transform: translateY(-5px); /* Slightly more lift on hover */
+  box-shadow: 0 18px 45px rgba(56, 161, 105, 0.55); /* More pronounced shadow on hover */
 }
 
 /* Content Sections */
@@ -454,7 +463,7 @@ export default {
 }
 
 .subheading {
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", sans-serif; /* Changed to Poppins */
   font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 600;
   text-align: center;
@@ -524,7 +533,7 @@ export default {
 }
 
 .pillar h3 {
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", sans-serif; /* Changed to Poppins */
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #1a5e2f;
@@ -548,12 +557,14 @@ export default {
   border-radius: 25px;
   border: 2px solid #38a169;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.2); /* Added default shadow */
 }
 
 .pillar-cta-button:hover {
   background: #38a169;
   color: white;
-  transform: translateX(5px);
+  transform: translateY(-3px); /* Changed to translateY for consistency */
+  box-shadow: 0 8px 20px rgba(56, 161, 105, 0.35); /* Enhanced hover shadow */
 }
 
 /* Philosophy Section */
@@ -639,7 +650,7 @@ export default {
   position: absolute;
   top: -10px;
   left: 20px;
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", sans-serif; /* Changed to Poppins */
 }
 
 /* Team Member */
@@ -675,7 +686,7 @@ export default {
 }
 
 .team-info h3 {
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", sans-serif; /* Changed to Poppins */
   font-size: 2rem;
   margin-bottom: 0.5rem;
   color: #1a5e2f;
@@ -761,6 +772,16 @@ export default {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  /* Adjust padding-top for the main content area in mobile view */
+  .about-container {
+    padding-top: 45px; /* Reduced padding for mobile */
+  }
+
+  /* Adjust scroll-padding-top for html to match */
+  html {
+    scroll-padding-top: 45px; /* Ensures anchor links scroll correctly below nav */
+  }
+
   .hero-section {
     min-height: 80vh;
     padding: 2rem 1rem;
@@ -787,6 +808,11 @@ export default {
 
   .philosophy-item::after {
     left: 0 !important;
+    width: 100%; /* Ensure separator spans full width on mobile */
+  }
+
+  .philosophy-icon {
+    width: auto; /* Allow icon width to adjust */
   }
 
   .team-member {
@@ -800,3 +826,4 @@ export default {
   }
 }
 </style>
+�
