@@ -166,6 +166,16 @@ export default defineComponent({
       itemsPerPage: 10,
     };
   },
+  mounted() {
+    useSEO({
+      title: "Herballo Ulearn - Herbal Medicine Library & Education",
+      description:
+        "Explore our comprehensive herbal medicine library and educational content at Herballo Ulearn.",
+      keywords:
+        "herbs, plants, leafs, dry leaves, fruit, branches, stem, herbal education, herbal medicine, herbal library, herbal medicine courses,Herbal plant database,medicinal herbs list, traditional medicine library,natural remedies encyclopedia,plant-based medicine information,herbal remedies database,botanical medicine index,ethnobotany resources,healing plants guide, herb identification library, ayurvedic herbs database,chinese herbal medicine information, african medicinal plants, herbal uses and benefits, phytotherapy library, medicinal plant research,holistic health herbs, natural healing repository, plant extracts uses, herbal pharmacology library",
+      url: "https://herballo.co/ulearn",
+    });
+  },
   computed: {
     filteredPlants() {
       if (!this.searchTerm) return this.plants;

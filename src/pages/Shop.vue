@@ -11,13 +11,13 @@ export default {
   components: {
     UnderConstruction,
   },
-  setup() {
+  mounted() {
     useSEO({
-      title: "Herballo Ulearn - Herbal Medicine Library & Education",
+      title: "Herballo Shop - Herbs and Herbal Product Market Place",
       description:
-        "Explore our comprehensive herbal medicine library and educational content at Herballo Ulearn.",
-      keywords: "herbal education, herbal library, herbal medicine courses",
-      url: "https://herballo.co/ulearn",
+        "Explore our comprehensive herbal medicine catalogue and products at Herballo Shop.",
+      keywords: "herbal shop, herbs, herbal medicine, herbal products",
+      url: "https://herballo.co/shop",
     });
   },
   methods: {
