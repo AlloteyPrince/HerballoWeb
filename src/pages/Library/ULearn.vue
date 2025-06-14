@@ -145,6 +145,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IconSearch } from "@/components/icons";
 import Navigation from "@/components/Navigation.vue";
+import { useSEO } from "@/composables/useSEO";
 
 export default defineComponent({
   name: "ULearn",
