@@ -14,8 +14,27 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy.vue";
 import TermsOfUse from "@/pages/TermsOfUse.vue";
 import Contact from "@/pages/Contact.vue";
 import PlantDetail from "@/pages/Library/PlantDetail.vue";
+import Blog from "@/pages/Blog.vue";
+import AdminLogin from "@/pages/AdminLogin.vue";
+import AdminDashboard from "@/pages/AdminDashboard.vue";
+import BlogDetails from "@/pages/BlogDetails.vue";
 
 const routes = [
+  {
+    path: "/admin/login",
+    name: "login",
+    component: AdminLogin,
+  },
+  {
+    path: "/admin/dashboard",
+    name: "dashboard",
+    component: AdminDashboard,
+  },
+  {
+    path: "/admin/blog/:id",
+    name: "blogDetails",
+    component: BlogDetails,
+  },
   {
     path: "/",
     name: "home",
@@ -30,6 +49,11 @@ const routes = [
     path: "/ulearn/:id",
     name: "plantDetail",
     component: PlantDetail,
+  },
+  {
+    path: "/blog",
+    name: "blog",
+    component: Blog,
   },
   {
     path: "/about",

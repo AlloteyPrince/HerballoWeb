@@ -13,6 +13,7 @@
               >Consultation</router-link
             >
           </li>
+          <li><router-link class="link" to="/blog">Blog</router-link></li>
           <li><router-link class="link" to="/shop">Shop</router-link></li>
           <li><router-link class="link" to="/about">About</router-link></li>
         </ul>
