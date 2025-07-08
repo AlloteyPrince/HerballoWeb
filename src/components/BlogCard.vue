@@ -1,6 +1,5 @@
 <template>
   <div class="blog-card">
-    <pre>{{ post.coverImage }}</pre>
 
     <img
       v-if="post.coverImage"
@@ -20,9 +19,11 @@
       <p class="blog-date">{{ formatDate(post.date) }}</p>
     </div>
   </div>
+  
 </template>
 
 <script setup>
+
 defineProps({ post: Object });
 
 const formatDate = (dateStr) => {

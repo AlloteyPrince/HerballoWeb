@@ -14,7 +14,6 @@
         v-model:content="content"
         contentType="html"
         class="quill"
-        :modules="modules"
       />
 
       <button type="submit">Submit Post</button>
@@ -25,117 +24,123 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import { ref } from "vue";
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
-const title = ref('')
-const slug = ref('')
-const tags = ref('')
-const content = ref('')
-const message = ref('')
-const error = ref('')
-const coverImage = ref(null)
-const quillRef = ref(null)
+const title = ref("");
+const slug = ref("");
+const tags = ref("");
+const content = ref("");
+const message = ref("");
+const error = ref("");
+const coverImage = ref(null);
+const quillRef = ref(null);
 
-const emit = defineEmits(['postCreated'])
+const emit = defineEmits(["postCreated"]);
 
 const handleFileUpload = async (e) => {
-  const file = e.target.files[0]
-  const formData = new FormData()
-  formData.append('image', file)
+  const file = e.target.files[0];
+  const formData = new FormData();
+  formData.append("image", file);
 
   try {
-    const res = await fetch('http://localhost:5000/api/upload', {
-      method: 'POST',
+    const res = await fetch("http://localhost:5000/api/upload", {
+      method: "POST",
       body: formData,
-    })
-    const data = await res.json()
-    coverImage.value = data.imageUrl
+    });
+    const data = await res.json();
+    coverImage.value = data.imageUrl;
   } catch (err) {
-    console.error('Image upload failed:', err)
+    console.error("Image upload failed:", err);
   }
-}
+};
 
 const handleSubmit = async () => {
-  message.value = ''
-  error.value = ''
+  message.value = "";
+  error.value = "";
+
+  const blogData = {
+    title: title.value,
+    slug: slug.value,
+    tags: (tags.value || "").split(",").map((t) => t.trim()),
+    content: content.value,
+    coverImage: coverImage.value,
+  };
+
+  console.log("Submitting blog:", blogData);
 
   try {
-    const res = await fetch('http://localhost:5000/api/posts', {
-      method: 'POST',
+    const res = await fetch("http://localhost:5000/api/posts", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify({
-        title: title.value,
-        slug: slug.value,
-        tags: tags.value.split(',').map((t) => t.trim()),
-        content: content.value,
-        coverImage: coverImage.value,
-      }),
-    })
+      body: JSON.stringify(blogData),
+    });
 
-    const data = await res.json()
+    const data = await res.json();
 
     if (!res.ok) {
-      error.value = data.message || 'Failed to create post'
+      console.error("Server error:", data);
+      error.value = data.message || "Failed to create post";
     } else {
-      message.value = '✅ Blog post created!'
-      emit('postCreated')
-      title.value = ''
-      slug.value = ''
-      tags.value = ''
-      content.value = ''
+      message.value = "✅ Blog post created!";
+      emit("postCreated");
+      title.value = "";
+      slug.value = "";
+      tags.value = "";
+      content.value = "";
     }
   } catch (err) {
-    error.value = '❌ Something went wrong'
+    console.error("❌ Request error:", err);
+    error.value = "❌ Something went wrong";
   }
-}
+};
 
 // Optional: Setup for image uploads inside Quill
 const modules = {
   toolbar: {
     container: [
-      ['bold', 'italic', 'underline'],
+      ["bold", "italic", "underline"],
       [{ header: 1 }, { header: 2 }],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'image'],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
     ],
     handlers: {
       image: () => {
-        const input = document.createElement('input')
-        input.setAttribute('type', 'file')
-        input.setAttribute('accept', 'image/*')
-        input.click()
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "image/*");
+        input.click();
 
         input.onchange = async () => {
-          const file = input.files[0]
-          const formData = new FormData()
-          formData.append('image', file)
+          const file = input.files[0];
+          const formData = new FormData();
+          formData.append("image", file);
 
           try {
-            const res = await fetch('http://localhost:5000/api/upload', {
-              method: 'POST',
+            const res = await fetch("http://localhost:5000/api/upload", {
+              method: "POST",
               body: formData,
-            })
-            const data = await res.json()
-            const imageUrl = `http://localhost:5000${data.imageUrl}`
+            });
+            const data = await res.json();
+            const imageUrl = `http://localhost:5000${data.imageUrl}`;
 
-            const editor = quillRef.value?.getEditor?.()
+            const editor = quillRef.value?.getEditor?.();
             if (editor) {
-              const range = editor.getSelection()
-              editor.insertEmbed(range.index, 'image', imageUrl)
+              const range = editor.getSelection();
+              editor.insertEmbed(range.index, "image", imageUrl);
             }
           } catch (err) {
-            console.error('Image upload failed:', err)
+            console.error("Image upload failed:", err);
           }
-        }
+        };
       },
     },
   },
-}
+};
 </script>
 
 <style scoped>
