@@ -1,6 +1,13 @@
 <template>
   <div class="blog-card">
-    <img v-if="post.coverImage" :src="post.coverImage" alt="Cover Image" class="blog-image" />
+    <pre>{{ post.coverImage }}</pre>
+
+    <img
+      v-if="post.coverImage"
+      :src="`http://localhost:5000${post.coverImage}`"
+      alt="Cover Image"
+      class="blog-image"
+    />
 
     <div class="blog-content">
       <h2 class="blog-title">{{ post.title }}</h2>
@@ -16,13 +23,15 @@
 </template>
 
 <script setup>
-defineProps({ post: Object })
+defineProps({ post: Object });
 
 const formatDate = (dateStr) => {
   return new Date(dateStr).toLocaleDateString(undefined, {
-    year: 'numeric', month: 'short', day: 'numeric'
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
-}
+};
 </script>
 
 <style scoped>

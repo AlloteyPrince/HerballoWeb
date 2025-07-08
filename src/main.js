@@ -11,6 +11,14 @@ import {
 
 import { createHead } from "@vueuse/head";
 
+import { QuillEditor, Quill } from '@vueup/vue-quill'
+import QuillSnow from 'quill/themes/snow.js'
+
+// Import core styles
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+
+Quill.register('themes/snow', QuillSnow)
+
 // 🔥 Track page views with Google Analytics
 router.afterEach((to) => {
   if (window.gtag) {

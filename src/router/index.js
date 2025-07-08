@@ -18,6 +18,7 @@ import Blog from "@/pages/Blog.vue";
 import AdminLogin from "@/pages/AdminLogin.vue";
 import AdminDashboard from "@/pages/AdminDashboard.vue";
 import BlogDetails from "@/pages/BlogDetails.vue";
+import EditDetails from "@/pages/EditDetails.vue";
 
 const routes = [
   {
@@ -29,11 +30,17 @@ const routes = [
     path: "/admin/dashboard",
     name: "dashboard",
     component: AdminDashboard,
+    meta: { requiresAuth: true },
   },
   {
     path: "/admin/blog/:id",
     name: "blogDetails",
     component: BlogDetails,
+  },
+  {
+    path: "/admin/blog/edit/:id",
+    name: "editDetails",
+    component: EditDetails,
   },
   {
     path: "/",
@@ -123,6 +130,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+
+  if (to.meta.requiresAuth && !token) {
+    next("/admin/login");
+  } else {
+    next();
+  }
 });
 
 export default router;
