@@ -11,9 +11,10 @@
       <!-- Quill Editor -->
       <QuillEditor
         ref="quillRef"
-        v-model:content="content"
+        v-model="content"
         contentType="html"
         class="quill"
+        :modules="modules"
       />
 
       <button type="submit">Submit Post</button>
@@ -60,6 +61,11 @@ const handleSubmit = async () => {
   message.value = "";
   error.value = "";
 
+  if (!content.value || content.value.trim() === "") {
+    error.value = "Content cannot be empty.";
+    return;
+  }
+
   const blogData = {
     title: title.value,
     slug: slug.value,
@@ -69,6 +75,8 @@ const handleSubmit = async () => {
   };
 
   console.log("Submitting blog:", blogData);
+
+  console.log("Submitting blogData:", JSON.stringify(blogData, null, 2));
 
   try {
     const res = await fetch("http://localhost:5000/api/posts", {
