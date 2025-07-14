@@ -44,8 +44,16 @@
               >
             </li>
             <li>
-              <router-link class="link" to="/consultation" @click="closeMobileNav"
+              <router-link
+                class="link"
+                to="/consultation"
+                @click="closeMobileNav"
                 >Consultation</router-link
+              >
+            </li>
+            <li>
+              <router-link class="link" to="/blog" @click="closeMobileNav"
+                >Blog</router-link
               >
             </li>
             <li>
@@ -107,7 +115,9 @@ export default {
       // Check if the click occurred outside the mobile navigation menu AND outside the hamburger icon
       const mobileNavMenu = this.$refs.mobileNavMenu;
       // Access the actual DOM element for Font Awesome component
-      const hamburgerIcon = this.$refs.hamburgerIcon ? this.$refs.hamburgerIcon.$el : null; 
+      const hamburgerIcon = this.$refs.hamburgerIcon
+        ? this.$refs.hamburgerIcon.$el
+        : null;
 
       if (
         mobileNavMenu &&
@@ -137,7 +147,8 @@ header {
   position: fixed;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
     0 1px 2px -1px rgba(0, 0, 0, 0.06);
   color: rgb(17, 17, 17);
 

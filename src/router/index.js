@@ -19,6 +19,7 @@ import AdminLogin from "@/pages/AdminLogin.vue";
 import AdminDashboard from "@/pages/AdminDashboard.vue";
 import BlogDetails from "@/pages/BlogDetails.vue";
 import EditDetails from "@/pages/EditDetails.vue";
+import PublicBlogDetail from "@/pages/PublicBlogDetail.vue";
 
 const routes = [
   {
@@ -36,11 +37,15 @@ const routes = [
     path: "/admin/blog/:id",
     name: "blogDetails",
     component: BlogDetails,
+    meta: { requiresAuth: true },
+    props: true,
   },
   {
     path: "/admin/blog/edit/:id",
     name: "editDetails",
     component: EditDetails,
+    meta: { requiresAuth: true },
+    props: true,
   },
   {
     path: "/",
@@ -61,6 +66,12 @@ const routes = [
     path: "/blog",
     name: "blog",
     component: Blog,
+  },
+  {
+    path: "/blog/:slug",
+    name: "publicBlogDetail",
+    component: PublicBlogDetail,
+    props: true,
   },
   {
     path: "/about",

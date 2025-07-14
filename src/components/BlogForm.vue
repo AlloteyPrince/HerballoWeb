@@ -4,17 +4,35 @@
 
     <form @submit.prevent="handleSubmit">
       <input v-model="title" type="text" placeholder="Title" required />
-      <input v-model="slug" type="text" placeholder="Slug" required />
       <input v-model="tags" type="text" placeholder="Tags (comma separated)" />
       <input type="file" @change="handleFileUpload" />
+
+      <br>
+
+
+      <!-- Author Info -->
+      <input
+        v-model="authorName"
+        type="text"
+        placeholder="Author Name"
+        required
+      />
+      <textarea
+        v-model="authorBio"
+        placeholder="Author Bio"
+        required
+      ></textarea>
+      <input type="file" @change="handleAuthorAvatarUpload" />
 
       <!-- Quill Editor -->
       <QuillEditor
         ref="quillRef"
-        v-model="content"
+        v-model:content="content"
         contentType="html"
         class="quill"
-        :modules="modules"
+        :options="editorOptions"
+        theme="snow"
+        @ready="onEditorReady"
       />
 
       <button type="submit">Submit Post</button>
@@ -25,9 +43,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
+
+
 
 const title = ref("");
 const slug = ref("");
@@ -37,11 +57,75 @@ const message = ref("");
 const error = ref("");
 const coverImage = ref(null);
 const quillRef = ref(null);
+const editorReady = ref(false);
+const authorName = ref('');
+const authorBio = ref('');
+const authorAvatar = ref(null);
 
 const emit = defineEmits(["postCreated"]);
 
+// Editor options - simplified to avoid initialization issues
+const editorOptions = ref({
+  theme: "snow",
+  modules: {
+    toolbar: [
+      ["bold", "italic", "underline"],
+      [{ header: 1 }, { header: 2 }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+    ],
+  },
+});
+
+const onEditorReady = (editor) => {
+  console.log("Editor ready:", editor);
+  editorReady.value = true;
+
+  // Now that editor is ready, we can set up custom handlers
+  setupImageHandler(editor);
+};
+
+const setupImageHandler = (editor) => {
+  const toolbar = editor.getModule("toolbar");
+  if (toolbar) {
+    toolbar.addHandler("image", () => {
+      const input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
+      input.click();
+
+      input.onchange = async () => {
+        const file = input.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+          const res = await fetch("http://localhost:5000/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          const imageUrl = `http://localhost:5000${data.imageUrl}`;
+
+          const range = editor.getSelection();
+          if (range) {
+            editor.insertEmbed(range.index, "image", imageUrl);
+          }
+        } catch (err) {
+          console.error("Image upload failed:", err);
+          error.value = "Failed to upload image";
+        }
+      };
+    });
+  }
+};
+
 const handleFileUpload = async (e) => {
   const file = e.target.files[0];
+  if (!file) return;
+
   const formData = new FormData();
   formData.append("image", file);
 
@@ -54,6 +138,27 @@ const handleFileUpload = async (e) => {
     coverImage.value = data.imageUrl;
   } catch (err) {
     console.error("Image upload failed:", err);
+    error.value = "Failed to upload cover image";
+  }
+};
+
+const handleAuthorAvatarUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const res = await fetch("http://localhost:5000/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    authorAvatar.value = data.imageUrl;
+  } catch (err) {
+    console.error("Author avatar upload failed:", err);
+    error.value = "Failed to upload author avatar";
   }
 };
 
@@ -72,11 +177,14 @@ const handleSubmit = async () => {
     tags: (tags.value || "").split(",").map((t) => t.trim()),
     content: content.value,
     coverImage: coverImage.value,
+    author: {
+    name: authorName.value,
+    bio: authorBio.value,
+    avatar: authorAvatar.value,
+  },
   };
 
   console.log("Submitting blog:", blogData);
-
-  console.log("Submitting blogData:", JSON.stringify(blogData, null, 2));
 
   try {
     const res = await fetch("http://localhost:5000/api/posts", {
@@ -96,58 +204,17 @@ const handleSubmit = async () => {
     } else {
       message.value = "✅ Blog post created!";
       emit("postCreated");
+      // Reset form
       title.value = "";
       slug.value = "";
       tags.value = "";
       content.value = "";
+      coverImage.value = null;
     }
   } catch (err) {
     console.error("❌ Request error:", err);
     error.value = "❌ Something went wrong";
   }
-};
-
-// Optional: Setup for image uploads inside Quill
-const modules = {
-  toolbar: {
-    container: [
-      ["bold", "italic", "underline"],
-      [{ header: 1 }, { header: 2 }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-    ],
-    handlers: {
-      image: () => {
-        const input = document.createElement("input");
-        input.setAttribute("type", "file");
-        input.setAttribute("accept", "image/*");
-        input.click();
-
-        input.onchange = async () => {
-          const file = input.files[0];
-          const formData = new FormData();
-          formData.append("image", file);
-
-          try {
-            const res = await fetch("http://localhost:5000/api/upload", {
-              method: "POST",
-              body: formData,
-            });
-            const data = await res.json();
-            const imageUrl = `http://localhost:5000${data.imageUrl}`;
-
-            const editor = quillRef.value?.getEditor?.();
-            if (editor) {
-              const range = editor.getSelection();
-              editor.insertEmbed(range.index, "image", imageUrl);
-            }
-          } catch (err) {
-            console.error("Image upload failed:", err);
-          }
-        };
-      },
-    },
-  },
 };
 </script>
 
@@ -176,6 +243,7 @@ input {
   border-radius: 6px;
   border: 1px solid #ccc;
   overflow: hidden;
+  min-height: 200px;
 }
 
 button {
@@ -185,6 +253,10 @@ button {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: #27ae60;
 }
 
 .success {

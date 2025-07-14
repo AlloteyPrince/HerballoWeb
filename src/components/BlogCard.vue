@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import { stripHtmlAndTruncate } from '../utils/helpers';
 
 defineProps({ post: Object });
 

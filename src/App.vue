@@ -88,4 +88,13 @@ body {
   display: flex;
   flex-direction: column;
 }
+.blog-content img {
+  max-width: 100% !important;
+  height: auto !important;
+  /* border-radius: 10px; */
+  object-fit: contain;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+  margin: 20px 0;
+  display: block;
+}
 </style>

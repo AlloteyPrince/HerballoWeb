@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Blog Nav -->
     <header class="blog-nav">
       <nav ref="navbar">
         <div class="branding">
@@ -9,7 +8,7 @@
         <ul v-show="!mobile" class="navigation">
           <li><router-link class="link" to="/">Home</router-link></li>
           <li><a href="#subscribe" class="link">Subscribe</a></li>
-          <li><a href="#donate" class="link">Donate</a></li>
+          <li><a href="#donate" class="link" >Donate</a></li>
         </ul>
         <div class="icon">
           <font-awesome-icon
@@ -35,11 +34,9 @@
       </nav>
     </header>
 
-    <!-- Blog Content -->
     <section class="blog-page">
       <h1 class="blog-header">Herballo Blog</h1>
 
-      <!-- Search and Filter -->
       <div class="controls">
         <input v-model="searchQuery" type="text" placeholder="Search blog posts..." />
         <select v-model="selectedTag">
@@ -53,7 +50,7 @@
       <div v-else-if="filteredPosts.length === 0" class="blog-message">No matching posts found.</div>
 
       <div class="blog-grid">
-        <BlogCard v-for="post in filteredPosts" :key="post._id" :post="post" />
+        <BlogCardPV1 v-for="post in filteredPosts" :key="post._id" :post="post" />
       </div>
     </section>
 
@@ -63,7 +60,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import BlogCard from '../components/BlogCard.vue'
+// *** UPDATED IMPORT STATEMENT ***
+import BlogCardPV1 from '../components/BlogCardPV1.vue' // Import the new public card component
 import VFooter from '../components/VFooter.vue'
 
 const posts = ref([])
@@ -102,7 +100,7 @@ const uniqueTags = computed(() => {
   return [...new Set(allTags)]
 })
 
-// Navigation logic
+// Navigation logic (no changes here)
 const mobile = ref(false)
 const mobileNav = ref(false)
 
@@ -124,6 +122,8 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+/* Your existing styles remain unchanged */
+
 /* ========== NAVBAR ========== */
 .blog-nav {
   background-color: white;
