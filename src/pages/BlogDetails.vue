@@ -12,7 +12,7 @@
 
     <img
       v-if="post.coverImage"
-      :src="`http://localhost:5000${post.coverImage}`"
+      :src="api(post.coverImage)"
       alt="Cover"
       class="cover-image"
     />
@@ -33,7 +33,7 @@
     </div>
 
     <div class="author-box" v-if="post.author">
-      <img :src="`http://localhost:5000${post.author.avatar}`" alt="Author" class="author-avatar" />
+      <img :src="api(post.author.avatar)" alt="Author" class="author-avatar" />
       <div>
         <h4>{{ post.author.name }}</h4>
         <p class="author-bio">{{ post.author.bio }}</p>
@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+import {api} from '../api'
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -65,7 +66,7 @@ const editPost = () => {
 
 const ratePost = async (star) => {
   try {
-    const res = await fetch(`http://localhost:5000/api/posts/${route.params.id}/rate`, {
+    const res = await fetch(api(`/api/posts/${route.params.id}/rate`), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,9 +101,7 @@ const handleShare = async () => {
     return;
   }
 
-  // --- CRUCIAL: CONSTRUCT THE PUBLIC-FACING URL ---
-  // IMPORTANT: During development, assume your public frontend is served at http://localhost:8080.
-  // In production, change 'http://localhost:8080' to your actual deployed public frontend domain (e.g., 'https://yourblog.com').
+ 
   const publicBaseUrl = 'http://localhost:8080'; // <<< ADJUST FOR PRODUCTION!
   const urlToShare = `${publicBaseUrl}/blog/${post.value.slug}`;
 
@@ -133,7 +132,6 @@ const handleShare = async () => {
       }
     }
   } else {
-    // Fallback to copying the link if Web Share API is not supported
     console.log("Web Share API not supported. Copying link instead.");
     await copyLink(urlToShare);
   }
@@ -154,7 +152,7 @@ const copyLink = async (url) => {
 
 onMounted(async () => {
   try {
-    const res = await fetch(`http://localhost:5000/api/posts/${route.params.id}`);
+    const res = await fetch(api(`/api/posts/${route.params.id}`));
     const data = await res.json();
     post.value = data;
 

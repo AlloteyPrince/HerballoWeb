@@ -35,7 +35,7 @@ const error = ref('')
 // Fetch the existing post
 onMounted(async () => {
   try {
-    const res = await fetch(`http://localhost:5000/api/posts/${route.params.id}`)
+    const res = await fetch(api('api/posts/route.params.id'))
     const data = await res.json()
     title.value = data.title
     slug.value = data.slug

@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+import { api } from "@/api";
 import { ref, onMounted } from "vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -102,12 +103,12 @@ const setupImageHandler = (editor) => {
         formData.append("image", file);
 
         try {
-          const res = await fetch("http://localhost:5000/api/upload", {
+          const res = await fetch(api('api/upload'), {
             method: "POST",
             body: formData,
           });
           const data = await res.json();
-          const imageUrl = `http://localhost:5000${data.imageUrl}`;
+          const imageUrl = api(`api/data.imageUrl`);
 
           const range = editor.getSelection();
           if (range) {
@@ -130,7 +131,7 @@ const handleFileUpload = async (e) => {
   formData.append("image", file);
 
   try {
-    const res = await fetch("http://localhost:5000/api/upload", {
+    const res = await fetch(api('/api/upload'), {
       method: "POST",
       body: formData,
     });
@@ -150,7 +151,7 @@ const handleAuthorAvatarUpload = async (e) => {
   formData.append("image", file);
 
   try {
-    const res = await fetch("http://localhost:5000/api/upload", {
+    const res = await fetch(api('/api/upload'), {
       method: "POST",
       body: formData,
     });
@@ -187,7 +188,7 @@ const handleSubmit = async () => {
   console.log("Submitting blog:", blogData);
 
   try {
-    const res = await fetch("http://localhost:5000/api/posts", {
+    const res = await fetch(api('/api/posts'), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

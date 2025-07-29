@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <img v-if="post.coverImage" :src="post.coverImage" :alt="post.title" class="post-cover-image">
+    <img v-if="post.coverImage" :src="api(post.coverImage)" :alt="post.title" class="post-cover-image">
 
     <div class="post-content" v-html="post.content"></div>
 
@@ -60,6 +60,7 @@
 </template>
 
 <script setup>
+import { api } from '@/api';
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { format } from 'date-fns';

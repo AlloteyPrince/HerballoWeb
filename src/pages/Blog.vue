@@ -59,6 +59,7 @@
 </template>
 
 <script setup>
+import {api} from '../api'
 import { ref, computed, onMounted } from 'vue'
 // *** UPDATED IMPORT STATEMENT ***
 import BlogCardPV1 from '../components/BlogCardPV1.vue' // Import the new public card component
@@ -72,7 +73,7 @@ const selectedTag = ref('')
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://localhost:5000/api/posts')
+    const res = await fetch(api('/api/posts'))
     const data = await res.json()
     posts.value = data.reverse()
   } catch (err) {

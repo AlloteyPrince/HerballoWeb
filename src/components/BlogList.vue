@@ -19,7 +19,7 @@
         <div class="card-content" @click="openPost(post._id)">
           <img
             v-if="post.coverImage"
-            :src="`http://localhost:5000${post.coverImage}`"
+            :src="api(post.coverImage)"
             alt="Cover"
             class="cover"
           />
@@ -52,7 +52,7 @@ const router = useRouter();
 const fetchPosts = async () => {
   loading.value = true;
   try {
-    const res = await fetch("http://localhost:5000/api/posts");
+    const res = await fetch(api('/api/posts'));
     posts.value = await res.json();
   } catch (err) {
     console.error("Error fetching posts:", err);
@@ -63,7 +63,7 @@ const fetchPosts = async () => {
 const deletePost = async (id) => {
   if (!confirm("Are you sure you want to delete this post?")) return;
   try {
-    const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
+    const res = await fetch(api(`/api/posts/${id}`), {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

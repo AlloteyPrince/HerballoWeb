@@ -1,6 +1,8 @@
-// frontend/src/utils/helper.js (or frontend/src/helper.js)
+// frontend/src/utils/helper.js
 
-// Utility function to strip HTML and truncate text (your existing function)
+import { api } from '@/api'; // ✅ Import api helper
+
+// Utility: Strip HTML + Truncate
 export function stripHtmlAndTruncate(htmlString, maxLength) {
   if (!htmlString) return '';
 
@@ -21,14 +23,10 @@ export function stripHtmlAndTruncate(htmlString, maxLength) {
   return text;
 }
 
-// ⭐ NEW FUNCTIONS: API Interaction Functions
-// Ensure your backend is running on http://localhost:5000
-const API_BASE_URL = 'http://localhost:5000/api/posts';
-
-// Function to get a single post by its SLUG
+// ✅ Get post by slug
 export async function getPostBySlug(slug) {
   try {
-    const response = await fetch(`${API_BASE_URL}/slug/${slug}`);
+    const response = await fetch(api(`/api/posts/slug/${slug}`));
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
@@ -40,10 +38,10 @@ export async function getPostBySlug(slug) {
   }
 }
 
-// Function to get all comments for a post by its ID
+// ✅ Get comments by post ID
 export async function getCommentsByPostId(postId) {
   try {
-    const response = await fetch(`${API_BASE_URL}/${postId}/comments`);
+    const response = await fetch(api(`/api/posts/${postId}/comments`));
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
@@ -55,42 +53,38 @@ export async function getCommentsByPostId(postId) {
   }
 }
 
-// Function to submit a new comment to a post by its ID
+// ✅ Submit comment
 export async function submitComment(postId, commentData) {
   try {
-    const response = await fetch(`${API_BASE_URL}/${postId}/comments`, {
+    const response = await fetch(api(`/api/posts/${postId}/comments`), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(commentData), // commentData should contain { name, comment }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(commentData),
     });
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
     }
-    return await response.json(); // Backend should return the new comment or a success message
+    return await response.json();
   } catch (error) {
     console.error("Error submitting comment:", error);
     throw error;
   }
 }
 
-// Function to submit a rating for a post by its ID
+// ✅ Submit rating
 export async function submitRating(postId, ratingValue) {
   try {
-    const response = await fetch(`${API_BASE_URL}/${postId}/rate`, {
+    const response = await fetch(api(`/api/posts/${postId}/rate`), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ value: ratingValue }), // Only send the rating value
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: ratingValue }),
     });
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
     }
-    return await response.json(); // Backend should return updated ratings/average
+    return await response.json();
   } catch (error) {
     console.error("Error submitting rating:", error);
     throw error;

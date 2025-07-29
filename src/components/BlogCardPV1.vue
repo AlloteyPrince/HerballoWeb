@@ -4,7 +4,7 @@
 
       <img
         v-if="post.coverImage"
-        :src="`http://localhost:5000${post.coverImage}`"
+        :src="api(post.coverImage)"
         alt="Cover Image"
         class="blog-image"
       />

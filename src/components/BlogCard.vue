@@ -3,7 +3,7 @@
 
     <img
       v-if="post.coverImage"
-      :src="`http://localhost:5000${post.coverImage}`"
+      :src="api(post.coverImage)"
       alt="Cover Image"
       class="blog-image"
     />
@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import { api } from '../api'
 import { stripHtmlAndTruncate } from '../utils/helpers';
 
 defineProps({ post: Object });
