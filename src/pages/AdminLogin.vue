@@ -5,7 +5,12 @@
       <p class="subtitle">Admin Login</p>
       <form @submit.prevent="login">
         <input type="text" v-model="username" placeholder="Username" required />
-        <input type="password" v-model="password" placeholder="Password" required />
+        <input
+          type="password"
+          v-model="password"
+          placeholder="Password"
+          required
+        />
         <button type="submit">Login</button>
         <p v-if="error" class="error">{{ error }}</p>
       </form>
@@ -14,35 +19,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-const username = ref('')
-const password = ref('')
-const error = ref(null)
-const router = useRouter()
+const username = ref("");
+const password = ref("");
+const error = ref(null);
+const router = useRouter();
 
 const login = async () => {
-  error.value = null
+  error.value = null;
   try {
-    const res = await fetch('http://localhost:5000/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username.value, password: password.value })
-    })
+    const res = await fetch(api('api/auth/login'), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value,
+      }),
+    });
 
-    const data = await res.json()
+    const data = await res.json();
 
     if (res.ok) {
-      localStorage.setItem('token', data.token)
-      router.push('/admin/dashboard')
+      localStorage.setItem("token", data.token);
+      router.push("/admin/dashboard");
     } else {
-      error.value = data.message || 'Login failed'
+      error.value = data.message || "Login failed";
     }
   } catch (err) {
-    error.value = 'Something went wrong'
+    error.value = "Something went wrong";
   }
-}
+};
 </script>
 
 <style scoped>

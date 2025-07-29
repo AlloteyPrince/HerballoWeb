@@ -401,6 +401,7 @@ watch(
 /* PublicBlogDetail.vue <style> */
 .blog-detail-container {
   max-width: 1200px;
+  width: 100%;
   margin: 40px auto;
   padding: 16px;
   background-color: #fff;
@@ -443,7 +444,8 @@ watch(
 
 .post-cover-image {
   max-width: 100%;
-  height: auto;
+  max-height: 480px;
+  object-fit: cover;
   border-radius: 8px;
   margin-bottom: 30px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
