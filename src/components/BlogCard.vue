@@ -10,13 +10,13 @@
 
     <div class="blog-content">
       <h2 class="blog-title">{{ post.title }}</h2>
-      <p class="blog-snippet">{{ post.content }}</p>
+      <p class="blog-snippet">{{ stripHtmlAndTruncate(post.content, 150) }}</p>
 
       <div class="blog-tags">
         <span v-for="tag in post.tags" :key="tag" class="tag">#{{ tag }}</span>
       </div>
 
-      <p class="blog-date">{{ formatDate(post.date) }}</p>
+      <p class="blog-date">{{ formatDate(post.createdAt) }}</p>
     </div>
   </div>
   

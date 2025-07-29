@@ -61,8 +61,7 @@
 <script setup>
 import {api} from '../api'
 import { ref, computed, onMounted } from 'vue'
-// *** UPDATED IMPORT STATEMENT ***
-import BlogCardPV1 from '../components/BlogCardPV1.vue' // Import the new public card component
+import BlogCardPV1 from '../components/BlogCardPV1.vue' 
 import VFooter from '../components/VFooter.vue'
 
 const posts = ref([])
@@ -101,7 +100,6 @@ const uniqueTags = computed(() => {
   return [...new Set(allTags)]
 })
 
-// Navigation logic (no changes here)
 const mobile = ref(false)
 const mobileNav = ref(false)
 
@@ -123,9 +121,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-/* Your existing styles remain unchanged */
 
-/* ========== NAVBAR ========== */
 .blog-nav {
   background-color: white;
   position: fixed;
@@ -238,7 +234,7 @@ onMounted(() => {
 
 /* ========== BLOG PAGE ========== */
 .blog-page {
-  padding: 120px 20px 60px 20px; /* top padding to avoid overlap with nav */
+  padding: 120px 20px 60px 20px;
   background-color: #f8f9fa;
   min-height: 100vh;
 }

@@ -36,6 +36,7 @@
 </template>
 
 <script setup>
+import { api } from "@/api";
 import { ref, onMounted, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 
@@ -104,9 +105,9 @@ const uniqueTags = computed(() => {
 // Filter by search query and tag
 const filteredPosts = computed(() => {
   return posts.value.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchQuery.value.toLowerCase());
+   const matchesSearch =
+  post.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+  stripHtmlAndTruncate(post.content, 1000).toLowerCase().includes(searchQuery.value.toLowerCase());
 
     const matchesTag =
       !selectedTag.value || post.tags.includes(selectedTag.value);

@@ -17,6 +17,7 @@
 </template>
 
 <script setup>
+import { api } from '@/api'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { QuillEditor } from '@vueup/vue-quill'
@@ -35,7 +36,7 @@ const error = ref('')
 // Fetch the existing post
 onMounted(async () => {
   try {
-    const res = await fetch(api('api/posts/route.params.id'))
+    const res = await fetch(api(`api/posts/route.params.id`))
     const data = await res.json()
     title.value = data.title
     slug.value = data.slug
@@ -49,7 +50,7 @@ onMounted(async () => {
 // Update handler
 const handleUpdate = async () => {
   try {
-    const res = await fetch(`http://localhost:5000/api/posts/${route.params.id}`, {
+    const res = await fetch(api(`api/posts/${route.params}.id`), {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

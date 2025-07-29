@@ -1,7 +1,6 @@
 <template>
   <router-link :to="`/blog/${post.slug}`" class="blog-card-link">
     <div class="blog-card">
-
       <img
         v-if="post.coverImage"
         :src="api(post.coverImage)"
@@ -14,7 +13,9 @@
         <p class="blog-snippet" v-html="postExcerpt"></p>
 
         <div class="blog-tags">
-          <span v-for="tag in post.tags" :key="tag" class="tag">#{{ tag }}</span>
+          <span v-for="tag in post.tags" :key="tag" class="tag"
+            >#{{ tag }}</span
+          >
         </div>
 
         <p class="blog-date">{{ formatDate(post.createdAt) }}</p>
@@ -24,8 +25,9 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-import { stripHtmlAndTruncate } from '../utils/helper'; // Adjust this path if helpers.js is in a different directory
+import { api } from "../api";
+import { defineProps } from "vue";
+import { stripHtmlAndTruncate } from "../utils/helper"; // Adjust this path if helpers.js is in a different directory
 
 const props = defineProps({
   post: {
@@ -38,7 +40,7 @@ const props = defineProps({
 const postExcerpt = stripHtmlAndTruncate(props.post.content, 180); // Adjust char limit as needed
 
 const formatDate = (dateStr) => {
-  if (!dateStr) return '';
+  if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -48,12 +50,11 @@ const formatDate = (dateStr) => {
 </script>
 
 <style scoped>
-/* Added a new class for the router-link wrapper */
 .blog-card-link {
-  text-decoration: none; /* Remove underline */
-  color: inherit; /* Inherit text color */
-  display: block; /* Make the link block-level to wrap the card */
-  margin-bottom: 20px; /* Add some spacing between cards if they're in a grid/list */
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  margin-bottom: 20px;
 }
 
 .blog-card {
@@ -64,12 +65,12 @@ const formatDate = (dateStr) => {
   transition: box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  height: 100%; /* Ensures cards in a grid have consistent height */
+  height: 100%;
 }
 
 .blog-card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  cursor: pointer; /* Indicate it's clickable on hover */
+  cursor: pointer;
 }
 
 .blog-image {
@@ -80,7 +81,7 @@ const formatDate = (dateStr) => {
 
 .blog-content {
   padding: 16px;
-  flex-grow: 1; /* Allows content area to grow and push date/tags to bottom if flexible */
+  /* flex-grow: 1; */
   display: flex;
   flex-direction: column;
 }
@@ -95,11 +96,11 @@ const formatDate = (dateStr) => {
 .blog-snippet {
   color: #555;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limit to 3 lines. Adjust this number as needed. */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 12px; /* Add margin to separate from tags */
+  margin-bottom: 12px;
 }
 
 .blog-tags {
