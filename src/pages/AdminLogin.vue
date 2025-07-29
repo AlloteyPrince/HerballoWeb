@@ -30,7 +30,7 @@ const router = useRouter();
 const login = async () => {
   error.value = null;
   try {
-    const res = await fetch(api('api/auth/login'), {
+    const res = await fetch(api("api/auth/login"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -102,7 +102,7 @@ form input:focus {
 button {
   width: 100%;
   padding: 12px;
-  background-color: #2c3e50;
+  background-color: #105212;
   color: white;
   border: none;
   border-radius: 6px;
