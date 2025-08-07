@@ -75,7 +75,7 @@ const login = async () => {
 .brand {
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: #2c3e50;
+  color: #105212;
 }
 
 .subtitle {
@@ -112,7 +112,7 @@ button {
 }
 
 button:hover {
-  background-color: #1e2d3a;
+  background-color: #0c3d0e;
 }
 
 .error {
