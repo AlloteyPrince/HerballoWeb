@@ -19,6 +19,7 @@
 </template>
 
 <script setup>
+import { api } from "@/utils/api";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
