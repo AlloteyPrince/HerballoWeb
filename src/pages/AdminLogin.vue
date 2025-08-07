@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { api } from "@/utils/api";
+import { api } from '../api'
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -41,6 +41,7 @@ const login = async () => {
     });
 
     const data = await res.json();
+    console.log("Response status:", res.status, data);
 
     if (res.ok) {
       localStorage.setItem("token", data.token);
@@ -49,6 +50,7 @@ const login = async () => {
       error.value = data.message || "Login failed";
     }
   } catch (err) {
+    console.error("FETCH ERROR:", err);
     error.value = "Something went wrong";
   }
 };
