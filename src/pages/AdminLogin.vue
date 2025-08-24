@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { api } from '../api'
+import { api } from "../api";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -31,7 +31,7 @@ const router = useRouter();
 const login = async () => {
   error.value = null;
   try {
-    const res = await fetch(api("api/auth/login"), {
+    const res = await fetch(api("/api/auth/login"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
