@@ -20,6 +20,8 @@ import AdminDashboard from "@/pages/AdminDashboard.vue";
 import BlogDetails from "@/pages/BlogDetails.vue";
 import EditDetails from "@/pages/EditDetails.vue";
 import PublicBlogDetail from "@/pages/PublicBlogDetail.vue";
+import NewsletterSender from "@/pages/admin/NewsletterSender.vue";
+import SubMangement from "@/pages/admin/SubMangement.vue";
 
 const routes = [
   {
@@ -44,6 +46,20 @@ const routes = [
     path: "/admin/blog/edit/:id",
     name: "editDetails",
     component: EditDetails,
+    meta: { requiresAuth: true },
+    props: true,
+  },
+  {
+    path: "/admin/subscribers/newsletter",
+    name: "newslettersender",
+    component: NewsletterSender,
+    meta: { requiresAuth: true },
+    props: true,
+  },
+  {
+    path: "/admin/subscribers/submanagement",
+    name: "submanagement",
+    component: SubMangement,
     meta: { requiresAuth: true },
     props: true,
   },
@@ -135,7 +151,6 @@ const routes = [
     name: "NotFound",
     component: NotFound,
   },
-
 ];
 
 const router = createRouter({
