@@ -3,9 +3,12 @@
     <aside class="sidebar">
       <h2>Herballo Admin</h2>
       <ul>
-        <li v-for="item in menu" :key="item.key"
-            :class="{ active: section === item.key }"
-            @click="section = item.key">
+        <li
+          v-for="item in menu"
+          :key="item.key"
+          :class="{ active: section === item.key }"
+          @click="section = item.key"
+        >
           {{ item.label }}
         </li>
       </ul>
@@ -16,27 +19,31 @@
       <div v-if="section === 'home'">
         <h1>Welcome back, Admin 👋</h1>
         <p>This is your control center for managing Herballo content.</p>
+
+        <div class="dashboard-cards">
+      <SubscribersCard />
+      <DashBlogCard/>
+        </div>
       </div>
 
       <div v-else-if="section === 'blog'">
-  <div class="blog-header">
-    <h2>Manage Blog Posts</h2>
-    <button @click="showForm = !showForm">
-      {{ showForm ? '← Back to Blog List' : '➕ Add New Blog' }}
-    </button>
-  </div>
+        <div class="blog-header">
+          <h2>Manage Blog Posts</h2>
+          <button @click="showForm = !showForm">
+            {{ showForm ? "← Back to Blog List" : "➕ Add New Blog" }}
+          </button>
+        </div>
 
-  <!-- Show form when showForm is true -->
-  <div v-if="showForm">
-   <BlogForm @postCreated="onPostCreated" />
-  </div>
+        <!-- Show form when showForm is true -->
+        <div v-if="showForm">
+          <BlogForm @postCreated="onPostCreated" />
+        </div>
 
-  <!-- Show list when showForm is false -->
-  <div v-else>
-    <BlogList :refreshKey="refreshKey" />
-  </div>
-</div>
-
+        <!-- Show list when showForm is false -->
+        <div v-else>
+          <BlogList :refreshKey="refreshKey" />
+        </div>
+      </div>
 
       <div v-else-if="section === 'consultation'">
         <h2>Consultation Management</h2>
@@ -51,6 +58,9 @@
       <div v-else-if="section === 'subscribers'">
         <h2>Subscriber List</h2>
         <p>Placeholder: View and manage email subscribers.</p>
+        <div class="dashboard-cards">
+          <SubManagement />
+        </div>
       </div>
 
       <div v-else-if="section === 'emailing'">
@@ -67,39 +77,41 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import BlogForm from '@/components/BlogForm.vue'
-import BlogList from '@/components/BlogList.vue'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import BlogForm from "@/components/BlogForm.vue";
+import BlogList from "@/components/BlogList.vue";
+import SubManagement from "@/pages/admin/SubManagement.vue";
+import SubscribersCard from "@/components/admin/SubscribersCard.vue";
+import DashBlogCard from "@/components/admin/DashBlogCard.vue";
 
-const router = useRouter()
-const section = ref('home')
-const showForm = ref(false)
-const refreshKey = ref(0)
+const router = useRouter();
+const section = ref("home");
+const showForm = ref(false);
+const refreshKey = ref(0);
 
 const onPostCreated = () => {
-  showForm.value = false
-  refreshKey.value += 1
-}
+  showForm.value = false;
+  refreshKey.value += 1;
+};
 
 const menu = [
-  { key: 'home', label: 'Dashboard' },
-  { key: 'blog', label: 'Blog' },
-  { key: 'consultation', label: 'Consultation' },
-  { key: 'library', label: 'Library' },
-  { key: 'subscribers', label: 'Subscribers' },
-  { key: 'emailing', label: 'Emailing' },
-  { key: 'settings', label: 'Settings' }
-]
+  { key: "home", label: "Dashboard" },
+  { key: "blog", label: "Blog" },
+  { key: "consultation", label: "Consultation" },
+  { key: "library", label: "Library" },
+  { key: "subscribers", label: "Subscribers" },
+  { key: "emailing", label: "Emailing" },
+  { key: "settings", label: "Settings" },
+];
 
 const logout = () => {
-  localStorage.removeItem('token')
-  router.push('/admin/login')
-}
+  localStorage.removeItem("token");
+  router.push("/admin/login");
+};
 </script>
 
 <style scoped>
-
 .blog-header {
   display: flex;
   justify-content: space-between;
@@ -115,7 +127,6 @@ const logout = () => {
   border-radius: 6px;
   cursor: pointer;
 }
-
 
 .dashboard-wrapper {
   display: flex;
@@ -173,6 +184,12 @@ const logout = () => {
 .main-content h1,
 .main-content h2 {
   margin-bottom: 1rem;
+}
+
+.dashboard-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 768px) {
