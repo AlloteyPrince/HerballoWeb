@@ -10,18 +10,22 @@
       v-if="showPopup"
       @close="closePopup"
     />
+
+    <SubscriptionPopup />
   </div>
 </template>
 
 <script>
 import SplashScreen from "@/components/SplashScreen.vue";
-import HerbPopUp from './components/HerbPopUp.vue'; // Import the HerbPopUp component
+import HerbPopUp from './components/popups/HerbPopUp.vue'; // Import the HerbPopUp component
+import SubscriptionPopup from "./components/popups/SubscriptionPopup.vue";
 
 export default {
   name: "App",
   components: {
     SplashScreen,
-    HerbPopUp
+    HerbPopUp,
+    SubscriptionPopup,
   },
   data() {
     return {

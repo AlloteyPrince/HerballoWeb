@@ -86,8 +86,8 @@ export default {
   font-size: 1.1rem;
   color: #555;
   line-height: 1.6;
-  white-space: pre-wrap; /* Preserve line breaks and spaces */
-  text-align: left; /* Align text to left inside popup */
+  white-space: pre-wrap;
+  text-align: left; 
 }
 
 /* Animation */
