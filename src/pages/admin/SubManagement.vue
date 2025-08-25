@@ -14,9 +14,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { api } from "../../api";
-import SubscribersCard from "./SubscribersCard.vue";
-import SubscribersTable from "./SubscribersTable.vue";
-import SendNewsletterCard from "./SendNewsletterCard.vue"; // New import
+import SubscribersCard from "@/components/admin/SubscribersCard.vue";
+import SubscribersTable from "@/components/admin/SubscribersTable.vue";
+import SendNewsletterCard from "@/components/admin/SendNewsletterCard.vue";
 
 const subscribers = ref([]);
 

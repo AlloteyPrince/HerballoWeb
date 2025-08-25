@@ -58,9 +58,7 @@
       <div v-else-if="section === 'subscribers'">
         <h2>Subscriber List</h2>
         <p>Placeholder: View and manage email subscribers.</p>
-        <div class="dashboard-cards">
           <SubManagement />
-        </div>
       </div>
 
       <div v-else-if="section === 'emailing'">

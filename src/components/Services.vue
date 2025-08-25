@@ -91,8 +91,8 @@
 </template>
 
 <script>
-// Make sure the path to ServiceDetailPopup.vue is correct for your project structure
-import ServiceDetailPopup from "./ServiceDetailPopup.vue"; 
+
+import ServiceDetailPopup from "@/components/popups/ServiceDetailPopup.vue"; 
 
 export default {
   name: "Services",

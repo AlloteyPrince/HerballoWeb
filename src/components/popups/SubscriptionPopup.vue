@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { api } from "../api";
+import { api } from '@/api'; // Adjust the path as necessary
 
 const showModal = ref(false);
 const email = ref("");

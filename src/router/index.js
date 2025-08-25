@@ -21,7 +21,7 @@ import BlogDetails from "@/pages/BlogDetails.vue";
 import EditDetails from "@/pages/EditDetails.vue";
 import PublicBlogDetail from "@/pages/PublicBlogDetail.vue";
 import NewsletterSender from "@/pages/admin/NewsletterSender.vue";
-import SubMangement from "@/pages/admin/SubMangement.vue";
+import SubManagement from "@/pages/admin/SubManagement.vue";
 
 const routes = [
   {
@@ -59,7 +59,7 @@ const routes = [
   {
     path: "/admin/subscribers/submanagement",
     name: "submanagement",
-    component: SubMangement,
+    component: SubManagement,
     meta: { requiresAuth: true },
     props: true,
   },

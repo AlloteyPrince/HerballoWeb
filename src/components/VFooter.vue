@@ -54,7 +54,7 @@
 <script>
 import GetInTouch from "@/components/GetInTouch.vue";
 import { api } from '@/api'; // Assuming your API utility is at this path
-import WelcomePopup from "@/components/WelcomePopup.vue";
+import WelcomePopup from "@/components/popups/WelcomePopup.vue";
 
 export default {
   name: "MyFooter",
