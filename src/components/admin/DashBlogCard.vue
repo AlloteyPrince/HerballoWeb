@@ -30,7 +30,8 @@ const error = ref(false);
 
 const fetchBlogCount = async () => {
   try {
-    const res = await fetch(api("/api/blogs/count")); // Use the new endpoint
+    // Corrected endpoint
+    const res = await fetch(api("/api/posts/count"));
     if (res.ok) {
       const data = await res.json();
       totalBlogs.value = data.count;

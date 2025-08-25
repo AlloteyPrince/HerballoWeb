@@ -30,7 +30,8 @@ const error = ref(false);
 
 const fetchSubscriberCount = async () => {
   try {
-    const res = await fetch(api("/api/subscribers"));
+    // Corrected endpoint
+    const res = await fetch(api("/api/subscribers/subscribers"));
     if (res.ok) {
       const data = await res.json();
       totalSubscribers.value = data.length;
@@ -89,4 +90,3 @@ onMounted(() => {
   margin: 0;
 }
 </style>
-
