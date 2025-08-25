@@ -21,8 +21,9 @@
         <p>This is your control center for managing Herballo content.</p>
 
         <div class="dashboard-cards">
-      <SubscribersCard />
-      <DashBlogCard/>
+          <SubscribersCard />
+          <DashBlogCard />
+          <SendNewsletterCard @navigate="handleNavigation" />
         </div>
       </div>
 
@@ -34,12 +35,10 @@
           </button>
         </div>
 
-        <!-- Show form when showForm is true -->
         <div v-if="showForm">
           <BlogForm @postCreated="onPostCreated" />
         </div>
 
-        <!-- Show list when showForm is false -->
         <div v-else>
           <BlogList :refreshKey="refreshKey" />
         </div>
@@ -58,12 +57,13 @@
       <div v-else-if="section === 'subscribers'">
         <h2>Subscriber List</h2>
         <p>Placeholder: View and manage email subscribers.</p>
-          <SubManagement />
+        <SubManagement />
       </div>
 
       <div v-else-if="section === 'emailing'">
         <h2>Email Campaigns</h2>
         <p>Placeholder: Create and send newsletters.</p>
+        <NewsletterSender />
       </div>
 
       <div v-else-if="section === 'settings'">
@@ -82,6 +82,8 @@ import BlogList from "@/components/BlogList.vue";
 import SubManagement from "@/pages/admin/SubManagement.vue";
 import SubscribersCard from "@/components/admin/SubscribersCard.vue";
 import DashBlogCard from "@/components/admin/DashBlogCard.vue";
+import SendNewsletterCard from "@/components/admin/SendNewsletterCard.vue"; // Added this import
+import NewsletterSender from "@/pages/admin/NewsletterSender.vue"; // New: Imported the component
 
 const router = useRouter();
 const section = ref("home");
@@ -93,11 +95,16 @@ const onPostCreated = () => {
   refreshKey.value += 1;
 };
 
+// New: Function to handle navigation from child components
+const handleNavigation = (targetSection) => {
+  section.value = targetSection;
+};
+
 const menu = [
   { key: "home", label: "Dashboard" },
   { key: "blog", label: "Blog" },
   { key: "consultation", label: "Consultation" },
-  { key: "library", label: "Library" },
+  { key: "library", "label": "Library" },
   { key: "subscribers", label: "Subscribers" },
   { key: "emailing", label: "Emailing" },
   { key: "settings", label: "Settings" },
@@ -110,6 +117,7 @@ const logout = () => {
 </script>
 
 <style scoped>
+/* ... (existing styles, no changes needed here) ... */
 .blog-header {
   display: flex;
   justify-content: space-between;

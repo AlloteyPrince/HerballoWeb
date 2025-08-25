@@ -50,13 +50,6 @@ const routes = [
     props: true,
   },
   {
-    path: "/admin/subscribers/newsletter",
-    name: "newslettersender",
-    component: NewsletterSender,
-    meta: { requiresAuth: true },
-    props: true,
-  },
-  {
     path: "/admin/subscribers/submanagement",
     name: "submanagement",
     component: SubManagement,

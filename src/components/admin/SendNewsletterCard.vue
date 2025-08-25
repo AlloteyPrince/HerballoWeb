@@ -29,12 +29,13 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
+import { defineEmits } from "vue";
 
-const router = useRouter();
+const emit = defineEmits(["navigate"]);
 
 const goToNewsletterSender = () => {
-  router.push({ name: "NewsletterSender" });
+  // Emit an event to the parent component with the desired section key
+  emit("navigate", "emailing");
 };
 </script>
 
