@@ -2,13 +2,17 @@
   <div>
     <header class="blog-nav">
       <nav ref="navbar">
-        <div class="branding">
+        <router-link to="/" class="branding">
           <img src="../images/ha-logo-main.jpg" alt="Herballo Logo" />
-        </div>
+        </router-link>
         <ul v-show="!mobile" class="navigation">
-          <li><router-link class="link" to="/">Home</router-link></li>
-          <li><a href="#subscribe" class="link">Subscribe</a></li>
-          <li><a href="#donate" class="link" >Donate</a></li>
+          <li><router-link class="link" to="/ulearn">Library</router-link></li>
+          <li><router-link class="link" to="/shop">Shop</router-link></li>
+          <li><router-link class="link" to="/about">About</router-link></li>
+          <li><router-link class="link" to="/contact">Contact</router-link></li>
+          <li>
+            <a href="#subscribe" class="link link-subscribe">Subscribe</a>
+          </li>
         </ul>
         <div class="icon">
           <font-awesome-icon
@@ -26,31 +30,78 @@
             class="mobile-nav dropdown-nav"
             ref="mobileNavMenu"
           >
-            <li><router-link class="link" to="/" @click="closeMobileNav">Home</router-link></li>
-            <li><a class="link" href="#subscribe" @click="closeMobileNav">Subscribe</a></li>
-            <li><a class="link" href="#donate" @click="closeMobileNav">Donate</a></li>
+            <li>
+              <router-link class="link" to="/ulearn" @click="closeMobileNav"
+                >Library</router-link
+              >
+            </li>
+            <li>
+              <router-link class="link" to="/shop" @click="closeMobileNav"
+                >Shop</router-link
+              >
+            </li>
+            <li>
+              <router-link class="link" to="/about" @click="closeMobileNav"
+                >About</router-link
+              >
+            </li>
+            <li>
+              <router-link class="link" to="/contact" @click="closeMobileNav"
+                >Contact</router-link
+              >
+            </li>
+            <li>
+              <a
+                class="link link-subscribe"
+                href="#subscribe"
+                @click="closeMobileNav"
+                >Subscribe</a
+              >
+            </li>
           </ul>
         </transition>
       </nav>
     </header>
 
-    <section class="blog-page">
-      <h1 class="blog-header">Herballo Blog</h1>
+    <div class="hero-and-controls-wrapper">
+      <section class="hero">
+        <p class="hero-big">Herballo Stories & Ideas</p>
+        <p class="hero-sub">
+          Stay informed and inspired with herbal medicine news and insights that
+          cuts accross.
+        </p>
+      </section>
 
-      <div class="controls">
-        <input v-model="searchQuery" type="text" placeholder="Search blog posts..." />
-        <select v-model="selectedTag">
-          <option value="">All Tags</option>
-          <option v-for="tag in uniqueTags" :key="tag" :value="tag">#{{ tag }}</option>
-        </select>
+      <div class="controls-wrapper">
+        <div class="controls">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search blog posts..."
+          />
+          <select v-model="selectedTag">
+            <option value="">All Tags</option>
+            <option v-for="tag in uniqueTags" :key="tag" :value="tag">
+              #{{ tag }}
+            </option>
+          </select>
+        </div>
       </div>
+    </div>
 
+    <section class="blog-page">
       <div v-if="loading" class="blog-message">Loading posts...</div>
       <div v-else-if="error" class="blog-message error">{{ error }}</div>
-      <div v-else-if="filteredPosts.length === 0" class="blog-message">No matching posts found.</div>
+      <div v-else-if="filteredPosts.length === 0" class="blog-message">
+        No matching posts found.
+      </div>
 
       <div class="blog-grid">
-        <BlogCardPV1 v-for="post in filteredPosts" :key="post._id" :post="post" />
+        <BlogCardPV1
+          v-for="post in filteredPosts"
+          :key="post._id"
+          :post="post"
+        />
       </div>
     </section>
 
@@ -59,69 +110,68 @@
 </template>
 
 <script setup>
-import {api} from '../api'
-import { ref, computed, onMounted } from 'vue'
-import BlogCardPV1 from '../components/BlogCardPV1.vue' 
-import VFooter from '../components/VFooter.vue'
+import { api } from "../api";
+import { ref, computed, onMounted } from "vue";
+import BlogCardPV1 from "../components/BlogCardPV1.vue";
+import VFooter from "../components/VFooter.vue";
 
-const posts = ref([])
-const loading = ref(true)
-const error = ref(null)
-const searchQuery = ref('')
-const selectedTag = ref('')
+const posts = ref([]);
+const loading = ref(true);
+const error = ref(null);
+const searchQuery = ref("");
+const selectedTag = ref("");
 
 onMounted(async () => {
   try {
-    const res = await fetch(api('/api/posts'))
-    const data = await res.json()
-    posts.value = data.reverse()
+    const res = await fetch(api("/api/posts"));
+    const data = await res.json();
+    posts.value = data.reverse();
   } catch (err) {
-    error.value = 'Failed to load blog posts.'
+    error.value = "Failed to load blog posts.";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-})
+});
 
 const filteredPosts = computed(() => {
-  return posts.value.filter(post => {
+  return posts.value.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchQuery.value.toLowerCase())
+      post.content.toLowerCase().includes(searchQuery.value.toLowerCase());
 
     const matchesTag =
-      !selectedTag.value || post.tags.includes(selectedTag.value)
+      !selectedTag.value || post.tags.includes(selectedTag.value);
 
-    return matchesSearch && matchesTag
-  })
-})
+    return matchesSearch && matchesTag;
+  });
+});
 
 const uniqueTags = computed(() => {
-  const allTags = posts.value.flatMap(post => post.tags || [])
-  return [...new Set(allTags)]
-})
+  const allTags = posts.value.flatMap((post) => post.tags || []);
+  return [...new Set(allTags)];
+});
 
-const mobile = ref(false)
-const mobileNav = ref(false)
+const mobile = ref(false);
+const mobileNav = ref(false);
 
 const toggleMobileNav = () => {
-  mobileNav.value = !mobileNav.value
-}
+  mobileNav.value = !mobileNav.value;
+};
 const closeMobileNav = () => {
-  mobileNav.value = false
-}
+  mobileNav.value = false;
+};
 
 const checkScreen = () => {
-  mobile.value = window.innerWidth <= 750
-  if (!mobile.value) mobileNav.value = false
-}
+  mobile.value = window.innerWidth <= 750;
+  if (!mobile.value) mobileNav.value = false;
+};
 onMounted(() => {
-  checkScreen()
-  window.addEventListener('resize', checkScreen)
-})
+  checkScreen();
+  window.addEventListener("resize", checkScreen);
+});
 </script>
 
 <style scoped lang="scss">
-
 .blog-nav {
   background-color: white;
   position: fixed;
@@ -162,10 +212,27 @@ onMounted(() => {
       }
     }
 
+    .link-subscribe {
+      border: 1px solid #2e8b57;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-weight: 600;
+      color: #2e8b57;
+      transition: all 0.3s ease;
+      border-bottom: none;
+
+      &:hover {
+        background-color: #2e8b57;
+        color: white;
+        border-color: #2e8b57;
+      }
+    }
+
     li {
       text-transform: uppercase;
-      padding: 16px;
+      padding: 16px 0 16px 16px;
       margin-left: 16px;
+      display: inline-flex;
     }
 
     .branding img {
@@ -213,6 +280,7 @@ onMounted(() => {
 
       li {
         margin-left: 0;
+        padding-left: 0;
       }
     }
 
@@ -233,25 +301,61 @@ onMounted(() => {
 }
 
 /* ========== BLOG PAGE ========== */
+.hero-and-controls-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  background: url("../images/blog-hero.png") center/cover no-repeat;
+  color: white;
+  text-align: center;
+  padding: 60px 20px 60px 20px;
+  margin-top: 80px;
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.4);
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+
+  .hero-big {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-sub {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  }
+}
 .blog-page {
-  padding: 120px 20px 60px 20px;
+  padding: 60px 20px 60px 20px;
   background-color: #f8f9fa;
   min-height: 100vh;
 }
-
-.blog-header {
-  text-align: center;
-  font-size: 2rem;
-  color: #2c3e50;
-  margin-bottom: 30px;
+.controls-wrapper {
+  position: relative;
+  z-index: 10;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: -50px; /* This negative margin pulls the div up */
 }
 
 .controls {
   display: flex;
   gap: 16px;
   justify-content: center;
-  max-width: 800px;
-  margin: 0 auto 24px auto;
+  padding: 24px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .controls input,

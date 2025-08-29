@@ -7,12 +7,13 @@
         </div>
         <ul v-show="!mobile" class="navigation">
           <li><router-link class="link" to="/">Home</router-link></li>
-          <li><router-link class="link" to="/ulearn">ULearn</router-link></li>
           <li>
             <router-link class="link" to="/consultation"
               >Consultation</router-link
             >
           </li>
+          <li><router-link class="link" to="/ulearn">ULearn</router-link></li>
+          
           <li><router-link class="link" to="/blog">Blog</router-link></li>
           <li><router-link class="link" to="/shop">Shop</router-link></li>
           <li><router-link class="link" to="/about">About</router-link></li>
@@ -38,17 +39,18 @@
                 >Home</router-link
               >
             </li>
-            <li>
-              <router-link class="link" to="/ulearn" @click="closeMobileNav"
-                >ULearn</router-link
-              >
-            </li>
+            
             <li>
               <router-link
                 class="link"
                 to="/consultation"
                 @click="closeMobileNav"
                 >Consultation</router-link
+              >
+            </li>
+            <li>
+              <router-link class="link" to="/ulearn" @click="closeMobileNav"
+                >ULearn</router-link
               >
             </li>
             <li>
