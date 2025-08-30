@@ -2,35 +2,47 @@
   <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <button @click="closeModal" class="close-btn">&times;</button>
-      <div class="modal-body">
-        <div v-if="!isSubscribed">
-          <h3>Stay Updated!</h3>
-          <p>
-            Subscribe to our newsletter and get notified about our latest
-            content.
-          </p>
-
-          <form @submit.prevent="subscribe">
-            <input
-              type="email"
-              v-model="email"
-              placeholder="Your email address"
-              required
-            />
-            <button type="submit" :disabled="isSubscribing">
-              {{ isSubscribing ? "Subscribing..." : "Subscribe" }}
-            </button>
-          </form>
-
-          <p v-if="message" :class="messageClass">{{ message }}</p>
+      <div class="modal-layout">
+        <div class="modal-image-side">
+          <img src="/images/popup-img.png" alt="Subscription Promotion" />
         </div>
 
-        <div v-else class="welcome-message">
-          <h3>Welcome to the Herballo family!</h3>
-          <p>
-            Thank you for subscribing. We'll keep you updated with our latest
-            news and exclusive offers.
-          </p>
+        <div class="modal-form-side">
+          <div class="modal-body">
+            <div v-if="!isSubscribed">
+              <h3>Stay Updated!</h3>
+              <p>
+                Subscribe to our newsletter and get notified about our latest
+                content.
+              </p>
+
+              <form @submit.prevent="subscribe">
+                <input
+                  type="email"
+                  v-model="email"
+                  placeholder="Your email address"
+                  required
+                />
+                <button
+                  type="submit"
+                  :disabled="isSubscribing"
+                  class="full-width-btn"
+                >
+                  {{ isSubscribing ? "Subscribing..." : "Subscribe" }}
+                </button>
+              </form>
+
+              <p v-if="message" :class="messageClass">{{ message }}</p>
+            </div>
+
+            <div v-else class="welcome-message">
+              <h3>Welcome to the Herballo family!</h3>
+              <p>
+                Thank you for subscribing. We'll keep you updated with our
+                latest news and exclusive offers.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,7 +51,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { api } from '@/api'; // Adjust the path as necessary
+import { api } from "@/api"; // Adjust the path as necessary
 
 const showModal = ref(false);
 const email = ref("");
@@ -79,16 +91,13 @@ const subscribe = async () => {
     const data = await res.json();
 
     if (res.ok) {
-      // New subscription successful, switch to welcome view
       isSubscribed.value = true;
       email.value = ""; // Clear the input field
     } else if (res.status === 409) {
-      // Already subscribed (backend returns 409)
       message.value =
         "We already have your details, but please stay around for more great content!";
       messageClass.value = "info";
     } else {
-      // Other errors
       message.value =
         data.message || "An error occurred. Please try again later.";
       messageClass.value = "error";
@@ -122,13 +131,12 @@ onMounted(() => {
 
 .modal-content {
   background: white;
-  padding: 2rem;
   border-radius: 8px;
-  max-width: 500px;
+  max-width: 800px; /* Increased max-width for the two-column layout */
   width: 90%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
-  text-align: center;
+  overflow: hidden; /* Ensures image corners are hidden */
 }
 
 .close-btn {
@@ -140,6 +148,45 @@ onMounted(() => {
   background: transparent;
   cursor: pointer;
   color: #333;
+  z-index: 10; /* Ensures it's above the image */
+}
+
+/* New Flexbox layout for the modal content */
+.modal-layout {
+  display: flex;
+  flex-direction: column; /* Stacks vertically on smaller screens */
+  width: 100%;
+
+  @media (min-width: 768px) {
+    flex-direction: row; /* Two columns on desktop */
+  }
+}
+
+.modal-image-side {
+  flex: 1; /* Takes up one part of the space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    display: block;
+  }
+
+  /* Give the image some height on mobile */
+  @media (max-width: 767px) {
+    height: 180px;
+  }
+}
+
+.modal-form-side {
+  flex: 1; /* Takes up the other part of the space */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .modal-body h3 {
@@ -174,6 +221,12 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* New style for the full-width button */
+.full-width-btn {
+  width: 100%;
+}
+
 .success {
   color: #105212;
 }

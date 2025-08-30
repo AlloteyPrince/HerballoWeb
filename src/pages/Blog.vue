@@ -11,7 +11,7 @@
           <li><router-link class="link" to="/about">About</router-link></li>
           <li><router-link class="link" to="/contact">Contact</router-link></li>
           <li>
-            <a href="#subscribe" class="link link-subscribe">Subscribe</a>
+            <a class="link link-subscribe" @click.prevent="openModal" href="#">Subscribe</a>
           </li>
         </ul>
         <div class="icon">
@@ -106,6 +106,51 @@
     </section>
 
     <VFooter />
+    
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content">
+        <button @click="closeModal" class="close-btn">&times;</button>
+        <div class="modal-layout">
+          <div class="modal-image-side">
+            <img src="../images/subscribe-promo.jpg" alt="Subscription Promotion" />
+          </div>
+          
+          <div class="modal-form-side">
+            <div class="modal-body">
+              <div v-if="!isSubscribed">
+                <h3>Stay Updated!</h3>
+                <p>
+                  Subscribe to our newsletter and get notified about our latest
+                  content.
+                </p>
+
+                <form @submit.prevent="subscribe">
+                  <input
+                    type="email"
+                    v-model="email"
+                    placeholder="Your email address"
+                    required
+                  />
+                  <button type="submit" :disabled="isSubscribing" class="full-width-btn">
+                    {{ isSubscribing ? "Subscribing..." : "Subscribe" }}
+                  </button>
+                </form>
+
+                <p v-if="message" :class="messageClass">{{ message }}</p>
+              </div>
+
+              <div v-else class="welcome-message">
+                <h3>Welcome to the Herballo family!</h3>
+                <p>
+                  Thank you for subscribing. We'll keep you updated with our latest
+                  news and exclusive offers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -121,16 +166,103 @@ const error = ref(null);
 const searchQuery = ref("");
 const selectedTag = ref("");
 
-onMounted(async () => {
-  try {
-    const res = await fetch(api("/api/posts"));
-    const data = await res.json();
-    posts.value = data.reverse();
-  } catch (err) {
-    error.value = "Failed to load blog posts.";
-  } finally {
-    loading.value = false;
+// Pop-up logic from your code
+const showModal = ref(false);
+const email = ref("");
+const message = ref(null);
+const messageClass = ref("");
+const isSubscribing = ref(false);
+const isSubscribed = ref(false);
+
+const openModal = () => {
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+const checkAndShowModal = () => {
+  const hasSeenPopup = localStorage.getItem("herballoPopupShown");
+
+  if (!hasSeenPopup) {
+    setTimeout(() => {
+      showModal.value = true;
+      localStorage.setItem("herballoPopupShown", "true");
+    }, 45000); // 45 seconds
   }
+};
+
+const subscribe = async () => {
+  message.value = null;
+  messageClass.value = "";
+  isSubscribing.value = true;
+  isSubscribed.value = false;
+
+  try {
+    const res = await fetch(api("/api/subscribe"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.value }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      isSubscribed.value = true;
+      email.value = "";
+    } else if (res.status === 409) {
+      message.value =
+        "We already have your details, but please stay around for more great content!";
+      messageClass.value = "info";
+    } else {
+      message.value =
+        data.message || "An error occurred. Please try again later.";
+      messageClass.value = "error";
+    }
+  } catch (err) {
+    message.value = "An error occurred. Please check your connection.";
+    messageClass.value = "error";
+  } finally {
+    isSubscribing.value = false;
+  }
+};
+
+const mobile = ref(false);
+const mobileNav = ref(false);
+
+const toggleMobileNav = () => {
+  mobileNav.value = !mobileNav.value;
+};
+const closeMobileNav = () => {
+  mobileNav.value = false;
+};
+
+const checkScreen = () => {
+  mobile.value = window.innerWidth <= 750;
+  if (!mobile.value) mobileNav.value = false;
+};
+
+onMounted(() => {
+  checkScreen();
+  window.addEventListener("resize", checkScreen);
+
+  // Calls the timed pop-up on page load
+  checkAndShowModal();
+  
+  // Fetches blog posts
+  async function fetchPosts() {
+    try {
+      const res = await fetch(api("/api/posts"));
+      const data = await res.json();
+      posts.value = data.reverse();
+    } catch (err) {
+      error.value = "Failed to load blog posts.";
+    } finally {
+      loading.value = false;
+    }
+  }
+  fetchPosts();
 });
 
 const filteredPosts = computed(() => {
@@ -149,25 +281,6 @@ const filteredPosts = computed(() => {
 const uniqueTags = computed(() => {
   const allTags = posts.value.flatMap((post) => post.tags || []);
   return [...new Set(allTags)];
-});
-
-const mobile = ref(false);
-const mobileNav = ref(false);
-
-const toggleMobileNav = () => {
-  mobileNav.value = !mobileNav.value;
-};
-const closeMobileNav = () => {
-  mobileNav.value = false;
-};
-
-const checkScreen = () => {
-  mobile.value = window.innerWidth <= 750;
-  if (!mobile.value) mobileNav.value = false;
-};
-onMounted(() => {
-  checkScreen();
-  window.addEventListener("resize", checkScreen);
 });
 </script>
 
@@ -218,13 +331,14 @@ onMounted(() => {
       padding: 8px 16px;
       font-weight: 600;
       background-color: #2e8b57;
-      color: white; /* Default text color is white */
+      color: white;
       transition: all 0.3s ease;
       border-bottom: none;
+      cursor: pointer;
 
       &:hover {
-        background-color: #1e6b3c; /* Darker green on hover */
-        color: white; /* Ensure text remains white on hover */
+        background-color: #1e6b3c;
+        color: white;
         border-color: #1e6b3c;
         transform: scale(1.05);
       }
@@ -391,5 +505,129 @@ onMounted(() => {
   gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Subscription Pop-up Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 800px; 
+  width: 90%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden; 
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #333;
+  z-index: 10; 
+}
+
+.modal-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.modal-image-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 767px) {
+    height: 180px;
+  }
+}
+
+.modal-form-side {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modal-body h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.modal-body form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-body input {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-body button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #105212;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.full-width-btn {
+  width: 100%;
+}
+
+.success {
+  color: #105212;
+}
+.info {
+  color: #5cb85c;
+}
+.error {
+  color: #dc3545;
+}
+
+.welcome-message h3 {
+  color: #105212;
+  font-size: 1.8rem;
 }
 </style>
