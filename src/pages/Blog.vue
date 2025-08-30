@@ -218,12 +218,13 @@ onMounted(() => {
       padding: 8px 16px;
       font-weight: 600;
       background-color: #2e8b57;
-      color: white;
+      color: white; /* Default text color is white */
       transition: all 0.3s ease;
       border-bottom: none;
 
       &:hover {
-        background-color: #1e6b3c;
+        background-color: #1e6b3c; /* Darker green on hover */
+        color: white; /* Ensure text remains white on hover */
         border-color: #1e6b3c;
         transform: scale(1.05);
       }
