@@ -185,7 +185,7 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 20px 0;
     width: 90%;
     margin: 0 auto;
 
@@ -217,14 +217,15 @@ onMounted(() => {
       border-radius: 4px;
       padding: 8px 16px;
       font-weight: 600;
-      color: #2e8b57;
+      background-color: #2e8b57;
+      color: white;
       transition: all 0.3s ease;
       border-bottom: none;
 
       &:hover {
-        background-color: #2e8b57;
-        color: white;
-        border-color: #2e8b57;
+        background-color: #1e6b3c;
+        border-color: #1e6b3c;
+        transform: scale(1.05);
       }
     }
 
@@ -304,6 +305,7 @@ onMounted(() => {
 .hero-and-controls-wrapper {
   position: relative;
   z-index: 1;
+  background-color: #f8f9fa;
 }
 
 .hero {
@@ -345,17 +347,22 @@ onMounted(() => {
   z-index: 10;
   max-width: 800px;
   margin: 0 auto;
-  margin-top: -50px; /* This negative margin pulls the div up */
+  margin-top: -50px;
 }
 
 .controls {
   display: flex;
+  flex-direction: column;
   gap: 16px;
   justify-content: center;
   padding: 24px;
-  background-color: white;
+  background-color: #f8f9fa;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+  }
 }
 
 .controls input,
@@ -365,7 +372,6 @@ onMounted(() => {
   border-radius: 6px;
   border: 1px solid #ccc;
   width: 100%;
-  max-width: 300px;
 }
 
 .blog-message {
