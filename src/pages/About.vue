@@ -1,14 +1,20 @@
 <template>
   <div>
-    <!-- Assuming Navigation component is fixed at the top -->
-    <navigation />
+    <Navigation />
     <section class="about-container">
-      <!-- Animated Background -->
       <div class="bg-decoration">
-        <div class="floating-leaf" style="left: 10%; animation-delay: 0s">🌿</div>
-        <div class="floating-leaf" style="left: 20%; animation-delay: 3s">🍃</div>
-        <div class="floating-leaf" style="left: 70%; animation-delay: 6s">🌱</div>
-        <div class="floating-leaf" style="left: 80%; animation-delay: 9s">🌿</div>
+        <div class="floating-leaf" style="left: 10%; animation-delay: 0s">
+          🌿
+        </div>
+        <div class="floating-leaf" style="left: 20%; animation-delay: 3s">
+          🍃
+        </div>
+        <div class="floating-leaf" style="left: 70%; animation-delay: 6s">
+          🌱
+        </div>
+        <div class="floating-leaf" style="left: 80%; animation-delay: 9s">
+          🌿
+        </div>
         <div class="floating-leaf" style="left: 30%; animation-delay: 12s">
           🍃
         </div>
@@ -17,7 +23,6 @@
         </div>
       </div>
 
-      <!-- Hero Section -->
       <div class="hero-section">
         <div class="hero-content">
           <div class="logo-container">
@@ -26,20 +31,18 @@
             </div>
           </div>
           <h1 class="section-title fade-in delay-1">About Herballo</h1>
-          <p class="hero-subtitle fade-in delay-2">
-            Where Traditional Wisdom Meets Modern Science
-          </p>
+          <p class="hero-subtitle fade-in delay-2">Health from the ground up</p>
           <p class="intro fade-in delay-3">
             Herballo is a health-focused brand specializing in herbal medicine
             education, research, and product development. We primarily provide
             natural health solutions, personalized consultations, educational
-            content, and the promotion and production of herbal-related products.
-            Our mission is to promote holistic well-being by integrating
-            traditional herbal practices with modern health insights.
+            content, and the promotion and production of herbal-related
+            products. Our mission is to promote holistic well-being by
+            integrating traditional herbal practices with modern health
+            insights.
           </p>
-          <p class="intro fade-in delay-4">
-            We're not just here to sell products — we're building a future where
-            **herbal medicine is validated, trusted, and accessible** to all.
+          <p class="intro fade-in delay-4 text-break">
+            We're building a future where herbal medicine is validated, trusted, and accessible to all.
           </p>
           <router-link to="/home" class="cta-button slide-in delay-5">
             <span>Discover Your Wellness Journey</span>
@@ -67,7 +70,7 @@
           </div>
 
           <div class="pillar card slide-in delay-8">
-            <div class="pillar-icon">👩�‍⚕️</div>
+            <div class="pillar-icon">👩‍⚕️</div>
             <h3>Consultation & Care</h3>
             <p>
               Through personalized one-on-one sessions, we listen to your unique
@@ -84,9 +87,9 @@
             <div class="pillar-icon">📚</div>
             <h3>Herbal Education</h3>
             <p>
-              Our ULearn platform and community resources empower individuals and
-              professionals to understand and use herbs safely, effectively, and
-              confidently.
+              Our ULearn platform and community resources empower individuals
+              and professionals to understand and use herbs safely, effectively,
+              and confidently.
             </p>
             <router-link to="/home" class="pillar-cta-button">
               <span>Explore ULearn</span>
@@ -99,8 +102,8 @@
             <h3>Product Development</h3>
             <p>
               Backed by research, our products are crafted for purity, potency,
-              and purpose — using ethically sourced botanicals and verified herbal
-              formulations.
+              and purpose — using ethically sourced botanicals and verified
+              herbal formulations.
             </p>
             <router-link to="/home" class="pillar-cta-button">
               <span>View Products</span>
@@ -128,8 +131,9 @@
             <p>
               Our sustainable farms cultivate medicinal herbs with care for the
               environment and community. We practice regenerative agriculture to
-              ensure the health of our planet while providing high-quality herbal
-              ingredients for both our products and the wider herbal community.
+              ensure the health of our planet while providing high-quality
+              herbal ingredients for both our products and the wider herbal
+              community.
             </p>
             <router-link to="/home" class="pillar-cta-button">
               <span>View Products</span>
@@ -145,16 +149,16 @@
             <div class="philosophy-content">
               <strong>Integrity</strong>: Transparent sourcing, scientific
               validation, and ethical care in everything we do. We believe in
-              honest communication about our processes, ingredients, and research
-              findings.
+              honest communication about our processes, ingredients, and
+              research findings.
             </div>
           </li>
           <li class="philosophy-item">
             <div class="philosophy-icon">📖</div>
             <div class="philosophy-content">
               <strong>Education</strong>: Empowering informed wellness decisions
-              through knowledge and understanding. We make complex herbal science
-              accessible to everyone, fostering a community of informed
+              through knowledge and understanding. We make complex herbal
+              science accessible to everyone, fostering a community of informed
               practitioners.
             </div>
           </li>
@@ -165,7 +169,7 @@
               healing for generations to come. Our practices prioritize
               environmental stewardship and the long-term health of our
               ecosystems.
-            (</div>
+            </div>
           </li>
         </ul>
 
@@ -178,9 +182,9 @@
         </p>
 
         <blockquote class="quote fade-in delay-15">
-          "Whether you're seeking personal healing, professional insight, or just
-          beginning your herbal journey — welcome to Herballo. This is where
-          tradition meets science, and nature meets you."
+          "Whether you're seeking personal healing, professional insight, or
+          just beginning your herbal journey — welcome to Herballo. This is
+          where tradition meets science, and nature meets you."
         </blockquote>
 
         <h2 class="subheading slide-in delay-16">Meet the Team</h2>
@@ -196,29 +200,28 @@
         </div>
       </div>
     </section>
-    <!-- Assuming VFooter component is at the bottom -->
     <VFooter />
   </div>
 </template>
 
 <script>
 import { useSEO } from "../composables/useSEO";
-import Navigation from "@/components/Navigation.vue"; // Assuming this is your navigation component
-import VFooter from "@/components/VFooter.vue"; // Assuming this is your footer component
-import { onMounted, nextTick } from "vue";
+import Navigation from "@/components/Navigation.vue";
+import VFooter from "@/components/VFooter.vue";
+import { onMounted } from "vue";
 
 export default {
   name: "About",
   components: { VFooter, Navigation },
-  methods:{
-     trackContactClick() {
-    if (window.gtag) {
-      window.gtag('event', 'contact_click', {
-        event_category: 'engagement',
-        event_label: 'Contact Button',
-      })
-    }
-  }
+  methods: {
+    trackContactClick() {
+      if (window.gtag) {
+        window.gtag("event", "contact_click", {
+          event_category: "engagement",
+          event_label: "Contact Button",
+        });
+      }
+    },
   },
   setup() {
     useSEO({
@@ -232,7 +235,6 @@ export default {
     });
 
     const initializeAnimations = () => {
-      // Scroll animation observer
       const observerOptions = {
         threshold: 0.1,
         rootMargin: "0px 0px -50px 0px",
@@ -250,7 +252,6 @@ export default {
         observer.observe(el);
       });
 
-      // Dynamic floating leaves
       const createFloatingLeaf = () => {
         const bgDecoration = document.querySelector(".bg-decoration");
         if (!bgDecoration) return;
@@ -264,7 +265,6 @@ export default {
 
         bgDecoration.appendChild(leaf);
 
-        // Remove leaf after animation
         setTimeout(() => {
           if (leaf.parentNode) {
             leaf.remove();
@@ -272,14 +272,11 @@ export default {
         }, 25000);
       };
 
-      // Create new floating leaves periodically
       setInterval(createFloatingLeaf, 4000);
     };
 
     onMounted(() => {
-      nextTick(() => {
-        initializeAnimations();
-      });
+      initializeAnimations();
     });
 
     return {};
@@ -288,23 +285,20 @@ export default {
 </script>
 
 <style scoped>
-/* Ensure HTML and body have scroll-padding-top for fixed headers */
 html {
-  scroll-padding-top: 80px; /* Adjust this value to match your fixed navigation bar's height */
+  scroll-padding-top: 80px;
 }
 
-/* Base styling for the About page container */
 .about-container {
-  font-family: "Poppins", sans-serif; /* Changed to Poppins */
+  font-family: "Poppins", sans-serif;
   color: #1a1a1a;
   background: linear-gradient(135deg, #f8fcf9 0%, #e8f5e8 100%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  padding-top: 80px; /* Add padding-top to account for fixed navigation bar */
+  padding-top: 80px;
 }
 
-/* Animated background elements */
 .bg-decoration {
   position: fixed;
   top: 0;
@@ -340,7 +334,6 @@ html {
   }
 }
 
-/* Hero Section */
 .hero-section {
   min-height: 100vh;
   display: flex;
@@ -357,8 +350,8 @@ html {
 }
 
 .hero-content {
-  max-width: 800px;
-  padding: 2rem;
+  max-width: 1000px; /* Increased max-width */
+  padding: 2rem 4rem; /* Adjusted padding to give more space */
 }
 
 .logo-container {
@@ -395,7 +388,7 @@ html {
 }
 
 .section-title {
-  font-family: "Poppins", sans-serif; /* Changed to Poppins */
+  font-family: "Poppins", sans-serif;
   font-size: clamp(3rem, 5vw, 5rem);
   font-weight: 700;
   background: linear-gradient(135deg, #1a5e2f, #38a169);
@@ -418,9 +411,6 @@ html {
   color: #718096;
   margin-bottom: 2rem;
   line-height: 1.8;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .cta-button {
@@ -435,7 +425,7 @@ html {
   font-weight: 600;
   font-size: 1.1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(56, 161, 105, 0.4); /* Enhanced default shadow */
+  box-shadow: 0 10px 30px rgba(56, 161, 105, 0.4);
   position: relative;
   overflow: hidden;
 }
@@ -461,11 +451,10 @@ html {
 }
 
 .cta-button:hover {
-  transform: translateY(-5px); /* Slightly more lift on hover */
-  box-shadow: 0 18px 45px rgba(56, 161, 105, 0.55); /* More pronounced shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 18px 45px rgba(56, 161, 105, 0.55);
 }
 
-/* Content Sections */
 .content-section {
   max-width: 1200px;
   margin: 0 auto;
@@ -473,7 +462,7 @@ html {
 }
 
 .subheading {
-  font-family: "Poppins", sans-serif; /* Changed to Poppins */
+  font-family: "Poppins", sans-serif;
   font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 600;
   text-align: center;
@@ -494,7 +483,6 @@ html {
   border-radius: 2px;
 }
 
-/* Pillars Grid */
 .pillars-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -543,7 +531,7 @@ html {
 }
 
 .pillar h3 {
-  font-family: "Poppins", sans-serif; /* Changed to Poppins */
+  font-family: "Poppins", sans-serif;
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #1a5e2f;
@@ -567,17 +555,16 @@ html {
   border-radius: 25px;
   border: 2px solid #38a169;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.2); /* Added default shadow */
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.2);
 }
 
 .pillar-cta-button:hover {
   background: #38a169;
   color: white;
-  transform: translateY(-3px); /* Changed to translateY for consistency */
-  box-shadow: 0 8px 20px rgba(56, 161, 105, 0.35); /* Enhanced hover shadow */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(56, 161, 105, 0.35);
 }
 
-/* Philosophy Section */
 .philosophy {
   list-style: none;
   padding: 0;
@@ -622,7 +609,6 @@ html {
   font-weight: 600;
 }
 
-/* Vision Text */
 .vision-text {
   font-size: 1.2rem;
   color: #4a5568;
@@ -634,7 +620,6 @@ html {
   line-height: 1.8;
 }
 
-/* Quote */
 .quote {
   background: linear-gradient(
     135deg,
@@ -660,10 +645,9 @@ html {
   position: absolute;
   top: -10px;
   left: 20px;
-  font-family: "Poppins", sans-serif; /* Changed to Poppins */
+  font-family: "Poppins", sans-serif;
 }
 
-/* Team Member */
 .team-member {
   display: flex;
   flex-direction: column;
@@ -696,7 +680,7 @@ html {
 }
 
 .team-info h3 {
-  font-family: "Poppins", sans-serif; /* Changed to Poppins */
+  font-family: "Poppins", sans-serif;
   font-size: 2rem;
   margin-bottom: 0.5rem;
   color: #1a5e2f;
@@ -713,7 +697,6 @@ html {
   font-size: 1rem;
 }
 
-/* Animations */
 .fade-in,
 .slide-in {
   opacity: 0;
@@ -727,7 +710,6 @@ html {
   transform: translateY(0);
 }
 
-/* Animation delays */
 .delay-1 {
   transition-delay: 0.1s;
 }
@@ -780,21 +762,26 @@ html {
   transition-delay: 1.7s;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
-  /* Adjust padding-top for the main content area in mobile view */
   .about-container {
-    padding-top: 45px; /* Reduced padding for mobile */
+    padding-top: 45px;
   }
 
-  /* Adjust scroll-padding-top for html to match */
   html {
-    scroll-padding-top: 45px; /* Ensures anchor links scroll correctly below nav */
+    scroll-padding-top: 45px;
   }
 
   .hero-section {
     min-height: 80vh;
     padding: 2rem 1rem;
+  }
+
+  .hero-content {
+    padding: 2rem 1.5rem; /* Adjusted for mobile */
+  }
+
+  .intro {
+    /* No max-width needed here, it inherits from hero-content */
   }
 
   .content-section {
@@ -818,11 +805,11 @@ html {
 
   .philosophy-item::after {
     left: 0 !important;
-    width: 100%; /* Ensure separator spans full width on mobile */
+    width: 100%;
   }
 
   .philosophy-icon {
-    width: auto; /* Allow icon width to adjust */
+    width: auto;
   }
 
   .team-member {
@@ -834,6 +821,18 @@ html {
     height: 120px;
     font-size: 2.5rem;
   }
+
+  .team-info h3 {
+    font-size: 1.5rem;
+  }
+
+  .quote {
+    font-size: 1.1rem;
+    padding: 1.5rem;
+  }
+
+  .quote::before {
+    font-size: 3rem;
+  }
 }
 </style>
-�

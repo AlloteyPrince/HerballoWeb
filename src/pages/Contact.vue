@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <Navigation/>
   <div class="contact-us-page">
     <section class="contact-header">
       <h1>Get in Touch with Herballo</h1>
@@ -57,9 +59,12 @@
       <p class="backend-note">**IMPORTANT:** Form submissions are handled by FormSubmit.co. You'll need to confirm your email with FormSubmit for the first submission.</p>
     </section>
   </div>
+  </div>
 </template>
 
 <script>
+import Navigation from '@/components/Navigation.vue';
+
 export default {
   name: 'ContactUs',
   data() {

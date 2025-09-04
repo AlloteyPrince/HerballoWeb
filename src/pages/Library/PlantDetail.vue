@@ -1,4 +1,5 @@
 <template>
+  <Navigation/>
   <div class="plant-detail-page">
     <!-- Back Button -->
     <button @click="$router.go(-1)" class="back-button">
@@ -105,6 +106,8 @@
 </template>
 
 <script>
+import Navigation from '@/components/Navigation.vue';
+
 export default {
   name: "PlantDetail",
   data() {

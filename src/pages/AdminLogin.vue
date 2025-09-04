@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <Navigation />
   <div class="admin-wrapper">
     <div class="admin-card">
       <h1 class="brand">Herballo</h1>
@@ -16,12 +18,14 @@
       </form>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup>
 import { api } from "../api";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import Navigation from "@/components/Navigation.vue";
 
 const username = ref("");
 const password = ref("");

@@ -1,8 +1,7 @@
 <template>
-  <!-- <navigation/> -->
   <div>
-    <div class="library-page">
-      <!-- Fixed Hero Section -->
+    <Navigation />
+    <div class="library-page-wrapper">
       <section class="hero-section">
         <div class="hero-content">
           <h1 class="text-white">ULearn Library</h1>
@@ -26,7 +25,6 @@
         </div>
       </section>
 
-      <!-- Plants List Section -->
       <section class="plants-section">
         <div class="container">
           <div v-if="isLoading" class="loading-state">
@@ -41,7 +39,6 @@
           </div>
 
           <div v-else class="plants-list">
-            <!-- Results Summary -->
             <div class="results-summary">
               <p>
                 Showing {{ paginatedPlants.length }} of
@@ -52,7 +49,6 @@
               </p>
             </div>
 
-            <!-- Plant Cards -->
             <div
               v-for="plant in paginatedPlants"
               :key="plant.id"
@@ -94,7 +90,6 @@
               </div>
             </div>
 
-            <!-- Pagination -->
             <div v-if="totalPages > 1" class="pagination">
               <button
                 @click="goToPage(currentPage - 1)"
@@ -136,6 +131,7 @@
         </div>
       </section>
     </div>
+    <VFooter />
   </div>
 </template>
 
@@ -146,6 +142,7 @@ import { Button } from "@/components/ui/button";
 import { IconSearch } from "@/components/icons";
 import Navigation from "@/components/Navigation.vue";
 import { useSEO } from "@/composables/useSEO";
+import VFooter from "@/components/VFooter.vue";
 
 export default defineComponent({
   name: "ULearn",
@@ -154,6 +151,7 @@ export default defineComponent({
     Button,
     IconSearch,
     Navigation,
+    VFooter
   },
   data() {
     return {
@@ -176,6 +174,7 @@ export default defineComponent({
         "herbs, plants, leafs, dry leaves, fruit, branches, stem, herbal education, herbal medicine, herbal library, herbal medicine courses,Herbal plant database,medicinal herbs list, traditional medicine library,natural remedies encyclopedia,plant-based medicine information,herbal remedies database,botanical medicine index,ethnobotany resources,healing plants guide, herb identification library, ayurvedic herbs database,chinese herbal medicine information, african medicinal plants, herbal uses and benefits, phytotherapy library, medicinal plant research,holistic health herbs, natural healing repository, plant extracts uses, herbal pharmacology library",
       url: "https://herballo.co/ulearn",
     });
+    this.loadPlants();
   },
   computed: {
     filteredPlants() {
@@ -209,11 +208,9 @@ export default defineComponent({
       const totalPages = this.totalPages;
       const current = this.currentPage;
 
-      // Show max 5 page numbers
       let start = Math.max(1, current - 2);
       let end = Math.min(totalPages, start + 4);
 
-      // Adjust start if we're near the end
       if (end - start < 4) {
         start = Math.max(1, end - 4);
       }
@@ -227,7 +224,6 @@ export default defineComponent({
   },
   watch: {
     filteredPlants() {
-      // Reset to first page when search results change
       this.currentPage = 1;
     },
   },
@@ -262,7 +258,7 @@ export default defineComponent({
       if (Array.isArray(data)) {
         this.plants = data.map((plant, index) => ({
           ...plant,
-          id: plant.id || `plant-${index}`, // Ensure each plant has an ID
+          id: plant.id || `plant-${index}`,
         }));
       } else if (data && typeof data === "object") {
         const possibleArrayKeys = ["plants", "data", "items"];
@@ -292,9 +288,8 @@ export default defineComponent({
         return;
       }
 
-      // Navigate to plant detail page
       this.$router.push({
-        name: "plantDetail", // Make sure this matches your route name
+        name: "plantDetail",
         params: { id: plant.id },
       });
     },
@@ -305,24 +300,19 @@ export default defineComponent({
       return plant.imageUrl || "/images/plant-placeholder.jpg";
     },
     onSearchInput() {
-      // Clear previous timeout
       if (this.searchTimeout) {
         clearTimeout(this.searchTimeout);
       }
 
-      // Show loading state
       this.isSearching = true;
 
-      // Debounce search to avoid excessive filtering
       this.searchTimeout = setTimeout(() => {
         this.isSearching = false;
-        // The computed property will handle the actual filtering
       }, 300);
     },
     goToPage(page) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
-        // Scroll to top of results
         this.$el.querySelector(".plants-section").scrollIntoView({
           behavior: "smooth",
         });
@@ -332,30 +322,23 @@ export default defineComponent({
 });
 </script>
 
+---
+
 <style scoped>
-.library-page {
-  min-height: 100vh;
-  background: #fafafa;
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-  padding-top: 200px; /* Space for fixed hero */
+.library-page-wrapper {
+  margin-top: 80px; /* Adjust this to match your navigation bar's height */
 }
 
-/* Fixed Hero Section */
 .hero-section {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+  position: relative;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-image: url("/images/ha7.jpg");
   background-size: cover;
   background-position: center;
   color: white;
-  padding: 2rem 2rem 1.5rem;
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -371,10 +354,10 @@ export default defineComponent({
 }
 
 .hero-content {
-  max-width: 800px;
-  margin: 0 auto;
   position: relative;
   z-index: 1;
+  max-width: 800px;
+  padding: 2rem;
 }
 
 .hero-content h1 {
@@ -432,7 +415,6 @@ export default defineComponent({
   animation: spin 1s linear infinite;
 }
 
-/* Plants Section */
 .plants-section {
   padding: 2rem 1rem;
   background: #fafafa;
@@ -465,7 +447,6 @@ export default defineComponent({
   flex-direction: column;
 }
 
-/* Plant Card */
 .plant-card {
   display: flex;
   align-items: center;
@@ -477,7 +458,7 @@ export default defineComponent({
 }
 
 .plant-card:hover {
-  background-color: #f0fdf4; /* Light green hover */
+  background-color: #f0fdf4;
 }
 
 .plant-card:last-child {
@@ -542,7 +523,7 @@ export default defineComponent({
 }
 
 .view-details-btn {
-  background-color: #105212; /* Green color */
+  background-color: #105212;
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -554,10 +535,9 @@ export default defineComponent({
 }
 
 .view-details-btn:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049;
 }
 
-/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -617,7 +597,6 @@ export default defineComponent({
   color: white;
 }
 
-/* Loading and Error States */
 .loading-state {
   text-align: center;
   padding: 3rem;
@@ -672,7 +651,6 @@ export default defineComponent({
   margin-top: 0.5rem;
 }
 
-/* Animations */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -682,27 +660,9 @@ export default defineComponent({
   }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
-  .library-page {
-    padding-top: 180px;
-  }
-
-  .hero-section {
-    padding: 1.5rem 1rem 1rem;
-  }
-
-  .hero-content h1 {
-    font-size: 1.75rem;
-  }
-
-  .hero-subtitle {
-    display: none;
-  }
-
-  .container {
-    margin: 0 0.5rem;
-    border-radius: 8px;
+  .library-page-wrapper {
+    margin-top: 64px;
   }
 
   .plant-card {
@@ -740,13 +700,6 @@ export default defineComponent({
     width: 100%;
     justify-content: center;
     margin-bottom: 0.5rem;
-  }
-}
-
-/* Ensure content doesn't hide behind fixed header */
-@media (max-width: 640px) {
-  .library-page {
-    padding-top: 160px;
   }
 }
 </style>
