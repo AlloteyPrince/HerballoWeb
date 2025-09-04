@@ -31,30 +31,22 @@
             ref="mobileNavMenu"
           >
             <li>
-              <router-link class="link" to="/ulearn" @click="closeMobileNav"
-                >Library</router-link
-              >
+              <router-link class="link" to="/ulearn" @click="closeMobileNav">Library</router-link>
             </li>
             <li>
-              <router-link class="link" to="/shop" @click="closeMobileNav"
-                >Shop</router-link
-              >
+              <router-link class="link" to="/shop" @click="closeMobileNav">Shop</router-link>
             </li>
             <li>
-              <router-link class="link" to="/about" @click="closeMobileNav"
-                >About</router-link
-              >
+              <router-link class="link" to="/about" @click="closeMobileNav">About</router-link>
             </li>
             <li>
-              <router-link class="link" to="/contact" @click="closeMobileNav"
-                >Contact</router-link
-              >
+              <router-link class="link" to="/contact" @click="closeMobileNav">Contact</router-link>
             </li>
             <li>
               <a
                 class="link link-subscribe"
-                href="#subscribe"
-                @click="closeMobileNav"
+                href="#"
+                @click.prevent="openModal(), closeMobileNav()"
                 >Subscribe</a
               >
             </li>
@@ -112,7 +104,7 @@
         <button @click="closeModal" class="close-btn">&times;</button>
         <div class="modal-layout">
           <div class="modal-image-side">
-            <img src="../images/subscribe-promo.jpg" alt="Subscription Promotion" />
+            <img src="../images/popup-img.png" alt="Subscription Promotion" />
           </div>
           
           <div class="modal-form-side">
@@ -166,7 +158,7 @@ const error = ref(null);
 const searchQuery = ref("");
 const selectedTag = ref("");
 
-// Pop-up logic from your code
+// Pop-up logic
 const showModal = ref(false);
 const email = ref("");
 const message = ref(null);
@@ -285,6 +277,11 @@ const uniqueTags = computed(() => {
 </script>
 
 <style scoped lang="scss">
+// Your existing styles go here. No changes are needed as they are already correct.
+// The provided code already includes the CSS for both the blog page and the modal.
+// The CSS for the modal's two-column layout is correct.
+
+/* Your existing styles for the blog page and modal are all here. */
 .blog-nav {
   background-color: white;
   position: fixed;
