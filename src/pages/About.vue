@@ -77,7 +77,7 @@
               health story and recommend holistic herbal solutions — integrating
               lifestyle, diet, and nature-based remedies.
             </p>
-            <router-link to="/home" class="pillar-cta-button">
+            <router-link to="/" class="pillar-cta-button">
               <span>Book a Consultation</span>
               <span>→</span>
             </router-link>
