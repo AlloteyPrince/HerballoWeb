@@ -1,10 +1,10 @@
 <template>
-  <navigation />
+  <Navigation />
   <hero />
-  <WhyItWorks/>
+  <WhyItWorks />
   <WhyHerballo />
   <services />
-  <library/>
+  <library />
   <FixedBackgroundScroll />
   <blogspace id="blog"></blogspace>
   <VFooter />

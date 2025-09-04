@@ -11,7 +11,9 @@
           <li><router-link class="link" to="/about">About</router-link></li>
           <li><router-link class="link" to="/contact">Contact</router-link></li>
           <li>
-            <a class="link link-subscribe" @click.prevent="openModal" href="#">Subscribe</a>
+            <a class="link link-subscribe" @click.prevent="openModal" href="#"
+              >Subscribe</a
+            >
           </li>
         </ul>
         <div class="icon">
@@ -31,22 +33,30 @@
             ref="mobileNavMenu"
           >
             <li>
-              <router-link class="link" to="/ulearn" @click="closeMobileNav">Library</router-link>
+              <router-link class="link" to="/ulearn" @click="closeMobileNav"
+                >Library</router-link
+              >
             </li>
             <li>
-              <router-link class="link" to="/shop" @click="closeMobileNav">Shop</router-link>
+              <router-link class="link" to="/shop" @click="closeMobileNav"
+                >Shop</router-link
+              >
             </li>
             <li>
-              <router-link class="link" to="/about" @click="closeMobileNav">About</router-link>
+              <router-link class="link" to="/about" @click="closeMobileNav"
+                >About</router-link
+              >
             </li>
             <li>
-              <router-link class="link" to="/contact" @click="closeMobileNav">Contact</router-link>
+              <router-link class="link" to="/contact" @click="closeMobileNav"
+                >Contact</router-link
+              >
             </li>
             <li>
               <a
                 class="link link-subscribe"
                 href="#"
-                @click.prevent="openModal(), closeMobileNav()"
+                @click.prevent="(openModal(), closeMobileNav())"
                 >Subscribe</a
               >
             </li>
@@ -98,15 +108,18 @@
     </section>
 
     <VFooter />
-    
+
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <button @click="closeModal" class="close-btn">&times;</button>
         <div class="modal-layout">
           <div class="modal-image-side">
-            <img src="../images/subscribe-promo.jpg" alt="Subscription Promotion" />
+            <img
+              src="../images/subscribe-promo.jpg"
+              alt="Subscription Promotion"
+            />
           </div>
-          
+
           <div class="modal-form-side">
             <div class="modal-body">
               <div v-if="!isSubscribed">
@@ -123,7 +136,11 @@
                     placeholder="Your email address"
                     required
                   />
-                  <button type="submit" :disabled="isSubscribing" class="full-width-btn">
+                  <button
+                    type="submit"
+                    :disabled="isSubscribing"
+                    class="full-width-btn"
+                  >
                     {{ isSubscribing ? "Subscribing..." : "Subscribe" }}
                   </button>
                 </form>
@@ -134,8 +151,8 @@
               <div v-else class="welcome-message">
                 <h3>Welcome to the Herballo family!</h3>
                 <p>
-                  Thank you for subscribing. We'll keep you updated with our latest
-                  news and exclusive offers.
+                  Thank you for subscribing. We'll keep you updated with our
+                  latest news and exclusive offers.
                 </p>
               </div>
             </div>
@@ -241,7 +258,7 @@ onMounted(() => {
 
   // Calls the timed pop-up on page load
   checkAndShowModal();
-  
+
   // Fetches blog posts
   async function fetchPosts() {
     try {
@@ -283,7 +300,8 @@ const uniqueTags = computed(() => {
   position: fixed;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
     0 1px 2px -1px rgba(0, 0, 0, 0.06);
   color: rgb(17, 17, 17);
 
@@ -467,7 +485,7 @@ const uniqueTags = computed(() => {
   z-index: 10;
   max-width: 800px;
   margin: 0 20px;
-  
+
   @media (max-width: 750px) {
     margin-top: 20px; /* Adds top margin on mobile */
   }
@@ -537,11 +555,11 @@ const uniqueTags = computed(() => {
 .modal-content {
   background: white;
   border-radius: 8px;
-  max-width: 800px; 
+  max-width: 800px;
   width: 90%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .close-btn {
@@ -553,14 +571,14 @@ const uniqueTags = computed(() => {
   background: transparent;
   cursor: pointer;
   color: #333;
-  z-index: 10; 
+  z-index: 10;
 }
 
 .modal-layout {
   display: flex;
   flex-direction: column;
   width: 100%;
-  
+
   @media (min-width: 768px) {
     flex-direction: row;
   }
