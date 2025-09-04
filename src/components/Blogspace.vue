@@ -14,7 +14,7 @@
       @touchend="resumeScroll"
     >
       <div class="blog-track" :class="{ 'is-paused': isScrollingPaused }">
-        <router-link v-for="post in posts" :key="post._id" :to="`/blog/${post._id}`" class="box">
+        <router-link v-for="post in posts" :key="post._id" :to="{ name: 'publicBlogDetail', params: { slug: post._id } }" class="box">
           <div class="inner-box">
             <img class="img-box" :src="post.image" :alt="post.title" />
           </div>
@@ -24,7 +24,7 @@
           </div>
         </router-link>
 
-        <router-link v-for="post in posts" :key="post._id + '-dup'" :to="`/blog/${post._id}`" class="box">
+        <router-link v-for="post in posts" :key="post._id + '-dup'" :to="{ name: 'publicBlogDetail', params: { slug: post._id } }" class="box">
           <div class="inner-box">
             <img class="img-box" :src="post.image" :alt="post.title" />
           </div>
@@ -132,7 +132,7 @@ onMounted(async () => {
   }
   100% {
     /* Adjusted value for 4 boxes + 3 gaps on desktop */
-    transform: translateX(-872px);
+    transform: translateX(-1192px);
   }
 }
 
@@ -148,7 +148,7 @@ onMounted(async () => {
   transition: box-shadow ease-in-out 0.3s;
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: 280px; /* Increased width */
   margin-right: 1.5rem;
   flex-shrink: 0;
   text-decoration: none; /* Remove underline from router-link */
@@ -164,7 +164,7 @@ onMounted(async () => {
 }
 
 .img-box {
-  height: 120px;
+  height: 150px; /* Increased height */
   width: 100%;
   object-fit: cover;
   display: block;
@@ -251,18 +251,18 @@ onMounted(async () => {
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-688px);
+      transform: translateX(-848px);
     }
   }
 
   .box {
-    width: 160px;
+    width: 200px; /* Increased width */
     min-height: 240px;
     margin-right: 1rem;
   }
 
   .img-box {
-    height: 100px;
+    height: 120px; /* Increased height */
   }
 
   .texts {
