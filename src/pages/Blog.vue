@@ -104,7 +104,7 @@
         <button @click="closeModal" class="close-btn">&times;</button>
         <div class="modal-layout">
           <div class="modal-image-side">
-            <img src="../images/popup-img.png" alt="Subscription Promotion" />
+            <img src="../images/subscribe-promo.jpg" alt="Subscription Promotion" />
           </div>
           
           <div class="modal-form-side">
@@ -277,10 +277,6 @@ const uniqueTags = computed(() => {
 </script>
 
 <style scoped lang="scss">
-// Your existing styles go here. No changes are needed as they are already correct.
-// The provided code already includes the CSS for both the blog page and the modal.
-// The CSS for the modal's two-column layout is correct.
-
 /* Your existing styles for the blog page and modal are all here. */
 .blog-nav {
   background-color: white;
@@ -418,16 +414,15 @@ const uniqueTags = computed(() => {
   position: relative;
   z-index: 1;
   background-color: #f8f9fa;
+  margin-top: 60px; /* Aligns content correctly below fixed nav */
 }
 
 .hero {
   background: url("../images/blog-hero.png") center/cover no-repeat;
   color: white;
   text-align: center;
-  padding: 60px 20px 60px 20px;
-  margin-top: 80px;
+  padding: 60px 20px;
   box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.4);
-  height: 50vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -435,11 +430,24 @@ const uniqueTags = computed(() => {
   position: relative;
   z-index: 1;
 
+  @media (max-width: 750px) {
+    min-height: 85vh; /* Increased height for mobile */
+  }
+
+  @media (min-width: 751px) {
+    height: 50vh;
+    min-height: auto;
+  }
+
   .hero-big {
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+    @media (max-width: 750px) {
+      line-height: 1.2;
+    }
   }
 
   .hero-sub {
@@ -458,8 +466,16 @@ const uniqueTags = computed(() => {
   position: relative;
   z-index: 10;
   max-width: 800px;
-  margin: 0 auto;
-  margin-top: -50px;
+  margin: 0 20px;
+  
+  @media (max-width: 750px) {
+    margin-top: 20px; /* Adds top margin on mobile */
+  }
+
+  @media (min-width: 751px) {
+    margin: 0 auto;
+    margin-top: -50px;
+  }
 }
 
 .controls {
@@ -468,7 +484,7 @@ const uniqueTags = computed(() => {
   gap: 16px;
   justify-content: center;
   padding: 24px;
-  background-color: #f8f9fa;
+  background-color: white;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
