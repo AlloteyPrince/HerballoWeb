@@ -42,9 +42,10 @@
             insights.
           </p>
           <p class="intro fade-in delay-4 text-break">
-            We're building a future where herbal medicine is validated, trusted, and accessible to all.
+            We're building a future where herbal medicine is validated, trusted,
+            and accessible to all.
           </p>
-          <router-link to="/home" class="cta-button slide-in delay-5">
+          <router-link to="/" class="cta-button slide-in delay-5">
             <span>Discover Your Wellness Journey</span>
             <span>→</span>
           </router-link>
