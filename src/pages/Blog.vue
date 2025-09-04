@@ -115,7 +115,7 @@
         <div class="modal-layout">
           <div class="modal-image-side">
             <img
-              src="../images/subscribe-promo.jpg"
+              src="../images/popup-img.png"
               alt="Subscription Promotion"
             />
           </div>
