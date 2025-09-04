@@ -396,15 +396,15 @@ html {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.02em;
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
+  font-size: 2rem;
   color: #4a5568;
   margin-bottom: 2rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .intro {
@@ -781,10 +781,6 @@ html {
     padding: 2rem 1.5rem; /* Adjusted for mobile */
   }
 
-  .intro {
-    /* No max-width needed here, it inherits from hero-content */
-  }
-
   .content-section {
     padding: 2rem 1rem;
   }
@@ -801,6 +797,7 @@ html {
   .philosophy-item {
     flex-direction: column;
     text-align: center;
+    align-items: center;
     gap: 1rem;
   }
 

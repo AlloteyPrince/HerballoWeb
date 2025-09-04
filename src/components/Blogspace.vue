@@ -1,160 +1,124 @@
 <template>
-  <div>
-    <div id="blog" class="container">
-      <div class="blogvisit">
-        <p class="blog-visit"><a href="">Our Research</a></p>
+  <div v-if="!error && posts.length > 0" class="blog-container">
+    <div class="blogvisit">
+      <p class="blog-visit">
+        <router-link to="/blog">Our Research</router-link>
+      </p>
+    </div>
+
+    <div
+      class="blogspace"
+      @mouseenter="pauseScroll"
+      @mouseleave="resumeScroll"
+      @touchstart="pauseScroll"
+      @touchend="resumeScroll"
+    >
+      <div class="blog-track" :class="{ 'is-paused': isScrollingPaused }">
+        <router-link v-for="post in posts" :key="post._id" :to="`/blog/${post._id}`" class="box">
+          <div class="inner-box">
+            <img class="img-box" :src="post.image" :alt="post.title" />
+          </div>
+          <div class="texts">
+            <p class="box-text">{{ post.title }}</p>
+            <p class="box-text2">{{ post.subtitle }}</p>
+          </div>
+        </router-link>
+
+        <router-link v-for="post in posts" :key="post._id + '-dup'" :to="`/blog/${post._id}`" class="box">
+          <div class="inner-box">
+            <img class="img-box" :src="post.image" :alt="post.title" />
+          </div>
+          <div class="texts">
+            <p class="box-text">{{ post.title }}</p>
+            <p class="box-text2">{{ post.subtitle }}</p>
+          </div>
+        </router-link>
       </div>
-
-      <div class="blogspace" @mouseenter="pauseScroll" @mouseleave="resumeScroll" @touchstart="pauseScroll" @touchend="resumeScroll">
-        <div class="blog-track" :class="{ 'is-paused': isScrollingPaused }">
-          <!-- Duplicate content for infinite scroll effect -->
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Hypertension Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Hypertension Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Cancer Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Cancer Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Diabetes Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Diabetes Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Arthritis Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Arthritis Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Products Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Products Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <!-- DUPLICATED CONTENT FOR SEAMLESS LOOPING -->
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Hypertension Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Hypertension Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Cancer Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Cancer Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Diabetes Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Diabetes Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Arthritis Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Arthritis Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-
-          <div class="box">
-            <div class="inner-box"><img class="img-box" src="../images/logo-blog.jpg" alt="Products Research Logo" /></div>
-            <div class="texts">
-              <p class="box-text">Products Research</p>
-              <p class="box-text2">We found that ...</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="blog-cta">
+      <router-link to="/blog" class="blog-cta-button">
+        Explore more
+      </router-link>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: "Blogspace",
-  data() {
-    return {
-      isScrollingPaused: false,
-    };
-  },
-  methods: {
-    pauseScroll() {
-      this.isScrollingPaused = true;
-    },
-    resumeScroll() {
-      this.isScrollingPaused = false;
-    },
-  },
+<script setup>
+import { api } from "../api";
+import { ref, onMounted } from "vue";
+
+const posts = ref([]);
+const loading = ref(true);
+const error = ref(null);
+const isScrollingPaused = ref(false);
+
+const pauseScroll = () => {
+  isScrollingPaused.value = true;
 };
+
+const resumeScroll = () => {
+  isScrollingPaused.value = false;
+};
+
+onMounted(async () => {
+  try {
+    const res = await fetch(api("/api/posts"));
+    if (!res.ok) {
+      throw new Error("Failed to load blog posts.");
+    }
+    const allPosts = await res.json();
+    posts.value = allPosts.reverse().slice(0, 4);
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 
 <style scoped>
 /* Scoped styles ensure these styles only apply to this component */
-.container {
+.blog-container {
   background-color: white;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding: 6rem 0; /* Updated: 6rem top and bottom padding for desktop */
+  padding: 6rem 0;
 }
 
 .blogvisit {
-  margin-bottom: 2rem; /* Add some space below the "Our Research" link */
+  margin-bottom: 2rem;
   color: #105212;
 }
 
 .blog-visit a {
-  font-weight: 800; /* Made bolder, matching services header */
-  font-size: 3em; /* Larger font size, matching services header */
-  color: rgb(1, 59, 1); /* Dark green color, matching services header */
-  text-decoration: none; /* Remove default underline */
+  font-weight: 800;
+  font-size: 3em;
+  color: rgb(1, 59, 1);
+  text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .blog-visit a:hover {
-  color: #666; /* Lighten color on hover */
+  color: #666;
 }
 
 .blog-visit a:visited {
-  color: #666; /* Visited link color to match grey */
+  color: #666;
 }
 
 .blogspace {
-  width: 80%; /* Container width for desktop cards */
-  overflow: hidden; /* Hide scrollbar */
-  position: relative; /* Needed for positioning the inner track relative to this */
+  width: 80%;
+  overflow: hidden;
+  position: relative;
 }
 
 .blog-track {
   display: flex;
-  white-space: nowrap; /* Keep items in a single line */
-  animation: scroll-left 40s linear infinite; /* Adjusted duration for smoother effect with duplicated content */
+  white-space: nowrap;
+  animation: scroll-left 40s linear infinite;
+  padding-bottom: 1rem;
 }
 
 .blog-track.is-paused {
@@ -167,57 +131,59 @@ export default {
     transform: translateX(0);
   }
   100% {
-    /* Translate by exactly half the total content width for seamless loop */
-    /* Calculation: (5 boxes * 200px width) + (4 gaps * 1.5rem (24px)) = 1000 + 96 = 1096px */
-    transform: translateX(-1096px); /* Value for 5 boxes + gaps on desktop */
+    /* Adjusted value for 4 boxes + 3 gaps on desktop */
+    transform: translateX(-872px);
   }
 }
 
+/* Updated `box` class to remove default link styling */
 .box {
-  height: auto; /* Allow height to adjust based on content */
-  min-height: 180px; /* Maintain a minimum height */
+  height: auto;
+  min-height: 180px;
   background-color: #ffffff;
   border-radius: 20px;
-  overflow: hidden; /* Ensures content stays within rounded corners */
-  border: 2px solid white; /* White border */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Keep a default shadow */
-  transition: box-shadow ease-in-out 0.3s; /* Only transition shadow */
-  display: flex; /* Make box a flex container for its contents */
-  flex-direction: column; /* Stack contents vertically */
-  width: 200px; /* Fixed width for each box on desktop */
-  margin-right: 1.5rem; /* Gap between boxes on desktop */
-  flex-shrink: 0; /* Prevent boxes from shrinking */
+  overflow: hidden;
+  border: 2px solid white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transition: box-shadow ease-in-out 0.3s;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+  text-decoration: none; /* Remove underline from router-link */
+  color: inherit; /* Inherit text color from parent */
 }
 
 .box:hover {
-  box-shadow: 0 10px 20px rgb(197, 197, 197); /* Enhanced shadow on hover */
+  box-shadow: 0 10px 20px rgb(197, 197, 197);
 }
 
 .inner-box {
-  flex-shrink: 0; /* Prevent image container from shrinking */
+  flex-shrink: 0;
 }
 
 .img-box {
   height: 120px;
   width: 100%;
-  object-fit: cover; /* Cover the area, cropping if necessary */
-  display: block; /* Remove extra space below image */
-  border-radius: 20px 20px 0 0; /* Apply border-radius only to top corners */
+  object-fit: cover;
+  display: block;
+  border-radius: 20px 20px 0 0;
 }
 
 .texts {
-  padding: 10px; /* Padding for the text content */
-  flex-grow: 1; /* Allow text content to take remaining space */
+  padding: 10px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center text vertically within its container */
+  justify-content: center;
 }
 
 .box p {
   text-align: center;
   color: rgb(15, 32, 20);
-  margin: 0; /* Remove default paragraph margins */
-  white-space: normal; /* Allow text to wrap within the box */
+  margin: 0;
+  white-space: normal;
 }
 
 .box-text {
@@ -228,57 +194,87 @@ export default {
   font-size: 0.8rem;
 }
 
+.blog-cta {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.blog-cta-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: #38a169;
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+}
+
+.blog-cta-button:hover {
+  background-color: #48bb78;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(56, 161, 105, 0.4);
+}
+
+.blog-message {
+  text-align: center;
+  color: #666;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.blog-message.error {
+  color: #dc3545;
+}
+
 /* Media Query for Mobile View */
 @media screen and (max-width: 800px) {
-  .container {
-    width: 100%; /* Full width container on mobile */
-    padding: 2rem 0; /* Revert to 2rem padding for mobile */
+  .blog-container {
+    width: 100%;
+    padding: 2rem 0;
   }
 
   .blogspace {
-    width: 100%; /* Make blogspace take full viewport width */
-    padding: 0 0.5rem; /* Reduced horizontal padding on the blogspace for mobile */
-    /* Keep flex behavior, but ensure items don't wrap */
-    gap: 1rem; /* Reduced gap between boxes for mobile */
-    /* Removed fixed height for mobile, will expand vertically */
+    width: 100%;
+    padding: 0 0.5rem;
   }
 
   .blog-track {
-    animation-duration: 25s; /* Faster scroll on smaller screens */
+    animation-duration: 25s;
   }
 
-  /* Keyframe animation for continuous horizontal scroll (Mobile) */
+  /* Re-calculated for 4 boxes + 3 gaps on mobile */
   @keyframes scroll-left {
     0% {
       transform: translateX(0);
     }
     100% {
-      /* Re-calculate based on mobile box width and gap */
-      /* Assuming 5 boxes of 160px + 4 gaps of 1rem (16px) = (5 * 160) + (4 * 16) = 800 + 64 = 864px */
-      transform: translateX(-864px); /* Adjusted value for mobile boxes + gaps */
+      transform: translateX(-688px);
     }
   }
 
   .box {
-    width: 160px; /* Reduced fixed width for mobile boxes */
-    min-height: 240px; /* Increased min-height to further ensure bottom content is visible */
-    margin-right: 1rem; /* Gap between boxes for mobile */
+    width: 160px;
+    min-height: 240px;
+    margin-right: 1rem;
   }
 
   .img-box {
-    height: 100px; /* Smaller image height on mobile */
+    height: 100px;
   }
 
   .texts {
-    padding: 8px; /* Slightly less padding for text on mobile */
+    padding: 8px;
   }
 
   .box-text2 {
-    font-size: 0.75rem; /* Slightly smaller font size for description on mobile */
+    font-size: 0.75rem;
   }
 
   .blog-visit a {
-    font-size: 2rem; /* Larger font size for mobile heading to match desktop */
+    font-size: 2rem;
   }
 }
 </style>
