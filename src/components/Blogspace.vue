@@ -14,7 +14,12 @@
       @touchend="resumeScroll"
     >
       <div class="blog-track" :class="{ 'is-paused': isScrollingPaused }">
-        <router-link v-for="post in posts" :key="post._id" :to="{ name: 'publicBlogDetail', params: { slug: post._id } }" class="box">
+        <router-link
+          v-for="post in posts"
+          :key="post._id"
+          :to="{ name: 'publicBlogDetail', params: { slug: post._id } }"
+          class="box"
+        >
           <div class="inner-box">
             <img class="img-box" :src="post.image" :alt="post.title" />
           </div>
@@ -24,7 +29,12 @@
           </div>
         </router-link>
 
-        <router-link v-for="post in posts" :key="post._id + '-dup'" :to="{ name: 'publicBlogDetail', params: { slug: post._id } }" class="box">
+        <router-link
+          v-for="post in posts"
+          :key="post._id + '-dup'"
+          :to="{ name: 'publicBlogDetail', params: { slug: post._id } }"
+          class="box"
+        >
           <div class="inner-box">
             <img class="img-box" :src="post.image" :alt="post.title" />
           </div>
@@ -208,7 +218,9 @@ onMounted(async () => {
   text-decoration: none;
   font-weight: 600;
   font-size: 1.1rem;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
   box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
 }
 
