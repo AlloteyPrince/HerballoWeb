@@ -8,12 +8,11 @@
       </p>
     </div>
 
-    <div class="blog-list">
+    <div class="blog-grid">
       <BlogCardPV1
         v-for="post in posts"
         :key="post._id"
         :post="post"
-        class="blog-card"
       />
     </div>
 
@@ -57,7 +56,7 @@ onMounted(async () => {
 
 <style scoped>
 /*
-  The CSS is now focused on a simple, centered, linear layout.
+  CSS is now structured for a single, centered grid row.
 */
 .blog-container {
   padding: 4rem 1rem;
@@ -65,7 +64,6 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   background-color: white;
-  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -88,17 +86,13 @@ onMounted(async () => {
   line-height: 1.5;
 }
 
-.blog-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center the cards horizontally */
-  gap: 2rem;
+/* This is the key change for the grid layout */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Forces exactly 4 columns */
+  gap: 2rem; /* Spacing between cards */
+  max-width: 1200px; /* Limits the max width of the grid */
   width: 100%;
-}
-
-.blog-card {
-  width: 100%; /* Make the cards take up the full width of the container */
-  max-width: 700px; /* Limit the maximum width for readability on large screens */
 }
 
 .blog-cta {
@@ -138,11 +132,22 @@ onMounted(async () => {
 }
 
 /* Media Queries for responsive design */
+@media (max-width: 1024px) {
+  /* On tablets, show 2 cards per row */
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
+  /* On mobile, show 1 card per row */
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
   .blog-title-heading {
     font-size: 2rem;
   }
-
   .blog-subtitle {
     font-size: 0.9rem;
   }
