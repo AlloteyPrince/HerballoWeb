@@ -14,9 +14,7 @@
             :key="index"
             class="step-card"
           >
-            <!-- Step Icon - now directly on the card -->
             <component :is="step.icon" class="step-icon" :class="step.colorClass" />
-
             <div class="step-content">
               <h3 class="step-title">{{ step.title }}</h3>
               <p class="step-description">{{ step.description }}</p>
@@ -51,32 +49,31 @@ export default {
         {
           title: 'Step 1: Share Your Needs',
           description: 'Tell us a little about yourself and your health concerns. It could also be general or about medicinal herbs. This helps us understand how best to support you.',
-          colorClass: 'blue-icon-color', // Changed to apply color directly to icon
+          colorClass: 'blue-icon-color',
           icon: 'EditIcon'
         },
         {
           title: 'Step 2: Secure Your Consultation',
           description: 'Once you\'ve shared your information, you\'ll proceed to a secure payment page. Your payment confirms your session.',
-          colorClass: 'green-icon-color', // Changed to apply color directly to icon
+          colorClass: 'green-icon-color',
           icon: 'CreditCardIcon'
         },
         {
           title: 'Step 3: Receive Your Meeting Details',
           description: 'After your payment is confirmed, our team will review your information and connect you with the most suitable practitioner or resource person. You\'ll receive all the necessary details (date, time, link, etc.) for your online consultation.',
-          colorClass: 'purple-icon-color', // Changed to apply color directly to icon
+          colorClass: 'purple-icon-color',
           icon: 'MailIcon'
         },
         {
           title: 'Step 4: Your Personalized Consultation',
           description: 'Connect with your chosen practitioner or resource person at the scheduled time from the comfort of your home. Discuss your health needs, ask any questions about medicinal herbs, and receive expert guidance tailored to you.',
-          colorClass: 'red-icon-color', // Changed to apply color directly to icon
+          colorClass: 'red-icon-color',
           icon: 'ShieldCheckIcon'
         }
       ]
     }
   },
   components: {
-    // Each SVG is defined as a local component here
     EditIcon: {
       template: `
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -115,24 +112,24 @@ export default {
         this.$router.push("/consultation");
       } else {
         console.warn("Vue Router not found. Cannot navigate to /consultation.");
-        // Fallback for demonstration or if router isn't used:
-        // window.location.href = "/consultation";
       }
     },
     startPulseAnimation() {
+      // Changed the interval to make the pulsing happen every 2 seconds
       setInterval(() => {
         this.isPulsing = true;
+        // The duration of the pulse animation itself is 2s,
+        // so we turn off the class at 1.5s to create a small gap.
         setTimeout(() => {
           this.isPulsing = false;
-        }, 2000);
-      }, 5000);
+        }, 1500);
+      }, 2000); // Pulse effect triggers every 2 seconds
     }
   }
 };
 </script>
 
 <style scoped>
-/* Main container styling */
 .how-it-works-container {
   width: 100%;
   padding: 4rem 1rem;
@@ -141,20 +138,18 @@ export default {
   box-sizing: border-box;
 }
 
-/* Content wrapper */
 .how-it-works-content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Header section */
 .header-section {
   text-align: center;
   margin-bottom: 4rem;
 }
 
 .how-it-works-title {
-  font-size: clamp(2rem, 4vw, 3rem); /* Adjusted font size for desktop */
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
   background: linear-gradient(135deg, #105212 0%, #22c55e 100%);
   -webkit-background-clip: text;
@@ -164,13 +159,11 @@ export default {
   line-height: 1.2;
 }
 
-/* Steps container */
 .steps-container {
   position: relative;
   margin-bottom: 4rem;
 }
 
-/* Steps grid */
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -185,7 +178,6 @@ export default {
   }
 }
 
-/* Step card styling */
 .step-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -194,12 +186,12 @@ export default {
   text-align: center;
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow:
-    0 2px 4px -1px rgba(0, 0, 0, 0.05), /* Fainter initial shadow */
-    0 1px 2px -1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
   transform: translateY(20px);
   opacity: 0;
   animation: slideInUp 0.6s ease-out forwards;
+  /* Updated for the faint outline effect */
+  border: 1px solid transparent;
 }
 
 .step-card:nth-child(1) { animation-delay: 0.2s; }
@@ -209,43 +201,29 @@ export default {
 
 .step-card:hover {
   transform: translateY(-10px) scale(1.02);
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1), /* Increased shadow on hover */
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* The outline effect you requested */
+  border-color: #e2e8f0; /* A faint gray outline */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Step Icon Styling (no wrapper) */
 .step-icon {
-  width: 3.5rem; /* Increased size for prominence */
-  height: 3.5rem; /* Increased size for prominence */
-  margin: 2rem auto 1.5rem; /* Centering and spacing */
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 2rem auto 1.5rem;
   transition: transform 0.3s ease;
-  color: currentColor; /* Ensures the SVG icon inherits color from its class */
-  display: block; /* For consistent centering */
+  color: currentColor;
+  display: block;
 }
 
 .step-card:hover .step-icon {
   transform: scale(1.1) rotate(5deg);
 }
 
-/* Color themes for the icons directly */
-.blue-icon-color {
-  color: #1d4ed8; /* Blue color for the icon */
-}
+.blue-icon-color { color: #1d4ed8; }
+.green-icon-color { color: #059669; }
+.purple-icon-color { color: #7c3aed; }
+.red-icon-color { color: #dc2626; }
 
-.green-icon-color {
-  color: #059669; /* Green color for the icon */
-}
-
-.purple-icon-color {
-  color: #7c3aed; /* Purple color for the icon */
-}
-
-.red-icon-color {
-  color: #dc2626; /* Red color for the icon */
-}
-
-/* Step content */
 .step-content {
   flex-grow: 1;
 }
@@ -264,7 +242,6 @@ export default {
   margin-bottom: 1.5rem;
 }
 
-/* CTA section */
 .cta-section {
   text-align: center;
   margin-top: 4rem;
@@ -357,12 +334,11 @@ export default {
     padding: 2rem 1rem;
   }
 
-  /* Explicitly remove pseudo-elements for connectors on all screens */
   .step-card::after {
     content: none;
   }
 
-  .step-icon { /* Adjusted size for mobile */
+  .step-icon {
     width: 3rem;
     height: 3rem;
     margin: 1.5rem auto 1rem;
@@ -370,7 +346,6 @@ export default {
 }
 
 @media (min-width: 768px) {
-  /* Explicitly remove pseudo-elements for connectors on all screens */
   .step-card::after {
     content: none;
   }

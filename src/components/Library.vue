@@ -5,7 +5,15 @@
         <font-awesome-icon :icon="['fas', 'book-reader']" class="library-icon" />
         <h2>Knowledge is the best medicine</h2>
         <p class="text-sub">Explore our extensive library to discover herbs that are touching and transforming lives worldwide. Whether you're seeking healing, inspiration, or knowledge, this is the place to start.</p>
-        <button @click="navigateToLearn">Check it here</button>
+        
+        <button
+          @click="navigateToLearn"
+          class="library-button"
+          :class="{ 'pulse': isPulsing }"
+        >
+          Check it here
+        </button>
+
       </div>
     </div>
   </div>
@@ -19,13 +27,27 @@ export default {
   components: {
     FontAwesomeIcon
   },
-  props: '',
   data() {
-    return {}
+    return {
+      isPulsing: false,
+    }
+  },
+  mounted() {
+    // Start the pulse animation when the component is mounted
+    this.startPulseAnimation();
   },
   methods: {
     navigateToLearn() {
       this.$router.push('/ulearn');
+    },
+    startPulseAnimation() {
+      // Logic for the pulsating effect
+      setInterval(() => {
+        this.isPulsing = true;
+        setTimeout(() => {
+          this.isPulsing = false;
+        }, 1500); // Animation duration is 2s, so we make the pulse class inactive a bit earlier.
+      }, 2000); // Repeat every 2 seconds.
     }
   }
 }
@@ -87,20 +109,49 @@ export default {
   max-width: 600px;
 }
 
-button {
-  background-color: #105212;
+/* Updated Button Styling to match other components */
+.library-button {
+  background: linear-gradient(135deg, #105212 0%, #22c55e 100%);
   color: white;
-  padding: 15px 30px;
-  border: none;
-  border-radius: 5px;
+  font-weight: 700;
   font-size: 1.1rem;
+  padding: 1rem 2.5rem;
+  border-radius: 2rem;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 4px 6px -1px rgba(16, 82, 18, 0.3),
+    0 2px 4px -1px rgba(16, 82, 18, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-button:hover {
-  background-color: #0d420f;
-  transform: translateY(-2px);
+.library-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 10px 15px -3px rgba(16, 82, 18, 0.4),
+    0 4px 6px -2px rgba(16, 82, 18, 0.3);
+}
+
+.library-button.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Animations from previous components */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow:
+      0 4px 6px -1px rgba(16, 82, 18, 0.3),
+      0 2px 4px -1px rgba(16, 82, 18, 0.2),
+      0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  50% {
+    box-shadow:
+      0 4px 6px -1px rgba(16, 82, 18, 0.3),
+      0 2px 4px -1px rgba(16, 82, 18, 0.2),
+      0 0 0 10px rgba(34, 197, 94, 0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -122,7 +173,7 @@ button:hover {
     margin-bottom: 15px;
   }
 
-  button {
+  .library-button {
     padding: 12px 25px;
     font-size: 1rem;
   }

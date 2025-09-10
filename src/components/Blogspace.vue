@@ -1,5 +1,6 @@
 <template>
   <div v-if="!error && posts.length > 0" class="blog-container">
+    <!-- Section Title and Subtitle -->
     <div class="blog-header">
       <h2 class="blog-title-heading">Our Latest Insights</h2>
       <p class="blog-subtitle">
@@ -8,6 +9,7 @@
       </p>
     </div>
 
+    <!-- Static, Centered 4-Card Grid -->
     <div class="blog-grid">
       <BlogCardPV1
         v-for="post in posts"
@@ -16,12 +18,18 @@
       />
     </div>
 
+    <!-- Centered "Explore More" Button -->
     <div class="blog-cta">
-      <router-link to="/blog" class="blog-cta-button">
+      <router-link
+        to="/blog"
+        class="blog-cta-button"
+        :class="{ 'pulse': isPulsing }"
+      >
         Explore more
       </router-link>
     </div>
 
+    <!-- Loading and Error States -->
     <div v-if="loading" class="blog-message">Loading posts...</div>
     <div v-else-if="error" class="blog-message error">{{ error }}</div>
   </div>
@@ -30,11 +38,21 @@
 <script setup>
 import { api } from "../api";
 import { ref, onMounted } from "vue";
-import BlogCardPV1 from "./BlogCardPV1.vue"; // Adjust path if necessary
+import BlogCardPV1 from "./BlogCardPV1.vue";
 
 const posts = ref([]);
 const loading = ref(true);
 const error = ref(null);
+const isPulsing = ref(false);
+
+const startPulseAnimation = () => {
+  setInterval(() => {
+    isPulsing.value = true;
+    setTimeout(() => {
+      isPulsing.value = false;
+    }, 1500); // Pulse duration is 2s, so we stop the class at 1.5s
+  }, 2000); // Repeat every 2 seconds
+};
 
 onMounted(async () => {
   try {
@@ -43,8 +61,8 @@ onMounted(async () => {
       throw new Error("Failed to load blog posts.");
     }
     const allPosts = await res.json();
-    // Get the 4 most recent blog posts
     posts.value = allPosts.reverse().slice(0, 4);
+    startPulseAnimation(); // Start the pulse animation after the data loads
   } catch (err) {
     console.error("Failed to fetch blog posts:", err);
     error.value = "Failed to load blog posts. Please try again later.";
@@ -55,9 +73,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/*
-  CSS is now structured for a single, centered grid row.
-*/
 .blog-container {
   padding: 4rem 1rem;
   display: flex;
@@ -65,7 +80,6 @@ onMounted(async () => {
   align-items: center;
   background-color: white;
   margin: 0 auto;
-  width: 100%
 }
 
 .blog-header {
@@ -87,12 +101,11 @@ onMounted(async () => {
   line-height: 1.5;
 }
 
-/* This is the key change for the grid layout */
 .blog-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Forces exactly 4 columns */
-  gap: 2rem; /* Spacing between cards */
-  max-width: 1200px; /* Limits the max width of the grid */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
   width: 100%;
 }
 
@@ -114,12 +127,18 @@ onMounted(async () => {
     background-color 0.3s ease,
     transform 0.3s ease;
   box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
 .blog-cta-button:hover {
   background-color: #2f855a;
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(56, 161, 105, 0.4);
+}
+
+.blog-cta-button.pulse {
+  animation: pulse 2s infinite;
 }
 
 .blog-message {
@@ -132,16 +151,30 @@ onMounted(async () => {
   color: #dc3545;
 }
 
+/* Animations from ConsultationSteps */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow:
+      0 4px 6px -1px rgba(16, 82, 18, 0.3),
+      0 2px 4px -1px rgba(16, 82, 18, 0.2),
+      0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  50% {
+    box-shadow:
+      0 4px 6px -1px rgba(16, 82, 18, 0.3),
+      0 2px 4px -1px rgba(16, 82, 18, 0.2),
+      0 0 0 10px rgba(34, 197, 94, 0);
+  }
+}
+
 /* Media Queries for responsive design */
 @media (max-width: 1024px) {
-  /* On tablets, show 2 cards per row */
   .blog-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  /* On mobile, show 1 card per row */
   .blog-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
