@@ -57,6 +57,7 @@ const formatDate = (dateStr) => {
   margin-bottom: 20px;
 }
 
+/* Updated CSS for consistent sizing */
 .blog-card {
   border: 1px solid #ddd;
   border-radius: 12px;
@@ -65,7 +66,8 @@ const formatDate = (dateStr) => {
   transition: box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  /* Fixed height to prevent content from expanding the card */
+  height: 400px;
 }
 
 .blog-card:hover {
@@ -75,13 +77,15 @@ const formatDate = (dateStr) => {
 
 .blog-image {
   width: 100%;
-  height: 180px;
+  /* Fixed height to ensure all images are the same size */
+  height: 200px;
   object-fit: cover;
 }
 
 .blog-content {
   padding: 16px;
-  /* flex-grow: 1; */
+  /* Allows the content to fill the remaining space */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
@@ -115,12 +119,12 @@ const formatDate = (dateStr) => {
   padding: 4px 8px;
   border-radius: 6px;
   margin-right: 6px;
-  display: inline-block; /* Ensure tags don't break onto new lines awkwardly */
+  display: inline-block; 
 }
 
 .blog-date {
   font-size: 0.75rem;
   color: #aaa;
-  margin-top: 0; /* Reset previous margin-top as tags provide space */
+  margin-top: 0; 
 }
 </style>
