@@ -1,35 +1,26 @@
 <template>
   <div v-if="!error && posts.length > 0" class="blog-container">
-    <div class="blog-heading-and-link">
-      <h2 class="blog-heading">
-        <router-link to="/blog">Our Research</router-link>
-      </h2>
-      <router-link to="/blog" class="explore-more-link">
-        Explore more
-      </router-link>
+    <div class="blog-header">
+      <h2 class="blog-title-heading">Our Latest Insights</h2>
+      <p class="blog-subtitle">
+        Stay informed and inspired with herbal medicine news and insights that
+        cuts across.
+      </p>
     </div>
 
-    <div
-      class="blog-track-wrapper"
-      @mouseenter="pauseScroll"
-      @mouseleave="resumeScroll"
-      @touchstart="pauseScroll"
-      @touchend="resumeScroll"
-    >
-      <div class="blog-track" :class="{ 'is-paused': isScrollingPaused }">
-        <BlogCardPV1
-          v-for="post in posts"
-          :key="post._id"
-          :post="post"
-          class="blog-card"
-        />
-        <BlogCardPV1
-          v-for="post in posts"
-          :key="post._id + '-dup'"
-          :post="post"
-          class="blog-card"
-        />
-      </div>
+    <div class="blog-grid">
+      <BlogCardPV1
+        v-for="post in posts"
+        :key="post._id"
+        :post="post"
+        class="blog-card"
+      />
+    </div>
+
+    <div class="blog-cta">
+      <router-link to="/blog" class="blog-cta-button">
+        Explore more
+      </router-link>
     </div>
 
     <div v-if="loading" class="blog-message">Loading posts...</div>
@@ -40,20 +31,11 @@
 <script setup>
 import { api } from "../api";
 import { ref, onMounted } from "vue";
-import BlogCardPV1 from "./BlogCardPV1.vue"; // Ensure this path is correct
+import BlogCardPV1 from "./BlogCardPV1.vue"; // Adjust path if necessary
 
 const posts = ref([]);
 const loading = ref(true);
 const error = ref(null);
-const isScrollingPaused = ref(false);
-
-const pauseScroll = () => {
-  isScrollingPaused.value = true;
-};
-
-const resumeScroll = () => {
-  isScrollingPaused.value = false;
-};
 
 onMounted(async () => {
   try {
@@ -62,8 +44,8 @@ onMounted(async () => {
       throw new Error("Failed to load blog posts.");
     }
     const allPosts = await res.json();
-    // Get the latest 5 posts to display in the carousel
-    posts.value = allPosts.reverse().slice(0, 5); 
+    // Get the 4 most recent blog posts
+    posts.value = allPosts.reverse().slice(0, 4);
   } catch (err) {
     console.error("Failed to fetch blog posts:", err);
     error.value = "Failed to load blog posts. Please try again later.";
@@ -75,116 +57,88 @@ onMounted(async () => {
 
 <style scoped>
 /*
-  Here is the updated CSS. The goal is to make the card-specific styling
-  handled by BlogCardPV1, and this component's CSS will only handle
-  the layout and animation.
+  The CSS has been completely rewritten to match the new, static grid layout.
 */
 .blog-container {
-  padding: 4rem 0;
+  padding: 4rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f8f9fa;
-  overflow: hidden;
-}
-
-.blog-heading-and-link {
-  width: 90%;
+  background-color: white; /* Changed from light grey to match other sections */
   max-width: 1200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin: 0 auto;
+}
+
+.blog-header {
+  text-align: center;
   margin-bottom: 2rem;
-  padding: 0 1rem;
+  max-width: 600px;
 }
 
-.blog-heading {
+.blog-title-heading {
   font-size: 2.5rem;
-  margin: 0;
-}
-
-.blog-heading a {
-  color: #105212;
-  text-decoration: none;
   font-weight: bold;
+  color: #105212;
+  margin-bottom: 0.5rem;
 }
 
-.explore-more-link {
-  padding: 0.75rem 1.5rem;
+.blog-subtitle {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.blog-cta {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.blog-cta-button {
+  display: inline-block;
+  padding: 1rem 2.5rem;
   background-color: #38a169;
   color: white;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  white-space: nowrap;
+  font-size: 1.1rem;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
 }
 
-.explore-more-link:hover {
+.blog-cta-button:hover {
   background-color: #2f855a;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(56, 161, 105, 0.4);
 }
 
-.blog-track-wrapper {
-  width: 100%;
-  overflow: hidden;
+.blog-message {
+  text-align: center;
+  color: #666;
+  margin-top: 2rem;
 }
 
-.blog-track {
-  display: flex;
-  white-space: nowrap;
-  animation: scroll-left 50s linear infinite;
+.blog-message.error {
+  color: #dc3545;
 }
 
-.blog-track.is-paused {
-  animation-play-state: paused;
-}
-
-/* Keyframe animation for continuous horizontal scroll */
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    /* Adjusted to scroll half the track's width */
-    transform: translateX(-50%);
-  }
-}
-
-.blog-track .blog-card {
-  /* This ensures the cards are the same size and spacing */
-  width: 300px; /* Adjust as needed */
-  margin-right: 2rem; /* Spacing between cards */
-  flex-shrink: 0;
-}
-
-/* Media Queries for different screen sizes */
-@media (max-width: 1024px) {
-  .blog-heading {
+/* Media Queries for responsive design */
+@media (max-width: 768px) {
+  .blog-title-heading {
     font-size: 2rem;
   }
-}
 
-@media (max-width: 768px) {
-  .blog-heading-and-link {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 1rem;
-  }
-
-  .explore-more-link {
-    margin-top: 1rem;
-    align-self: flex-end;
-  }
-
-  .blog-track {
-    animation-duration: 30s;
-  }
-
-  .blog-track .blog-card {
-    width: 250px;
-    margin-right: 1.5rem;
+  .blog-subtitle {
+    font-size: 0.9rem;
   }
 }
 </style>
