@@ -11,11 +11,7 @@
 
     <!-- Static, Centered 4-Card Grid -->
     <div class="blog-grid">
-      <BlogCardPV1
-        v-for="post in posts"
-        :key="post._id"
-        :post="post"
-      />
+      <BlogCardPV1 v-for="post in posts" :key="post._id" :post="post" />
     </div>
 
     <!-- Centered "Explore More" Button -->
@@ -23,7 +19,7 @@
       <router-link
         to="/blog"
         class="blog-cta-button"
-        :class="{ 'pulse': isPulsing }"
+        :class="{ pulse: isPulsing }"
       >
         Explore more
       </router-link>
@@ -80,6 +76,7 @@ onMounted(async () => {
   align-items: center;
   background-color: white;
   margin: 0 auto;
+  width: 100%;
 }
 
 .blog-header {
@@ -153,7 +150,8 @@ onMounted(async () => {
 
 /* Animations from ConsultationSteps */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow:
       0 4px 6px -1px rgba(16, 82, 18, 0.3),
       0 2px 4px -1px rgba(16, 82, 18, 0.2),
