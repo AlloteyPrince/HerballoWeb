@@ -65,6 +65,7 @@ onMounted(async () => {
   align-items: center;
   background-color: white;
   margin: 0 auto;
+  width: 100%
 }
 
 .blog-header {
