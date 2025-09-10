@@ -8,7 +8,7 @@
       </p>
     </div>
 
-    <div class="blog-grid">
+    <div class="blog-list">
       <BlogCardPV1
         v-for="post in posts"
         :key="post._id"
@@ -57,14 +57,14 @@ onMounted(async () => {
 
 <style scoped>
 /*
-  The CSS has been completely rewritten to match the new, static grid layout.
+  The CSS is now focused on a simple, centered, linear layout.
 */
 .blog-container {
   padding: 4rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white; /* Changed from light grey to match other sections */
+  background-color: white;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -88,11 +88,17 @@ onMounted(async () => {
   line-height: 1.5;
 }
 
-.blog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the cards horizontally */
   gap: 2rem;
   width: 100%;
+}
+
+.blog-card {
+  width: 100%; /* Make the cards take up the full width of the container */
+  max-width: 700px; /* Limit the maximum width for readability on large screens */
 }
 
 .blog-cta {
