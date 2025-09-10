@@ -115,15 +115,12 @@ export default {
       }
     },
     startPulseAnimation() {
-      // Changed the interval to make the pulsing happen every 2 seconds
       setInterval(() => {
         this.isPulsing = true;
-        // The duration of the pulse animation itself is 2s,
-        // so we turn off the class at 1.5s to create a small gap.
         setTimeout(() => {
           this.isPulsing = false;
         }, 1500);
-      }, 2000); // Pulse effect triggers every 2 seconds
+      }, 2000);
     }
   }
 };
@@ -190,8 +187,8 @@ export default {
   transform: translateY(20px);
   opacity: 0;
   animation: slideInUp 0.6s ease-out forwards;
-  /* Updated for the faint outline effect */
-  border: 1px solid transparent;
+  /* Faint outline by default, as requested */
+  border: 1px solid #e2e8f0; 
 }
 
 .step-card:nth-child(1) { animation-delay: 0.2s; }
@@ -201,9 +198,9 @@ export default {
 
 .step-card:hover {
   transform: translateY(-10px) scale(1.02);
-  /* The outline effect you requested */
-  border-color: #e2e8f0; /* A faint gray outline */
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* The hover effect is now a clean lift and scale, with no changes to the border or shadow. */
+  border: 1px solid #e2e8f0; /* Keeping the same border to avoid shifting */
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.03); /* Keeping the same shadow to avoid shifting */
 }
 
 .step-icon {
