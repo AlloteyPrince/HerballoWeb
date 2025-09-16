@@ -7,24 +7,19 @@
         herbal medicine experts.
       </p>
 
-      <!-- <pre>{{ form }}</pre> -->
-
-      <form @submit.prevent="submitBookingInfo" class="booking-form" action="https://formsubmit.co/info@herballo.co" method="POST">
-        <!-- Personal Information -->
+      <form @submit.prevent="submitBookingInfo" class="booking-form">
         <div class="form-section">
           <h2>Personal Information</h2>
-
           <div class="form-group">
             <label for="name">Full Name *</label>
             <input
               type="text"
               id="name"
-              v-model="form.name"
+              v-model="form.fullName"
               required
               placeholder="Enter your full name"
             />
           </div>
-
           <div class="form-group">
             <label for="email">Email Address *</label>
             <input
@@ -35,7 +30,6 @@
               placeholder="Enter your email address"
             />
           </div>
-
           <div class="form-group">
             <label for="phone">Phone Number *</label>
             <input
@@ -52,10 +46,8 @@
           </div>
         </div>
 
-        <!-- Consultation Details -->
         <div class="form-section">
           <h2>Consultation Details</h2>
-
           <div class="form-group">
             <label for="purpose">Purpose of Consultation *</label>
             <select id="purpose" v-model="form.purpose" required>
@@ -67,7 +59,6 @@
               <option value="clinical">Clinical / Health Consultations</option>
             </select>
           </div>
-
           <div class="form-group">
             <label for="description">Brief Description</label>
             <textarea
@@ -77,8 +68,6 @@
               placeholder="Please provide a brief description of your consultation needs..."
             ></textarea>
           </div>
-
-          <!-- Supporting Documents moved here -->
           <div class="form-group">
             <label for="documents">Upload Documents or Reports</label>
             <div
@@ -136,11 +125,8 @@
           </div>
         </div>
 
-        <!-- Scheduling -->
         <div class="form-section">
           <h2>Schedule Your Appointment</h2>
-
-          <!-- Combined Notice Card -->
           <div class="combined-notice">
             <h3>Important Information</h3>
             <ul class="notice-list">
@@ -203,18 +189,14 @@
           />
         </div>
 
-        <!-- Additional Information -->
         <div class="form-section">
           <h2>Additional Information</h2>
-
           <div class="form-group">
             <label class="checkbox-label">
               <input type="checkbox" v-model="form.isFirstTime" />
               This is my first consultation with Herballo
             </label>
           </div>
-
-          <!-- Call Type Preference -->
           <div class="form-group">
             <label for="callType">Preferred Call Type *</label>
             <select id="callType" v-model="form.callType" required>
@@ -223,7 +205,6 @@
               <option value="video">Video Call</option>
             </select>
           </div>
-
           <div class="form-group">
             <label for="specialRequests"
               >Special Requests or Accessibility Needs</label
@@ -235,8 +216,6 @@
               placeholder="Any special accommodations, accessibility needs, or specific requests..."
             ></textarea>
           </div>
-
-          <!-- "Where did you hear about us?" moved here -->
           <div class="form-group">
             <label for="hearAbout">Where did you hear about us? *</label>
             <select id="hearAbout" v-model="form.hearAbout" required>
@@ -258,13 +237,16 @@
           </div>
         </div>
 
-        <!-- Submit Button -->
         <div class="form-actions">
           <button type="button" @click="goBack" class="btn-secondary">
             Back to Consent
           </button>
-          <button type="submit" class="btn-primary" :disabled="!isFormValid">
-            Continue
+          <button
+            type="submit"
+            class="btn-primary"
+            :disabled="!isFormValid || bookingSubmitted"
+          >
+            {{ submitButtonText }}
           </button>
         </div>
       </form>
@@ -281,7 +263,7 @@ export default {
   data() {
     return {
       form: {
-        name: "",
+        fullName: "",
         email: "",
         phone: "",
         purpose: "",
@@ -296,40 +278,19 @@ export default {
       uploadedFiles: [],
       availableSlots: [],
       loadingSlots: false,
-      weekdayTimeSlots: [
-        { value: "09:00-10:00", label: "9:00 AM - 10:00 AM" },
-        { value: "10:00-11:00", label: "10:00 AM - 11:00 AM" },
-        { value: "11:00-12:00", label: "11:00 AM - 12:00 PM" },
-        { value: "13:00-14:00", label: "1:00 PM - 2:00 PM" },
-        { value: "14:00-15:00", label: "2:00 PM - 3:00 PM" },
-        { value: "15:00-16:00", label: "3:00 PM - 4:00 PM" },
-        { value: "16:00-17:00", label: "4:00 PM - 5:00 PM" },
-        { value: "19:00-20:00", label: "7:00 PM - 8:00 PM" },
-      ],
-      saturdayTimeSlots: [
-        { value: "09:00-10:00", label: "9:00 AM - 10:00 AM" },
-        { value: "10:00-11:00", label: "10:00 AM - 11:00 AM" },
-        { value: "11:00-12:00", label: "11:00 AM - 12:00 PM" },
-      ],
-      sundayTimeSlots: [
-        { value: "13:00-14:00", label: "1:00 PM - 2:00 PM" },
-        { value: "14:00-15:00", label: "2:00 PM - 3:00 PM" },
-        { value: "15:00-16:00", label: "3:00 PM - 4:00 PM" },
-        { value: "16:00-17:00", label: "4:00 PM - 5:00 PM" },
-        { value: "19:00-20:00", label: "7:00 PM - 8:00 PM" },
-      ],
+      bookingSubmitted: false,
+      submitButtonText: "Continue",
     };
   },
   computed: {
     minDate() {
       const today = new Date();
-      // Add 1 day (24 hours) to current date for minimum booking requirement
       const minBookingDate = new Date(today.getTime() + 24 * 60 * 60 * 1000);
       return minBookingDate.toISOString().split("T")[0];
     },
     isFormValid() {
       return (
-        this.form.name.trim() !== "" &&
+        this.form.fullName.trim() !== "" &&
         this.form.email.trim() !== "" &&
         this.form.phone.trim() !== "" &&
         this.form.purpose !== "" &&
@@ -339,61 +300,40 @@ export default {
         this.form.time !== ""
       );
     },
-    isDateValid() {
-      if (!this.form.date) return false;
-
-      const selectedDate = new Date(this.form.date);
-      const today = new Date();
-      const minBookingTime = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-
-      return selectedDate >= minBookingTime;
+  },
+  watch: {
+    form: {
+      handler() {
+        if (!this.isFormValid) {
+          this.submitButtonText = "Please complete the form";
+        } else {
+          // MODIFIED: Text now reflects the new flow
+          this.submitButtonText = "Proceed to Summary";
+        }
+      },
+      deep: true,
+      immediate: true,
     },
   },
   methods: {
+    // Methods for date, time, and file uploads are all fine and do not need changes
     onDateChange(date) {
       this.form.date = date;
       this.fetchAvailableSlots();
-      this.form.time = ""; // Reset time when date changes
+      this.form.time = "";
     },
     onTimeChange(time) {
       this.form.time = time;
     },
 
-    getTimeSlotsForDate(date) {
-      const selectedDate = new Date(date);
-      const dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-
-      if (dayOfWeek === 0) {
-        // Sunday
-        return this.sundayTimeSlots;
-      } else if (dayOfWeek === 6) {
-        // Saturday
-        return this.saturdayTimeSlots;
-      } else {
-        // Monday to Friday
-        return this.weekdayTimeSlots;
-      }
-    },
-
     async fetchAvailableSlots() {
       if (!this.form.date) return;
-
-      // Check if selected date meets minimum advance booking requirement
-      if (!this.isDateValid()) {
-        this.availableSlots = [];
-        return;
-      }
-
       this.loadingSlots = true;
-      this.form.time = ""; // Reset selected time when date changes
+      this.form.time = "";
 
       try {
-        // Get appropriate time slots based on the day of the week (conditional scheduling)
-        const dayTimeSlots = this.getTimeSlotsForDate(this.form.date);
-
-        // Replace this with your actual API call
         const response = await fetch(
-          `/api/bookings/available-slots?date=${this.form.date}`,
+          `/api/bookings/availability?date=${this.form.date}`,
           {
             method: "GET",
             headers: {
@@ -403,94 +343,18 @@ export default {
         );
 
         if (response.ok) {
-          const bookedSlots = await response.json(); // Array of booked time slots
-
-          // Filter slots based on 24-hour advance requirement
-          const filteredSlots = this.filterSlotsForAdvanceBooking(
-            dayTimeSlots,
-            bookedSlots
-          );
-
-          // Mark slots as booked or available
-          this.availableSlots = filteredSlots
-            .map((slot) => ({
-              ...slot,
-              booked: bookedSlots.includes(slot.value),
-            }))
-            .filter((slot) => !slot.booked); // Only show available slots
+          this.availableSlots = await response.json();
         } else {
           throw new Error("Failed to fetch available slots");
         }
       } catch (error) {
         console.error("Error fetching available slots:", error);
-        // Fallback: show conditional slots as available
-        const dayTimeSlots = this.getTimeSlotsForDate(this.form.date);
-        this.availableSlots = this.filterSlotsForAdvanceBooking(
-          dayTimeSlots,
-          []
-        );
         alert(
           "Unable to check slot availability. Please verify your selection with our team."
         );
+        this.availableSlots = [];
       }
-
       this.loadingSlots = false;
-    },
-
-    filterSlotsForAdvanceBooking(allSlots, bookedSlots) {
-      const selectedDate = new Date(this.form.date);
-      const now = new Date();
-
-      // If booking for tomorrow or later, show all slots
-      const tomorrow = new Date(now);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(0, 0, 0, 0);
-
-      if (selectedDate >= tomorrow) {
-        return allSlots;
-      }
-
-      // If booking for today (which shouldn't be possible with minDate),
-      // filter out slots that are less than 24 hours away
-      const minBookingTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-
-      return allSlots.filter((slot) => {
-        const [startTime] = slot.value.split("-");
-        const [hours, minutes] = startTime.split(":");
-        const slotDateTime = new Date(selectedDate);
-        slotDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-        return slotDateTime >= minBookingTime;
-      });
-    },
-
-    getScheduleTypeLabel() {
-      if (!this.form.date) return "";
-
-      const selectedDate = new Date(this.form.date);
-      const dayOfWeek = selectedDate.getDay();
-
-      if (dayOfWeek === 0) return "Sunday Schedule";
-      if (dayOfWeek === 6) return "Saturday Schedule";
-      return "Weekday Schedule";
-    },
-
-    getUserTimezone() {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const now = new Date();
-      const ghanaTime = new Date(
-        now.toLocaleString("en-US", { timeZone: "GMT" })
-      );
-      const userTime = new Date(
-        now.toLocaleString("en-US", { timeZone: timezone })
-      );
-      const timeDiff =
-        (userTime.getTime() - ghanaTime.getTime()) / (1000 * 60 * 60);
-
-      return {
-        timezone,
-        offsetFromGMT: timeDiff,
-      };
     },
 
     handleFileSelect(event) {
@@ -505,7 +369,6 @@ export default {
     addFiles(files) {
       files.forEach((file) => {
         if (file.size <= 10 * 1024 * 1024) {
-          // 10MB limit
           this.uploadedFiles.push(file);
         } else {
           alert(`File "${file.name}" is too large. Maximum size is 10MB.`);
@@ -515,58 +378,77 @@ export default {
     removeFile(index) {
       this.uploadedFiles.splice(index, 1);
     },
-    submitBookingInfo() {
-      if (this.isFormValid) {
-        // Validate advance booking requirement before proceeding
-        if (!this.isDateValid) {
-          alert(
-            "Appointments must be booked at least 24 hours in advance. Please select a different date and time."
-          );
-          return;
+
+    async submitBookingInfo() {
+      if (!this.isFormValid) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+      
+      this.bookingSubmitted = true;
+      this.submitButtonText = "Processing...";
+
+      try {
+        const formData = new FormData();
+        
+        for (const key in this.form) {
+          if (key !== 'date' && key !== 'time') {
+            formData.append(key, this.form[key]);
+          }
         }
+        
+        const combinedDateTime = new Date(`${this.form.date}T${this.form.time}:00`);
+        formData.append('bookingDateTime', combinedDateTime.toISOString());
 
-        // Prepare booking data with user timezone info
-        const userTimezone = this.getUserTimezone();
-        const bookingData = {
-          ...this.form,
-          uploadedFiles: this.uploadedFiles,
-          userTimezone: userTimezone.timezone,
-          userOffsetFromGMT: userTimezone.offsetFromGMT,
-          submittedAt: new Date().toISOString(),
-        };
+        this.uploadedFiles.forEach((file) => {
+          formData.append(`files`, file);
+        });
 
-        // Store booking data in session storage or pass as route params
-        // Using sessionStorage to handle file objects
-        sessionStorage.setItem(
-          "bookingData",
-          JSON.stringify({
-            ...bookingData,
-            uploadedFiles: this.uploadedFiles.map((file) => ({
-              name: file.name,
-              size: file.size,
-              type: file.type,
-            })),
-          })
-        );
+        // MODIFIED: We now send the booking info to the backend...
+        const response = await fetch("/api/bookings", {
+          method: "POST",
+          body: formData,
+        });
 
-        // Store actual files separately if needed for the actual submission
-        sessionStorage.setItem(
-          "bookingFiles",
-          JSON.stringify(this.uploadedFiles.length)
-        );
+        const data = await response.json();
 
-        // Navigate to booking summary page
-        this.$router.push("/consultation/summary");
+        if (response.ok) {
+          // MODIFIED: Instead of confirming, we log the received bookingId
+          console.log("Pending booking saved:", data.bookingId);
+          
+          // TODO: Pass all form data to the next page (Summary)
+          // You could use a Vuex store, or pass it via router state
+          this.$router.push({
+            name: "ConsultationSummary",
+            params: {
+              bookingData: JSON.stringify({
+                ...this.form,
+                files: this.uploadedFiles.map(f => f.name), // Store file names for summary
+                bookingId: data.bookingId,
+              }),
+            },
+          });
+
+        } else {
+          throw new Error(data.message || "Failed to submit booking");
+        }
+      } catch (error) {
+        console.error("Booking submission error:", error);
+        alert("Error submitting booking: " + error.message);
+      } finally {
+        this.bookingSubmitted = false;
+        this.submitButtonText = "Proceed to Summary";
       }
     },
     goBack() {
-      this.$router.push("/consultation");
+      this.$router.back();
     },
   },
 };
 </script>
 
 <style scoped>
+/* All your existing styles here */
 .booking-wrapper {
   display: flex;
   justify-content: center;
@@ -732,7 +614,6 @@ h1 {
   line-height: 1;
 }
 
-/* Combined Notice Card Styles */
 .combined-notice {
   background: linear-gradient(135deg, #e8f5e8, #f0fdf0);
   border: 2px solid #105212;
@@ -833,12 +714,6 @@ h1 {
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px solid transparent;
-}
-
-.btn-primary {
-  background-color: #105212;
-  color: white;
-  border-color: #105212;
 }
 
 .btn-primary:hover:not(:disabled) {
