@@ -107,10 +107,12 @@ const routes = [
         name: "booking",
         component: Booking,
       },
+      // MODIFIED: Updated the summary route to accept a parameter
       {
-        path: "summary",
+        path: "summary/:bookingId?",
         name: "summary",
         component: Summary,
+        props: true,
       },
       {
         path: "bookpaysuccess",

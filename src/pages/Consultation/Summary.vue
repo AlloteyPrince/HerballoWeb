@@ -11,13 +11,12 @@
       </div>
 
       <div v-if="bookingData" class="summary-content">
-        <!-- Personal Information -->
         <div class="summary-section">
           <h2>Personal Information</h2>
           <div class="summary-grid">
             <div class="summary-item">
               <strong>Full Name:</strong>
-              <span>{{ bookingData.name }}</span>
+              <span>{{ bookingData.fullName }}</span>
             </div>
             <div class="summary-item">
               <strong>Email:</strong>
@@ -30,7 +29,6 @@
           </div>
         </div>
 
-        <!-- Consultation Details -->
         <div class="summary-section">
           <h2>Consultation Details</h2>
           <div class="summary-grid">
@@ -49,7 +47,6 @@
           </div>
         </div>
 
-        <!-- Appointment Schedule -->
         <div class="summary-section">
           <h2>Appointment Schedule</h2>
           <div class="schedule-highlight">
@@ -96,20 +93,10 @@
           </div>
         </div>
 
-        <!-- Documents -->
-        <div
-          class="summary-section"
-          v-if="
-            bookingData.uploadedFiles && bookingData.uploadedFiles.length > 0
-          "
-        >
+        <div class="summary-section" v-if="bookingData.files && bookingData.files.length > 0">
           <h2>Uploaded Documents</h2>
           <div class="documents-list">
-            <div
-              v-for="(file, index) in bookingData.uploadedFiles"
-              :key="index"
-              class="document-item"
-            >
+            <div v-for="(file, index) in bookingData.files" :key="index" class="document-item">
               <svg
                 class="document-icon"
                 viewBox="0 0 24 24"
@@ -123,16 +110,12 @@
                 <polyline points="14,2 14,8 20,8" stroke-width="2" />
               </svg>
               <div class="document-info">
-                <span class="document-name">{{ file.name }}</span>
-                <span class="document-size"
-                  >({{ formatFileSize(file.size) }})</span
-                >
+                <span class="document-name">{{ file }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Additional Information -->
         <div class="summary-section">
           <h2>Additional Information</h2>
           <div class="summary-grid">
@@ -150,24 +133,12 @@
             </div>
           </div>
         </div>
-
-        <!-- Important Notice -->
-        <!-- <div class="important-notice">
-          <h3>Important Reminders</h3>
-          <ul>
-            <li>Session duration is limited to 1 hour maximum</li>
-            <li>All times shown are in Ghana Standard Time (GMT)</li>
-            <li>You will receive a confirmation email within 24 hours</li>
-            <li>Please join the call 5 minutes before your scheduled time</li>
-          </ul>
-        </div> -->
       </div>
 
       <div v-else class="no-data">
         <p>No booking data found. Please go back and fill out the form.</p>
       </div>
 
-      <!-- Action Buttons -->
       <div class="summary-actions">
         <button type="button" @click="goBackToBooking" class="btn-secondary">
           <svg
@@ -185,18 +156,21 @@
           type="button"
           @click="proceedToPayment"
           class="btn-primary"
-          :disabled="!bookingData"
+          :disabled="!bookingData || loading"
         >
-          Proceed to Payment
-          <svg
-            class="btn-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-          >
-            <path d="M5 12h14" stroke-width="2" />
-            <path d="M12 5l7 7-7 7" stroke-width="2" />
-          </svg>
+          <span v-if="loading">Processing Payment...</span>
+          <span v-else>
+            Proceed to Payment
+            <svg
+              class="btn-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path d="M5 12h14" stroke-width="2" />
+              <path d="M12 5l7 7-7 7" stroke-width="2" />
+            </svg>
+          </span>
         </button>
       </div>
     </div>
@@ -209,17 +183,19 @@ export default {
   data() {
     return {
       bookingData: null,
+      loading: false, // NEW: Added a loading state for the button
     };
   },
   mounted() {
     this.loadBookingData();
   },
   methods: {
+    // --- Data Loading and Formatting methods (All fine, no changes needed) ---
     loadBookingData() {
       try {
-        const storedData = sessionStorage.getItem("bookingData");
-        if (storedData) {
-          this.bookingData = JSON.parse(storedData);
+        // MODIFIED: Fetching data from router params instead of session storage
+        if (this.$route.params.bookingData) {
+          this.bookingData = JSON.parse(this.$route.params.bookingData);
         } else {
           // If no data found, redirect back to booking form
           this.$router.push("/consultation/booking");
@@ -275,10 +251,8 @@ export default {
 
     formatTime(timeString) {
       if (!timeString) return "";
-      const [startTime, endTime] = timeString.split("-");
-      return `${this.convertTo12Hour(startTime)} - ${this.convertTo12Hour(
-        endTime
-      )}`;
+      const [startTime] = timeString.split("-");
+      return `${this.convertTo12Hour(startTime)}`;
     },
 
     convertTo12Hour(time24) {
@@ -288,48 +262,50 @@ export default {
       return `${hour12}:${minutes} ${ampm}`;
     },
 
-    formatFileSize(bytes) {
-      if (bytes === 0) return "0 Bytes";
-      const k = 1024;
-      const sizes = ["Bytes", "KB", "MB", "GB"];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-    },
-
+    // --- Action methods ---
     goBackToBooking() {
-      // Keep the data in session storage so user can continue editing
+      // Navigates back to the booking form
       this.$router.push("/consultation/booking");
     },
 
-    proceedToPayment() {
-      if (!this.bookingData) return;
+    // MODIFIED: This method now initiates payment instead of just navigating
+    async proceedToPayment() {
+      if (!this.bookingData || this.loading) return;
 
-      // Navigate to payment page
-      this.$router.push("/consultation/payment");
-    },
+      this.loading = true;
 
-    getUserTimezone() {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const now = new Date();
-      const ghanaTime = new Date(
-        now.toLocaleString("en-US", { timeZone: "GMT" })
-      );
-      const userTime = new Date(
-        now.toLocaleString("en-US", { timeZone: timezone })
-      );
-      const timeDiff =
-        (userTime.getTime() - ghanaTime.getTime()) / (1000 * 60 * 60);
+      try {
+        const response = await fetch("/api/bookings/paystack/initialize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            bookingId: this.bookingData.bookingId, // Pass the bookingId to the backend
+          }),
+        });
 
-      return {
-        timezone,
-        offsetFromGMT: timeDiff,
-      };
+        const data = await response.json();
+
+        if (response.ok) {
+          // Redirect the user to the Paystack payment page
+          window.location.href = data.authorization_url;
+        } else {
+          // Handle error from backend
+          throw new Error(data.message || "Failed to initialize payment");
+        }
+      } catch (error) {
+        console.error("Payment initialization error:", error);
+        alert("Error initiating payment: " + error.message);
+        this.loading = false;
+      }
     },
   },
 };
 </script>
 
 <style scoped>
+/* Your existing styles are all fine and do not need changes */
 .summary-wrapper {
   display: flex;
   justify-content: center;
