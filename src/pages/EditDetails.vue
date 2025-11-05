@@ -35,22 +35,50 @@ const error = ref('')
 
 // Fetch the existing post
 onMounted(async () => {
+  // 💡 FIX 1: Correctly retrieve the post ID from the route parameters.
+  const postId = route.params.id;
+
+  if (!postId) {
+    error.value = 'Error: Post ID not found in route.';
+    return;
+  }
+
   try {
-    const res = await fetch(api(`api/posts/route.params.id`))
-    const data = await res.json()
-    title.value = data.title
-    slug.value = data.slug
-    tags.value = data.tags.join(', ')
-    content.value = data.content
+    // CORRECT SYNTAX: Use template literal interpolation ${postId}
+    const res = await fetch(api(`api/posts/${postId}`));
+    
+    if (!res.ok) {
+        throw new Error('Failed to fetch post details');
+    }
+    
+    const data = await res.json();
+    
+    title.value = data.title;
+    slug.value = data.slug;
+    
+    // Safety check for tags before joining
+    tags.value = data.tags && Array.isArray(data.tags) ? data.tags.join(', ') : '';
+    content.value = data.content;
+    
   } catch (err) {
-    error.value = 'Failed to fetch blog post'
+    console.error("Fetch error:", err);
+    error.value = 'Failed to fetch blog post';
   }
 })
 
 // Update handler
 const handleUpdate = async () => {
+  // 💡 FIX 2: Correctly retrieve the post ID from the route parameters.
+  const postId = route.params.id; 
+
+  if (!postId) {
+    error.value = 'Error: Post ID not found for update.';
+    return;
+  }
+
   try {
-    const res = await fetch(api(`api/posts/${route.params}.id`), {
+    // CORRECT SYNTAX: Use template literal interpolation ${postId}
+    const res = await fetch(api(`api/posts/${postId}`), { 
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +87,8 @@ const handleUpdate = async () => {
       body: JSON.stringify({
         title: title.value,
         slug: slug.value,
-        tags: tags.value.split(',').map(t => t.trim()),
+        // Split and map tags correctly
+        tags: tags.value.split(',').map(t => t.trim()).filter(t => t.length > 0), 
         content: content.value,
       })
     })
