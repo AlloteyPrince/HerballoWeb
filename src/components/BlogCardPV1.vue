@@ -3,7 +3,7 @@
     <div class="blog-card">
       <img
         v-if="post.coverImage"
-        :src="api(post.coverImage)"
+        :src="getFinalImageUrl(post.coverImage)"
         alt="Cover Image"
         class="blog-image"
       />
@@ -36,6 +36,16 @@ const props = defineProps({
   },
 });
 
+// NEW FUNCTION: Checks if the URL is a full Cloudinary URL or an old local path.
+const getFinalImageUrl = (imageUrl) => {
+  // If the URL starts with http or https, it's a full Cloudinary link.
+  if (imageUrl && imageUrl.startsWith("http")) {
+    return imageUrl; // Use the URL directly, bypassing the api() wrapper.
+  }
+  // Otherwise, assume it's an old local path and use the api() wrapper to add the base URL.
+  return api(imageUrl);
+};
+
 // Directly call the utility function to create the processed excerpt
 const postExcerpt = stripHtmlAndTruncate(props.post.content, 180); // Adjust char limit as needed
 
@@ -50,6 +60,7 @@ const formatDate = (dateStr) => {
 </script>
 
 <style scoped>
+/* NOTE: The CSS remains unchanged from your original file. */
 .blog-card-link {
   text-decoration: none;
   color: inherit;
@@ -119,12 +130,12 @@ const formatDate = (dateStr) => {
   padding: 4px 8px;
   border-radius: 6px;
   margin-right: 6px;
-  display: inline-block; 
+  display: inline-block;
 }
 
 .blog-date {
   font-size: 0.75rem;
   color: #aaa;
-  margin-top: 0; 
+  margin-top: 0;
 }
 </style>
