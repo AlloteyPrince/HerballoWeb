@@ -1,9 +1,8 @@
 <template>
   <div class="blog-card">
-
     <img
-      v-if="post.coverImage"
-      :src="api(post.coverImage)"
+      v-if="post.image"
+      :src="getFinalImageUrl(post.image)"
       alt="Cover Image"
       class="blog-image"
     />
@@ -19,14 +18,23 @@
       <p class="blog-date">{{ formatDate(post.createdAt) }}</p>
     </div>
   </div>
-  
 </template>
 
 <script setup>
-import { api } from '../api'
-import { stripHtmlAndTruncate } from '../utils/helpers';
+import { api } from "../api";
+import { stripHtmlAndTruncate } from "../utils/helpers";
 
 defineProps({ post: Object });
+
+// NEW FUNCTION: Checks if the URL is a full Cloudinary URL or an old local path.
+const getFinalImageUrl = (imageUrl) => {
+  // If the URL starts with http or https, it's a full Cloudinary link.
+  if (imageUrl && imageUrl.startsWith("http")) {
+    return imageUrl; // Use the Cloudinary URL directly, bypassing the api() wrapper.
+  }
+  // Otherwise, assume it's an old local path and use the api() wrapper.
+  return api(imageUrl);
+};
 
 const formatDate = (dateStr) => {
   return new Date(dateStr).toLocaleDateString(undefined, {
