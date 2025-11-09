@@ -6,20 +6,27 @@
         <i class="fas fa-share-alt"></i> Share Public Link
       </button>
     </div>
-    <p v-if="shareMessage" :class="{ 'success-message': shareSuccess, 'error-message': !shareSuccess }">
+    <p
+      v-if="shareMessage"
+      :class="{
+        'success-message': shareSuccess,
+        'error-message': !shareSuccess,
+      }"
+    >
       {{ shareMessage }}
     </p>
 
     <img
-      v-if="post.coverImage"
-      :src="api(post.coverImage)"
+      v-if="post.image"
+      :src="getFinalImageUrl(post.image)"
       alt="Cover"
       class="cover-image"
     />
 
     <h2>{{ post.title }}</h2>
     <p class="tags">#{{ post.tags.join(" #") }}</p>
-    <div class="blog-content" v-html="post.content"></div>
+
+    <div class="blog-content" v-html="correctContentUrls(post.content)"></div>
 
     <div class="rating">
       <span
@@ -28,7 +35,8 @@
         class="star"
         :class="{ active: star <= currentRating }"
         @click="ratePost(star)"
-      >★</span>
+        >★</span
+      >
       <p v-if="ratingMessage" class="rating-message">{{ ratingMessage }}</p>
     </div>
 
@@ -43,7 +51,9 @@
 </template>
 
 <script setup>
-import {api} from '../api'
+import { api } from "../api";
+// FIX 3: Import the new helper functions
+import { correctContentUrls } from "../utils/helper";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -59,6 +69,17 @@ const userId = localStorage.getItem("userId");
 // ⭐ NEW: Share states
 const shareMessage = ref(null);
 const shareSuccess = ref(true);
+
+// FIX 1 PART 2: Function to safely load images (copied from BlogCardPV1 logic)
+const getFinalImageUrl = (imageUrl) => {
+  if (imageUrl && imageUrl.startsWith("http")) {
+    return imageUrl;
+  }
+  // NOTE: If images are breaking inside the content (which is why we use correctContentUrls),
+  // you might need to adjust this logic if post.image still contains an old path.
+  // For now, this is the correct logic for the featured image field.
+  return api(imageUrl);
+};
 
 const editPost = () => {
   router.push(`/admin/blog/edit/${route.params.id}`);
@@ -96,17 +117,18 @@ const handleShare = async () => {
   shareMessage.value = null; // Clear previous messages
   if (!post.value || !post.value.slug) {
     shareSuccess.value = false;
-    shareMessage.value = '❌ Post slug not available for sharing.';
-    setTimeout(() => shareMessage.value = null, 3000);
+    shareMessage.value = "❌ Post slug not available for sharing.";
+    setTimeout(() => (shareMessage.value = null), 3000);
     return;
   }
 
- 
-  const publicBaseUrl = 'http://localhost:8080'; // <<< ADJUST FOR PRODUCTION!
+  const publicBaseUrl = "http://localhost:8080"; // <<< ADJUST FOR PRODUCTION!
   const urlToShare = `${publicBaseUrl}/blog/${post.value.slug}`;
 
-  const titleToShare = post.value.title || 'Check out this blog post!';
-  const textToShare = post.value.content ? post.value.content.substring(0, 100) + '...' : 'Read more on our blog!';
+  const titleToShare = post.value.title || "Check out this blog post!";
+  const textToShare = post.value.content
+    ? post.value.content.substring(0, 100) + "..."
+    : "Read more on our blog!";
 
   if (navigator.share) {
     // Use Web Share API if available
@@ -117,17 +139,18 @@ const handleShare = async () => {
         url: urlToShare,
       });
       shareSuccess.value = true;
-      shareMessage.value = '✅ Public post shared successfully!';
-      setTimeout(() => shareMessage.value = null, 3000);
+      shareMessage.value = "✅ Public post shared successfully!";
+      setTimeout(() => (shareMessage.value = null), 3000);
     } catch (err) {
-      if (err.name === 'AbortError') {
+      if (err.name === "AbortError") {
         shareSuccess.value = false;
-        shareMessage.value = 'Share canceled.';
-        setTimeout(() => shareMessage.value = null, 3000);
+        shareMessage.value = "Share canceled.";
+        setTimeout(() => (shareMessage.value = null), 3000);
       } else {
         console.error("Error sharing:", err);
         shareSuccess.value = false;
-        shareMessage.value = '❌ Failed to share public post. Trying to copy link instead...';
+        shareMessage.value =
+          "❌ Failed to share public post. Trying to copy link instead...";
         await copyLink(urlToShare); // Fallback to copy link
       }
     }
@@ -141,12 +164,13 @@ const copyLink = async (url) => {
   try {
     await navigator.clipboard.writeText(url);
     shareSuccess.value = true;
-    shareMessage.value = '✅ Public link copied to clipboard!';
-    setTimeout(() => shareMessage.value = null, 3000);
+    shareMessage.value = "✅ Public link copied to clipboard!";
+    setTimeout(() => (shareMessage.value = null), 3000);
   } catch (err) {
     console.error("Failed to copy link:", err);
     shareSuccess.value = false;
-    shareMessage.value = '❌ Failed to copy link. Please copy it manually: ' + url;
+    shareMessage.value =
+      "❌ Failed to copy link. Please copy it manually: " + url;
   }
 };
 
@@ -166,6 +190,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* NOTE: CSS remains unchanged */
 .blog-details {
   max-width: 700px;
   margin: 40px auto;
@@ -173,27 +198,22 @@ onMounted(async () => {
   padding: 24px;
   border-radius: 10px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
-  position: relative; /* Needed for absolute positioning if desired for buttons */
+  position: relative;
 }
-
-/* ⭐ NEW: Header for buttons */
 .header-actions {
   display: flex;
-  justify-content: flex-end; /* Pushes buttons to the right */
-  gap: 10px; /* Space between buttons */
+  justify-content: flex-end;
+  gap: 10px;
   margin-bottom: 20px;
 }
-
 .blog-details h2 {
   margin-bottom: 10px;
 }
-
 .tags {
   color: #3498db;
   margin-bottom: 20px;
   display: block;
 }
-
 .cover-image {
   width: 100%;
   max-height: 320px;
@@ -201,7 +221,6 @@ onMounted(async () => {
   border-radius: 10px;
   margin-bottom: 20px;
 }
-
 .edit-btn {
   padding: 10px 16px;
   background: #3498db;
@@ -209,12 +228,10 @@ onMounted(async () => {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap;
 }
-
-/* ⭐ NEW: Share Button Styles */
 .share-button {
-  background-color: #28a745; /* Green color for share */
+  background-color: #28a745;
   color: white;
   border: none;
   padding: 10px 16px;
@@ -222,37 +239,30 @@ onMounted(async () => {
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s ease;
-  display: inline-flex; /* To align icon and text */
+  display: inline-flex;
   align-items: center;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap;
 }
-
 .share-button:hover {
   background-color: #218838;
 }
-
 .share-button i {
   margin-right: 8px;
 }
-
-/* ⭐ NEW: Share Message Styles */
 p.success-message {
   color: green;
-  margin-top: -10px; /* Adjust to place it closer to buttons */
+  margin-top: -10px;
   margin-bottom: 15px;
-  text-align: right; /* Align message with buttons */
+  text-align: right;
   font-size: 0.9em;
 }
-
 p.error-message {
   color: red;
-  margin-top: -10px; /* Adjust to place it closer to buttons */
+  margin-top: -10px;
   margin-bottom: 15px;
-  text-align: right; /* Align message with buttons */
+  text-align: right;
   font-size: 0.9em;
 }
-
-
 .blog-content img {
   max-width: 100% !important;
   height: auto !important;
@@ -262,7 +272,6 @@ p.error-message {
   margin: 20px 0;
   display: block;
 }
-
 .author-box {
   display: flex;
   align-items: center;
@@ -270,7 +279,6 @@ p.error-message {
   padding-top: 20px;
   border-top: 1px solid #eee;
 }
-
 .author-avatar {
   width: 60px;
   height: 60px;
@@ -278,28 +286,22 @@ p.error-message {
   object-fit: cover;
   margin-right: 16px;
 }
-
 .author-bio {
   color: #444;
   font-size: 14px;
 }
-
-/* Rating styles */
 .rating {
   margin: 30px 0 20px;
   font-size: 26px;
 }
-
 .star {
   cursor: pointer;
   color: #ccc;
   transition: color 0.3s ease;
 }
-
 .star.active {
   color: gold;
 }
-
 .rating-message {
   font-size: 14px;
   color: green;
