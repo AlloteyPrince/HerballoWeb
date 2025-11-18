@@ -6,10 +6,10 @@
       <router-view />
     </div>
 
-    <HerbPopUp
+    <!-- <HerbPopUp
       v-if="showPopup"
       @close="closePopup"
-    />
+    /> -->
 
     <SubscriptionPopup />
   </div>
@@ -40,7 +40,7 @@ export default {
       setTimeout(() => {
         this.showSplash = false;
         sessionStorage.setItem("splashShown", "true");
-        // After splash screen hides, initiate the pop-up logic
+        
         this.initiatePopup();
       }, 3000); // SplashScreen duration
     } else {

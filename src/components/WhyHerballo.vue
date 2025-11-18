@@ -5,31 +5,50 @@
 
       <div class="why-herballo-content-wrapper">
         <!-- Large opening apostrophe -->
-        <span class="apostrophe-open">
-          &lsquo;
-        </span>
+        <span class="apostrophe-open"> &lsquo; </span>
 
         <p class="why-herballo-text">
-          Herballo is a modern herbal wellness brand rooted in African healing traditions and backed by evidence-based insights.
-          We help you restore balance, detox naturally, and support long-term health using trusted herbal remedies.
-          In a world of quick fixes, Herballo offers safe, personalized, and holistic care that works from the inside out.
-          Choose Herballo for personalized care, authentic herbal expertise, and a commitment to holistic health that puts you first.
+          Herballo is a modern herbal wellness brand rooted in African healing
+          traditions and backed by evidence-based insights. We help you restore
+          balance, detox naturally, and support long-term health using trusted
+          herbal remedies. In a world of quick fixes, Herballo offers safe,
+          personalized, and holistic care that works from the inside out. Choose
+          Herballo for personalized care, authentic herbal expertise, and a
+          commitment to holistic health that puts you first.
         </p>
 
         <!-- Large closing apostrophe -->
-        <span class="apostrophe-close">
-          &rsquo;
-        </span>
+        <span class="apostrophe-close"> &rsquo; </span>
+
+        <div class="youtubevideoforherballo">
+          <div>
+            <p>Watch this video about Herballo</p>
+
+            <div class="video-container">
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/-o8urc2dULs"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'WhyHerballo',
+  name: "WhyHerballo",
   // No data, props, or methods needed for this static content component
 });
 </script>
@@ -108,7 +127,7 @@ export default defineComponent({
   z-index: 0; /* -z-0 */
   user-select: none; /* select-none */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
-  font-family: 'Georgia', serif; /* Changed font specifically for apostrophe */
+  font-family: "Georgia", serif; /* Changed font specifically for apostrophe */
 }
 
 @media (min-width: 768px) {
@@ -144,7 +163,7 @@ export default defineComponent({
   transform: translateY(25%); /* transform translate-y-1/4 */
   user-select: none; /* select-none */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
-  font-family: 'Georgia', serif; /* Changed font specifically for apostrophe */
+  font-family: "Georgia", serif; /* Changed font specifically for apostrophe */
 }
 
 @media (min-width: 768px) {
