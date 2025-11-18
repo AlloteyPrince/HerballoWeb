@@ -4,6 +4,7 @@
       <h2 class="why-herballo-heading">Why Herballo?</h2>
 
       <div class="why-herballo-content-wrapper">
+        <!-- Large opening apostrophe -->
         <span class="apostrophe-open"> &lsquo; </span>
 
         <p class="why-herballo-text">
@@ -16,53 +17,10 @@
           commitment to holistic health that puts you first.
         </p>
 
+        <!-- Large closing apostrophe -->
         <span class="apostrophe-close"> &rsquo; </span>
-
-        <br />
-
-        <div class="youtubevideoforherballo">
-          <div class="video-trigger" @click="openLightbox">
-            <p>Watch this video about Herballo (Click to watch full screen)</p>
-
-            <div class="video-container">
-              <iframe
-                width="100%"
-                height="315"
-                src="https://www.youtube.com/embed/-o8urc2dULs"
-                title="YouTube video player"
-                frameborder="0"
-                allowfullscreen
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="picture-in-picture; web-share"
-                style="pointer-events: none"
-              >
-              </iframe>
-              <div class="play-overlay">&#9658;</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
-
-    <div id="video-lightbox" :class="{ 'lightbox-overlay': true, 'visible': isLightboxOpen }">
-      <div class="lightbox-content">
-        <span class="close-button" @click="closeLightbox">&times;</span>
-        
-        <div class="video-wrapper">
-          <iframe 
-              v-if="isLightboxOpen"
-              width="100%" 
-              height="100%" 
-              :src="lightboxVideoSrc" 
-              title="Full Screen Video" 
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              allowfullscreen>
-          </iframe>
-        </div>
-      </div>
-    </div>
-
   </section>
 </template>
 
@@ -71,162 +29,127 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "WhyHerballo",
-  data() {
-    return {
-      isLightboxOpen: false,
-      videoID: '-o8urc2dULs',
-    };
-  },
-  computed: {
-    // Computes the video source URL with autoplay enabled for the lightbox
-    lightboxVideoSrc() {
-      // Return null or an empty string if closed to prevent the iframe from loading
-      if (!this.isLightboxOpen) return '';
-      return `https://www.youtube.com/embed/${this.videoID}?autoplay=1`;
-    }
-  },
-  methods: {
-    openLightbox() {
-      this.isLightboxOpen = true;
-      // Prevent scrolling on the main page while the video is open
-      document.body.style.overflow = 'hidden';
-    },
-    closeLightbox() {
-      this.isLightboxOpen = false;
-      // Resume scrolling on the main page
-      document.body.style.overflow = '';
-      // Vue handles stopping the video by removing the iframe when isLightboxOpen is false
-    }
-  }
+  // No data, props, or methods needed for this static content component
 });
 </script>
 
 <style scoped>
-/* --- EXISTING STYLES (TRUNCATED FOR BREVITY) --- */
-/*
-  .why-herballo-section, .why-herballo-container, 
-  .why-herballo-heading, .why-herballo-content-wrapper, 
-  .apostrophe-open, .why-herballo-text, .apostrophe-close, 
-  (etc.) should remain as they were.
-*/
+.why-herballo-section {
+  padding-top: 4rem; /* py-16 */
+  padding-bottom: 4rem; /* py-16 */
+  background-color: rgb(247, 250, 229); /* Updated background color */
+  color: #4a5568; /* text-gray-800 */
+  display: flex; /* For centering content */
+  justify-content: center; /* For centering content horizontally */
+}
 
-/* ------------------------------------------------ */
-/* --- NEW LIGHTBOX AND VIDEO-TRIGGER STYLES HERE --- */
-/* ------------------------------------------------ */
+@media (min-width: 768px) {
+  .why-herballo-section {
+    padding-top: 6rem; /* md:py-24 */
+    padding-bottom: 6rem; /* md:py-24 */
+  }
+}
 
-.video-trigger {
-  /* This makes the whole area clickable and shows a pointer */
-  cursor: pointer;
-  /* Use relative positioning for the play overlay */
+.why-herballo-container {
+  max-width: 64rem; /* max-w-4xl (approximately, Tailwind's max-w-4xl is 56rem, I've adjusted slightly for aesthetics based on previous styling) */
+  margin-left: 1.5rem; /* mx-auto + px-6, so combining margin and padding here for left/right margin */
+  margin-right: 1.5rem; /* mx-auto + px-6 */
+  padding-left: 1.5rem; /* px-6 */
+  padding-right: 1.5rem; /* px-6 */
+  text-align: center; /* text-center */
+  width: 100%; /* Ensure it takes full width within its max-width */
+}
+
+/* Adjustments for mobile view (screens up to 767px wide) */
+@media (max-width: 767px) {
+  .why-herballo-container {
+    margin-left: 1rem; /* Reduced from 1.5rem for more content width */
+    margin-right: 1rem; /* Reduced from 1.5rem for more content width */
+    padding-left: 1rem; /* Reduced from 1.5rem for more content width */
+    padding-right: 1rem; /* Reduced from 1.5rem for more content width */
+  }
+}
+
+.why-herballo-heading {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 800; /* font-extrabold */
+  margin-bottom: 2.5rem; /* mb-10 */
+  color: #105212; /* Updated heading color */
+}
+
+@media (min-width: 640px) {
+  .why-herballo-heading {
+    font-size: 3rem; /* sm:text-5xl */
+  }
+}
+
+.why-herballo-content-wrapper {
   position: relative;
-  display: block; /* Ensure the div acts like a block element */
+  padding-left: 2rem; /* px-8 */
+  padding-right: 2rem; /* px-8 */
 }
 
-/* Ensure the thumbnail video is not interactive */
-.video-container iframe {
-  pointer-events: none;
+/* Adjustments for mobile view (screens up to 767px wide) */
+@media (max-width: 767px) {
+  .why-herballo-content-wrapper {
+    padding-left: 1.5rem; /* Reduced from 2rem for more content width */
+    padding-right: 1.5rem; /* Reduced from 2rem for more content width */
+  }
 }
 
-/* Play Icon Overlay for the "Thumbnail" */
-.play-overlay {
+.apostrophe-open {
   position: absolute;
+  left: -0.5rem; /* Adjusted for more space from text */
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem; /* Large play button */
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.4); /* Subtle darkening */
-  pointer-events: none; /* Crucial: ensures click goes to the parent .video-trigger */
-  transition: background-color 0.2s;
+  font-size: 10rem; /* text-[10rem] */
+  line-height: 1; /* leading-none */
+  color: rgba(34, 140, 140, 0.2); /* text-primary-light/20 */
+  z-index: 0; /* -z-0 */
+  user-select: none; /* select-none */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
+  font-family: "Georgia", serif; /* Changed font specifically for apostrophe */
 }
 
-.video-trigger:hover .play-overlay {
-  background-color: rgba(0, 0, 0, 0.6); /* Darker hover effect */
+@media (min-width: 768px) {
+  .apostrophe-open {
+    left: -1rem; /* Adjusted for more space on larger screens */
+    font-size: 15rem; /* md:text-[15rem] */
+  }
 }
 
-
-/* --- LIGHTBOX STYLES --- */
-
-/* 1. The Lightbox Overlay (Hidden by default) */
-.lightbox-overlay {
-    /* Fixed position ensures it covers the entire viewport */
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* The blackout effect: semi-transparent black */
-    background-color: rgba(0, 0, 0, 0.95); 
-    /* Place it above all other content */
-    z-index: 9999; 
-    /* Center the content */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    /* Initially hide the lightbox with transitions */
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s, visibility 0s 0.3s;
+.why-herballo-text {
+  position: relative;
+  z-index: 1; /* z-10 */
+  font-size: 1.125rem; /* text-lg */
+  line-height: 1.75; /* leading-relaxed */
+  color: #1f2937; /* text-gray-darker */
+  font-weight: 500; /* font-medium */
 }
 
-/* 2. Make it Visible */
-.lightbox-overlay.visible {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.3s; /* Show instantly, hide after opacity transition */
+@media (min-width: 768px) {
+  .why-herballo-text {
+    font-size: 1.25rem; /* md:text-xl */
+  }
 }
 
-/* 3. The Content Box (Holds the iFrame) */
-.lightbox-content {
-    /* Define the size of the video window */
-    position: relative;
-    width: 90%; /* Max width on small screens */
-    max-width: 1000px; /* Example max width on large screens */
-    height: auto;
+.apostrophe-close {
+  position: absolute;
+  right: -0.5rem; /* Adjusted for more space from text */
+  bottom: 0;
+  font-size: 10rem; /* text-[10rem] */
+  line-height: 1; /* leading-none */
+  color: rgba(34, 140, 140, 0.2); /* text-primary-light/20 */
+  z-index: 0; /* -z-0 */
+  transform: translateY(25%); /* transform translate-y-1/4 */
+  user-select: none; /* select-none */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Added subtle shadow */
+  font-family: "Georgia", serif; /* Changed font specifically for apostrophe */
 }
 
-/* 4. Aspect Ratio Wrapper for the Video */
-.video-wrapper {
-    position: relative;
-    width: 100%;
-    /* Maintains a 16:9 aspect ratio */
-    padding-bottom: 56.25%; 
-    height: 0;
-}
-
-/* 5. Make the iFrame fill the content box */
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-/* 6. Close Button Style */
-.close-button {
-    position: absolute;
-    top: -40px; /* Position it above the video content */
-    right: 0px; 
-    color: #fff;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 10000; /* Ensure it is clickable */
-    line-height: 1;
-}
-
-/* Adjust close button for smaller screens */
-@media (max-width: 600px) {
-    .close-button {
-        top: 0px; /* Moves it into the corner of the screen for better tapping */
-        right: 10px;
-        font-size: 30px;
-    }
+@media (min-width: 768px) {
+  .apostrophe-close {
+    right: -1rem; /* Adjusted for more space on larger screens */
+    font-size: 15rem; /* md:text-[15rem] */
+  }
 }
 </style>
