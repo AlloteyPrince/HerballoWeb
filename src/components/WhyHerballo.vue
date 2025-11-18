@@ -20,6 +20,8 @@
         <!-- Large closing apostrophe -->
         <span class="apostrophe-close"> &rsquo; </span>
 
+        <br />
+
         <div class="youtubevideoforherballo">
           <div>
             <p>Watch this video about Herballo</p>
