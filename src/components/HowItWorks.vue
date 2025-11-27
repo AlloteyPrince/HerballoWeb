@@ -3,7 +3,7 @@
     <div class="how-it-works-content-wrapper">
       <div class="header-section">
         <h2 class="how-it-works-title">
-          Your Journey to Better Health in 4 Simple Steps
+          How it works
         </h2>
       </div>
 

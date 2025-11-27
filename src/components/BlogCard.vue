@@ -1,11 +1,13 @@
 <template>
   <div class="blog-card">
-    <img
-      v-if="post.image"
-      :src="getFinalImageUrl(post.image)"
-      alt="Cover Image"
-      class="blog-image"
-    />
+    <div class="blog-image-wrapper">
+      <img
+        v-if="post.image"
+        :src="getFinalImageUrl(post.image)"
+        alt="Cover Image"
+        class="blog-image"
+      />
+    </div>
 
     <div class="blog-content">
       <h2 class="blog-title">{{ post.title }}</h2>
@@ -26,17 +28,16 @@ import { stripHtmlAndTruncate } from "../utils/helpers";
 
 defineProps({ post: Object });
 
-// NEW FUNCTION: Checks if the URL is a full Cloudinary URL or an old local path.
+// Handle Cloudinary or old local path
 const getFinalImageUrl = (imageUrl) => {
-  // If the URL starts with http or https, it's a full Cloudinary link.
-  if (imageUrl && imageUrl.startsWith("http")) {
-    return imageUrl; // Use the Cloudinary URL directly, bypassing the api() wrapper.
-  }
-  // Otherwise, assume it's an old local path and use the api() wrapper.
-  return api(imageUrl);
+  if (!imageUrl) return "/images/default-thumbnail.jpg"; // fallback
+  if (imageUrl.startsWith("http")) return imageUrl; // Cloudinary
+  return api(imageUrl); // Old backend path
 };
 
+// Format date
 const formatDate = (dateStr) => {
+  if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString(undefined, {
     year: "numeric",
     month: "short",
@@ -51,29 +52,43 @@ const formatDate = (dateStr) => {
   border-radius: 12px;
   overflow: hidden;
   background-color: #fff;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   display: flex;
   flex-direction: column;
 }
 
 .blog-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.blog-image-wrapper {
+  overflow: hidden;
+  height: 180px;
 }
 
 .blog-image {
   width: 100%;
-  height: 180px;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.blog-card:hover .blog-image {
+  transform: scale(1.05);
 }
 
 .blog-content {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .blog-title {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: #333;
 }
 
@@ -82,24 +97,26 @@ const formatDate = (dateStr) => {
   max-height: 4.5em;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 10px;
 }
 
 .blog-tags {
-  margin-top: 12px;
+  margin-top: auto;
+  margin-bottom: 6px;
 }
 
 .tag {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   background-color: #e7f5ec;
   color: #207144;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 6px;
-  margin-right: 6px;
+  margin-right: 4px;
 }
 
 .blog-date {
-  margin-top: 10px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #aaa;
+  margin-top: 4px;
 }
 </style>

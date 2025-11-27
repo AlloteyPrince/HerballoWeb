@@ -1,12 +1,14 @@
 <template>
   <router-link :to="`/blog/${post.slug}`" class="blog-card-link">
     <div class="blog-card">
-      <img
-        v-if="post.image"
-        :src="getFinalImageUrl(post.image)" 
-        alt="Cover Image"
-        class="blog-image"
-      />
+      <!-- Blog Image with hover zoom -->
+      <div class="blog-image-wrapper">
+        <img
+          :src="getFinalImageUrl(post.image)"
+          alt="Cover Image"
+          class="blog-image"
+        />
+      </div>
 
       <div class="blog-content">
         <h2 class="blog-title">{{ post.title }}</h2>
@@ -25,9 +27,8 @@
 </template>
 
 <script setup>
-import { api } from "../api";
 import { defineProps } from "vue";
-import { stripHtmlAndTruncate } from "../utils/helper"; 
+import { stripHtmlAndTruncate } from "../utils/helper";
 
 const props = defineProps({
   post: {
@@ -36,19 +37,18 @@ const props = defineProps({
   },
 });
 
-// NEW FUNCTION: Checks if the URL is a full Cloudinary URL or an old local path.
+// Always return full image URL
 const getFinalImageUrl = (imageUrl) => {
-  // If the URL starts with http or https, it's a full Cloudinary link.
-  if (imageUrl && imageUrl.startsWith('http')) {
-    return imageUrl; // Use the URL directly, bypassing the api() wrapper.
-  }
-  // Otherwise, assume it's an old local path and use the api() wrapper to add the base URL.
-  return api(imageUrl);
+  const defaultImage = "/images/default-thumbnail.jpg";
+  if (!imageUrl) return defaultImage;
+  if (imageUrl.startsWith("http")) return imageUrl;
+  return `${import.meta.env.VITE_API_BASE_URL}${imageUrl}`;
 };
 
-// Directly call the utility function to create the processed excerpt
-const postExcerpt = stripHtmlAndTruncate(props.post.content, 180); 
+// Processed excerpt
+const postExcerpt = stripHtmlAndTruncate(props.post.content, 180);
 
+// Format date
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString(undefined, {
@@ -66,6 +66,7 @@ const formatDate = (dateStr) => {
   display: block;
   margin-bottom: 20px;
 }
+
 .blog-card {
   border: 1px solid #ddd;
   border-radius: 12px;
@@ -76,27 +77,43 @@ const formatDate = (dateStr) => {
   flex-direction: column;
   height: 400px;
 }
+
 .blog-card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
+
+.blog-image-wrapper {
+  overflow: hidden;
+  height: 200px;
+}
+
 .blog-image {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
+  background-color: #f0f0f0;
+  transition: transform 0.4s ease;
 }
+
+.blog-card:hover .blog-image {
+  transform: scale(1.05); /* subtle zoom on hover */
+}
+
 .blog-content {
   padding: 16px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
+
 .blog-title {
   font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 8px;
   color: #333;
 }
+
 .blog-snippet {
   color: #555;
   display: -webkit-box;
@@ -106,10 +123,12 @@ const formatDate = (dateStr) => {
   text-overflow: ellipsis;
   margin-bottom: 12px;
 }
+
 .blog-tags {
   margin-top: auto; 
   margin-bottom: 10px;
 }
+
 .tag {
   font-size: 0.8rem;
   background-color: #e7f5ec;
@@ -119,6 +138,7 @@ const formatDate = (dateStr) => {
   margin-right: 6px;
   display: inline-block; 
 }
+
 .blog-date {
   font-size: 0.75rem;
   color: #aaa;
