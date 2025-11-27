@@ -3,7 +3,7 @@
     <div class="how-it-works-content-wrapper">
       <div class="header-section">
         <h2 class="how-it-works-title">
-          How it works
+          How It Works
         </h2>
       </div>
 
@@ -15,12 +15,15 @@
             class="step-card"
             :style="{ animationDelay: `${index * 0.2}s` }"
           >
-            <!-- Step number with icon inside -->
+            <!-- Colored number badge -->
             <div class="step-number" :class="step.numberClass">
-              <component :is="step.icon" class="number-icon" />
+              {{ index + 1 }}
             </div>
 
-            <!-- Icon below -->
+            <!-- Connecting line (not visible on last step) -->
+            <!-- <div v-if="index < steps.length - 1" class="connecting-line"></div> -->
+
+            <!-- Icon -->
             <component :is="step.icon" class="step-icon" :class="step.colorClass" />
             
             <div class="step-content">
@@ -122,6 +125,8 @@ export default {
     navigateToConsultation() {
       if (this.$router) {
         this.$router.push("/consultation");
+      } else {
+        console.warn("Vue Router not found. Cannot navigate to /consultation.");
       }
     },
     startPulseAnimation() {
@@ -161,24 +166,40 @@ export default {
   background: linear-gradient(135deg, #105212 0%, #22c55e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 1rem;
   line-height: 1.3;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.steps-container {
+  position: relative;
+  margin-bottom: 4rem;
 }
 
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-/* Card */
+@media (min-width: 1024px) {
+  .steps-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 .step-card {
   background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   border-radius: 1.5rem;
   padding: 2.5rem 2rem;
   text-align: center;
   position: relative;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
   border: 1px solid #e2e8f0;
   transform: translateY(30px);
   opacity: 0;
@@ -187,55 +208,82 @@ export default {
 
 .step-card:hover {
   transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -2px rgba(0, 0, 0, 0.06);
 }
 
-/* Number badge with icon */
+/* Step number badge */
 .step-number {
   position: absolute;
-  top: -24px;
+  top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: white;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: bounceIn 0.6s ease-out forwards;
 }
 
-.number-icon {
-  width: 24px;
-  height: 24px;
-}
-
-/* Soft faint backgrounds */
 .number-blue {
-  background: rgba(59,130,246,0.15);
-  color: #1d4ed8;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
 .number-green {
-  background: rgba(16,185,129,0.15);
-  color: #059669;
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 .number-purple {
-  background: rgba(168,85,247,0.15);
-  color: #7c3aed;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
 }
 
 .number-red {
-  background: rgba(239,68,68,0.15);
-  color: #dc2626;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
-/* Icons below */
+/* Connecting line between steps */
+/* .connecting-line {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    rgba(16, 82, 18, 0.3) 0%, 
+    rgba(34, 197, 94, 0.5) 50%, 
+    rgba(16, 82, 18, 0.3) 100%);
+  z-index: 0;
+  transform-origin: left center;
+  animation: lineGrow 1s ease-out forwards;
+  animation-delay: 0.8s;
+  transform: scaleX(0);
+} */
+
+@media (max-width: 1023px) {
+  .connecting-line {
+    display: none;
+  }
+}
+
 .step-icon {
-  width: 3rem;
-  height: 3rem;
-  margin: 2rem auto 1.2rem;
-  animation: iconFloat 3s infinite ease-in-out;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 2rem auto 1.5rem;
+  transition: transform 0.3s ease;
+  color: currentColor;
+  display: block;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+.step-card:hover .step-icon {
+  transform: scale(1.15) rotate(5deg);
+  animation-play-state: paused;
 }
 
 .blue-icon-color { color: #1d4ed8; }
@@ -243,28 +291,37 @@ export default {
 .purple-icon-color { color: #7c3aed; }
 .red-icon-color { color: #dc2626; }
 
-/* Text */
+.step-content {
+  flex-grow: 1;
+}
+
 .step-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: #1e293b;
+  margin-bottom: 1rem;
+  line-height: 1.3;
 }
 
 .step-description {
   color: #64748b;
   line-height: 1.6;
-  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
-/* CTA */
 .cta-section {
   text-align: center;
   margin-top: 4rem;
+  animation: fadeInUp 1s ease-out;
+  animation-delay: 1.2s;
+  opacity: 0;
+  animation-fill-mode: forwards;
 }
 
 .get-started-button {
-  background: linear-gradient(135deg, #105212, #22c55e);
+  background: linear-gradient(135deg, #105212 0%, #22c55e 100%);
   color: white;
+  font-weight: 700;
   font-size: 1.1rem;
   padding: 1rem 2.5rem;
   border-radius: 2rem;
@@ -273,9 +330,64 @@ export default {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 4px 6px -1px rgba(16, 82, 18, 0.3),
+    0 2px 4px -1px rgba(16, 82, 18, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.get-started-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.get-started-button:hover::before {
+  opacity: 1;
+}
+
+.get-started-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 10px 15px -3px rgba(16, 82, 18, 0.4),
+    0 4px 6px -2px rgba(16, 82, 18, 0.3);
+}
+
+.get-started-button:active {
+  transform: translateY(0) scale(1.02);
+}
+
+.get-started-button.pulse {
+  animation: pulse 2s infinite;
+}
+
+.button-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.get-started-button:hover .button-icon {
+  transform: translateX(4px);
 }
 
 /* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes slideInUp {
   to {
     transform: translateY(0);
@@ -283,8 +395,88 @@ export default {
   }
 }
 
+@keyframes bounceIn {
+  0% {
+    transform: translateX(-50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.1);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes lineGrow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow:
+      0 4px 6px -1px rgba(16, 82, 18, 0.3),
+      0 2px 4px -1px rgba(16, 82, 18, 0.2),
+      0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  50% {
+    box-shadow:
+      0 4px 6px -1px rgba(16, 82, 18, 0.3),
+      0 2px 4px -1px rgba(16, 82, 18, 0.2),
+      0 0 0 10px rgba(34, 197, 94, 0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .how-it-works-container {
+    padding: 2rem 1rem;
+  }
+
+  .step-number {
+    width: 45px;
+    height: 45px;
+    font-size: 1.25rem;
+    top: -18px;
+  }
+
+  .step-icon {
+    width: 3rem;
+    height: 3rem;
+    margin: 1.5rem auto 1rem;
+  }
+
+  .step-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
