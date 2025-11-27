@@ -4,6 +4,7 @@
       <!-- Blog Image with hover zoom -->
       <div class="blog-image-wrapper">
         <img
+          v-if="post.image"
           :src="getFinalImageUrl(post.image)"
           alt="Cover Image"
           class="blog-image"
@@ -28,7 +29,8 @@
 
 <script setup>
 import { defineProps } from "vue";
-import { stripHtmlAndTruncate } from "../utils/helper";
+import { stripHtmlAndTruncate } from "../utils/helpers";
+import { api } from "../api"; // import the same API helper used in admin
 
 const props = defineProps({
   post: {
@@ -37,12 +39,11 @@ const props = defineProps({
   },
 });
 
-// Always return full image URL
+// Unified image URL handler
 const getFinalImageUrl = (imageUrl) => {
-  const defaultImage = "/images/default-thumbnail.jpg";
-  if (!imageUrl) return defaultImage;
-  if (imageUrl.startsWith("http")) return imageUrl;
-  return `${import.meta.env.VITE_API_BASE_URL}${imageUrl}`;
+  if (!imageUrl) return "/images/default-thumbnail.jpg"; // fallback
+  if (imageUrl.startsWith("http")) return imageUrl; // Cloudinary or external URLs
+  return api(imageUrl); // Local backend path
 };
 
 // Processed excerpt
@@ -60,6 +61,7 @@ const formatDate = (dateStr) => {
 </script>
 
 <style scoped>
+/* same styles as before */
 .blog-card-link {
   text-decoration: none;
   color: inherit;
@@ -97,7 +99,7 @@ const formatDate = (dateStr) => {
 }
 
 .blog-card:hover .blog-image {
-  transform: scale(1.05); /* subtle zoom on hover */
+  transform: scale(1.05);
 }
 
 .blog-content {
