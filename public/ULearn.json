@@ -183,5 +183,36 @@
     ],
     "additionalInfo": "",
     "readMoreLink": "https://herballo.com/plants/onion-allium-cepa"
+  },
+
+  {
+    "id": "dubrafo_grossera_vignei",
+    "commonName": "Dubrafo",
+    "otherCommonNames": ["Grossera", "African Cherry", "Wild Cherry"],
+    "scientificName": "Grossera vignei",
+    "imageUrl": [
+      "/plantImages/Dubrafo/plant1.jpg",
+      "/plantImages/Dubrafo/plant2.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used in African herbal medicine for its anti-inflammatory and antimicrobial properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Antimicrobial Effects",
+      "Wound Healing Support",
+      "Digestive Health"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Tannins", "Saponins"],
+    "commonPreparations": [
+      "Decoction of leaves",
+      "Topical application of extracts",
+      "Infusion of bark"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/grossera-vignei"
   }
 ]
