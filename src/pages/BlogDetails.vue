@@ -1,298 +1,241 @@
 <template>
-  <div class="blog-details" v-if="post">
-    <div class="header-actions">
-      <button class="edit-btn" @click="editPost">✏️ Edit</button>
-      <button @click="handleShare" class="share-button">
-        <i class="fas fa-share-alt"></i> Share Public Link
-      </button>
-    </div>
-    <p
-      v-if="shareMessage"
-      :class="{
-        'success-message': shareSuccess,
-        'error-message': !shareSuccess,
-      }"
-    >
-      {{ shareMessage }}
-    </p>
-
-    <img
-      v-if="post.coverImage"
-      :src="getFinalImageUrl(post.coverImage)"
-      alt="Cover"
-      class="cover-image"
-    />
-
-    <h2>{{ post.title }}</h2>
-    <p class="tags">#{{ post.tags.join(" #") }}</p>
-
-    <div class="blog-content" v-html="correctContentUrls(post.content)"></div>
-
-    <div class="rating">
-      <span
-        v-for="star in 5"
-        :key="star"
-        class="star"
-        :class="{ active: star <= currentRating }"
-        @click="ratePost(star)"
-      >★</span>
-      <p v-if="ratingMessage" class="rating-message">{{ ratingMessage }}</p>
+  <div class="blog-details">
+    <div class="header">
+      <h1 class="title">{{ post.title }}</h1>
+      <button @click="sharePost" class="share-btn">Share</button>
     </div>
 
-    <div class="author-box" v-if="post.author">
-      <img :src="getFinalImageUrl(post.author.avatar)" alt="Author" class="author-avatar" />
-      <div>
-        <h4>{{ post.author.name }}</h4>
-        <p class="author-bio">{{ post.author.bio }}</p>
+    <div class="meta">
+      <span>By {{ post.author?.name || "Unknown" }}</span> |
+      <span>{{ formatDate(post.createdAt) }}</span>
+    </div>
+
+    <img v-if="post.coverImage" :src="getFinalImageUrl(post.coverImage)" class="cover-image" />
+
+    <div class="content" v-html="post.content"></div>
+
+    <div class="tags" v-if="post.tags?.length">
+      <span class="tag" v-for="tag in post.tags" :key="tag">{{ tag }}</span>
+    </div>
+
+    <!-- Ratings -->
+    <div class="ratings">
+      <span>Average Rating: {{ post.averageRating }}/5</span>
+      <div class="rate">
+        <label v-for="i in 5" :key="i">
+          <input type="radio" :value="i" v-model="userRating" @change="submitRating" />
+          {{ i }}
+        </label>
       </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="comments">
+      <h3>Comments</h3>
+      <div v-for="comment in post.comments" :key="comment._id" class="comment">
+        <p><strong>{{ comment.name }}</strong> says:</p>
+        <p>{{ comment.comment }}</p>
+      </div>
+
+      <h4>Add Comment</h4>
+      <input v-model="newCommentName" type="text" placeholder="Your Name" />
+      <textarea v-model="newCommentText" placeholder="Your Comment"></textarea>
+      <button @click="submitComment">Submit Comment</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { api } from "../api";
-import { correctContentUrls } from "../utils/helper";
 import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import { api } from "@/api";
+import { formatDate, getFinalImageUrl } from "@/helpers/helper.js";
 
-const post = ref(null);
-const currentRating = ref(0);
-const ratingMessage = ref("");
 const route = useRoute();
-const router = useRouter();
+const postId = route.params.id;
 
-const shareMessage = ref(null);
-const shareSuccess = ref(true);
+const post = ref({
+  title: "",
+  content: "",
+  author: {},
+  tags: [],
+  coverImage: "",
+  comments: [],
+  ratings: [],
+  averageRating: 0,
+});
 
-const getFinalImageUrl = (imageUrl) => {
-  if (!imageUrl) return "/images/default-thumbnail.jpg";
-  if (imageUrl.startsWith("http")) return imageUrl;
-  return api(imageUrl);
-};
+const newCommentName = ref("");
+const newCommentText = ref("");
+const userRating = ref(0);
 
-const editPost = () => {
-  router.push(`/admin/blog/edit/${route.params.id}`);
-};
+onMounted(async () => {
+  await fetchPost();
+});
 
-const ratePost = async (star) => {
+const fetchPost = async () => {
   try {
-    const res = await fetch(api(`/api/posts/${route.params.id}/rate`), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ value: star }),
-    });
-
+    const res = await fetch(api(`/api/posts/${postId}`));
+    if (!res.ok) throw new Error("Failed to fetch post");
     const data = await res.json();
-
-    if (!res.ok) {
-      ratingMessage.value = data.message || "Failed to rate.";
-    } else {
-      currentRating.value = star;
-      ratingMessage.value = "✅ Thanks for rating!";
-    }
+    post.value = data;
   } catch (err) {
-    ratingMessage.value = "❌ Could not submit rating.";
     console.error(err);
   }
 };
 
-const handleShare = async () => {
-  shareMessage.value = null;
-  if (!post.value || !post.value.slug) {
-    shareSuccess.value = false;
-    shareMessage.value = "❌ Post slug not available for sharing.";
-    setTimeout(() => (shareMessage.value = null), 3000);
-    return;
-  }
-
-  const publicBaseUrl = "http://localhost:8080";
-  const urlToShare = `${publicBaseUrl}/blog/${post.value.slug}`;
-
-  const titleToShare = post.value.title || "Check out this blog post!";
-  const textToShare = post.value.content
-    ? post.value.content.substring(0, 100) + "..."
-    : "Read more on our blog!";
-
+// Share functionality
+const sharePost = () => {
   if (navigator.share) {
-    try {
-      await navigator.share({ title: titleToShare, text: textToShare, url: urlToShare });
-      shareSuccess.value = true;
-      shareMessage.value = "✅ Public post shared successfully!";
-      setTimeout(() => (shareMessage.value = null), 3000);
-    } catch (err) {
-      if (err.name === "AbortError") {
-        shareSuccess.value = false;
-        shareMessage.value = "Share canceled.";
-        setTimeout(() => (shareMessage.value = null), 3000);
-      } else {
-        console.error("Error sharing:", err);
-        shareSuccess.value = false;
-        shareMessage.value = "❌ Failed to share post. Copying link instead...";
-        await copyLink(urlToShare);
-      }
-    }
+    navigator.share({
+      title: post.value.title,
+      text: "Check out this post!",
+      url: window.location.href,
+    }).catch(err => console.error(err));
   } else {
-    await copyLink(urlToShare);
+    navigator.clipboard.writeText(window.location.href);
+    alert("Link copied to clipboard!");
   }
 };
 
-const copyLink = async (url) => {
-  try {
-    await navigator.clipboard.writeText(url);
-    shareSuccess.value = true;
-    shareMessage.value = "✅ Public link copied to clipboard!";
-    setTimeout(() => (shareMessage.value = null), 3000);
-  } catch (err) {
-    console.error("Failed to copy link:", err);
-    shareSuccess.value = false;
-    shareMessage.value = "❌ Failed to copy link. Please copy manually: " + url;
-  }
-};
+// Submit a comment
+const submitComment = async () => {
+  if (!newCommentName.value.trim() || !newCommentText.value.trim()) return;
 
-onMounted(async () => {
   try {
-    const res = await fetch(api(`/api/posts/${route.params.id}`));
+    const res = await fetch(api(`/api/posts/${postId}/comments`), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: newCommentName.value,
+        comment: newCommentText.value,
+      }),
+    });
     const data = await res.json();
-    post.value = data;
+    if (!res.ok) throw new Error(data.message || "Failed to submit comment");
+
+    post.value.comments.push(data);
+    newCommentName.value = "";
+    newCommentText.value = "";
   } catch (err) {
-    console.error("Failed to load post:", err);
+    console.error(err);
   }
-});
+};
+
+// Submit rating
+const submitRating = async () => {
+  if (!userRating.value) return;
+  try {
+    const res = await fetch(api(`/api/posts/${postId}/ratings`), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ value: userRating.value }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to submit rating");
+
+    post.value.averageRating = data.averageRating;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// Helper for final image URLs
+const getFinalImageUrlFn = (url) => getFinalImageUrl(url);
 </script>
 
 <style scoped>
 .blog-details {
-  max-width: 700px;
+  max-width: 800px;
   margin: 40px auto;
-  background: white;
+  background: #fff;
   padding: 24px;
   border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
-  position: relative;
 }
 
-.header-actions {
+.header {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.blog-details h2 {
-  margin-bottom: 10px;
+.title {
+  font-size: 2rem;
 }
 
-.tags {
-  color: #3498db;
-  margin-bottom: 20px;
-  display: block;
+.share-btn {
+  padding: 8px 12px;
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  background-color: #2980b9;
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 16px;
 }
 
 .cover-image {
   width: 100%;
-  max-height: 320px;
-  object-fit: cover;
-  border-radius: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.content {
   margin-bottom: 20px;
 }
 
-.edit-btn {
+.tags {
+  margin-bottom: 20px;
+}
+.tag {
+  display: inline-block;
+  margin-right: 6px;
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ratings {
+  margin-bottom: 20px;
+}
+
+.comments {
+  margin-top: 20px;
+}
+
+.comment {
+  margin-bottom: 12px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+input,
+textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
   padding: 10px 16px;
-  background: #3498db;
+  background: #2ecc71;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  white-space: nowrap;
 }
 
-.share-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.share-button:hover {
-  background-color: #218838;
-}
-
-.share-button i {
-  margin-right: 8px;
-}
-
-p.success-message {
-  color: green;
-  margin-top: -10px;
-  margin-bottom: 15px;
-  text-align: right;
-  font-size: 0.9em;
-}
-
-p.error-message {
-  color: red;
-  margin-top: -10px;
-  margin-bottom: 15px;
-  text-align: right;
-  font-size: 0.9em;
-}
-
-.blog-content img {
-  max-width: 100% !important;
-  height: auto !important;
-  border-radius: 10px;
-  object-fit: contain;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 20px 0;
-  display: block;
-}
-
-.author-box {
-  display: flex;
-  align-items: center;
-  margin-top: 32px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-}
-
-.author-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 16px;
-}
-
-.author-bio {
-  color: #444;
-  font-size: 14px;
-}
-
-.rating {
-  margin: 30px 0 20px;
-  font-size: 26px;
-}
-
-.star {
-  cursor: pointer;
-  color: #ccc;
-  transition: color 0.3s ease;
-}
-
-.star.active {
-  color: gold;
-}
-
-.rating-message {
-  font-size: 14px;
-  color: green;
-  margin-top: 8px;
+button:hover {
+  background-color: #27ae60;
 }
 </style>

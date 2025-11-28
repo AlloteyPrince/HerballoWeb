@@ -1,38 +1,31 @@
 <template>
   <div class="blog-form">
-    <h3>Create new blog post</h3>
+    <h3>Create New Blog Post</h3>
 
     <form @submit.prevent="handleSubmit">
+      <!-- Title -->
       <input v-model="title" type="text" placeholder="Title" required />
+
+      <!-- Tags -->
       <input v-model="tags" type="text" placeholder="Tags (comma separated)" />
-      <input type="file" @change="handleFileUpload" />
 
-      <br>
-
+      <!-- Cover Image -->
+      <label>Cover Image:</label>
+      <input type="file" @change="handleCoverImageUpload" />
+      <p v-if="coverImageUrl" class="info-text">Selected file ready for upload</p>
 
       <!-- Author Info -->
-      <input
-        v-model="authorName"
-        type="text"
-        placeholder="Author Name"
-        required
-      />
-      <textarea
-        v-model="authorBio"
-        placeholder="Author Bio"
-        required
-      ></textarea>
+      <input v-model="authorName" type="text" placeholder="Author Name" required />
+      <textarea v-model="authorBio" placeholder="Author Bio" required></textarea>
+      <label>Author Avatar:</label>
       <input type="file" @change="handleAuthorAvatarUpload" />
+      <p v-if="authorAvatarUrl" class="info-text">Selected file ready for upload</p>
 
       <!-- Quill Editor -->
       <QuillEditor
-        ref="quillRef"
         v-model:content="content"
         contentType="html"
         class="quill"
-        :options="editorOptions"
-        theme="snow"
-        @ready="onEditorReady"
       />
 
       <button type="submit">Submit Post</button>
@@ -43,228 +36,154 @@
 </template>
 
 <script setup>
-import { api } from "@/api";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
-
-
+import { uploadFile, parseTags } from "@/helpers/helper.js";
+import { api } from "@/api";
 
 const title = ref("");
-const slug = ref("");
 const tags = ref("");
 const content = ref("");
+const authorName = ref("");
+const authorBio = ref("");
+const coverImageUrl = ref(null);
+const authorAvatarUrl = ref(null);
 const message = ref("");
 const error = ref("");
-const coverImage = ref(null);
-const quillRef = ref(null);
-const editorReady = ref(false);
-const authorName = ref('');
-const authorBio = ref('');
-const authorAvatar = ref(null);
 
-const emit = defineEmits(["postCreated"]);
-
-// Editor options - simplified to avoid initialization issues
-const editorOptions = ref({
-  theme: "snow",
-  modules: {
-    toolbar: [
-      ["bold", "italic", "underline"],
-      [{ header: 1 }, { header: 2 }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-    ],
-  },
-});
-
-const onEditorReady = (editor) => {
-  console.log("Editor ready:", editor);
-  editorReady.value = true;
-
-  // Now that editor is ready, we can set up custom handlers
-  setupImageHandler(editor);
-};
-
-const setupImageHandler = (editor) => {
-  const toolbar = editor.getModule("toolbar");
-  if (toolbar) {
-    toolbar.addHandler("image", () => {
-      const input = document.createElement("input");
-      input.setAttribute("type", "file");
-      input.setAttribute("accept", "image/*");
-      input.click();
-
-      input.onchange = async () => {
-        const file = input.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append("image", file);
-
-        try {
-          const res = await fetch(api('api/upload'), {
-            method: "POST",
-            body: formData,
-          });
-          const data = await res.json();
-          const imageUrl = api(`api/data.imageUrl`);
-
-          const range = editor.getSelection();
-          if (range) {
-            editor.insertEmbed(range.index, "image", imageUrl);
-          }
-        } catch (err) {
-          console.error("Image upload failed:", err);
-          error.value = "Failed to upload image";
-        }
-      };
-    });
-  }
-};
-
-const handleFileUpload = async (e) => {
+const handleCoverImageUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
-  const formData = new FormData();
-  formData.append("image", file);
-
   try {
-    const res = await fetch(api('/api/upload'), {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-    coverImage.value = data.imageUrl;
+    coverImageUrl.value = await uploadFile(file, localStorage.getItem("token"));
   } catch (err) {
-    console.error("Image upload failed:", err);
     error.value = "Failed to upload cover image";
+    console.error(err);
   }
 };
 
 const handleAuthorAvatarUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
-  const formData = new FormData();
-  formData.append("image", file);
-
   try {
-    const res = await fetch(api('/api/upload'), {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-    authorAvatar.value = data.imageUrl;
+    authorAvatarUrl.value = await uploadFile(file, localStorage.getItem("token"));
   } catch (err) {
-    console.error("Author avatar upload failed:", err);
     error.value = "Failed to upload author avatar";
+    console.error(err);
   }
 };
 
 const handleSubmit = async () => {
-  message.value = "";
   error.value = "";
+  message.value = "";
 
-  if (!content.value || content.value.trim() === "") {
-    error.value = "Content cannot be empty.";
+  if (!title.value.trim() || !content.value.trim()) {
+    error.value = "Title and content are required.";
     return;
   }
 
-  const blogData = {
+  const postData = {
     title: title.value,
-    slug: slug.value,
-    tags: (tags.value || "").split(",").map((t) => t.trim()),
+    tags: parseTags(tags.value),
     content: content.value,
-    coverImage: coverImage.value,
+    coverImage: coverImageUrl.value,
     author: {
-    name: authorName.value,
-    bio: authorBio.value,
-    avatar: authorAvatar.value,
-  },
+      name: authorName.value,
+      bio: authorBio.value,
+      avatar: authorAvatarUrl.value,
+    },
   };
 
-  console.log("Submitting blog:", blogData);
-
   try {
-    const res = await fetch(api('/api/posts'), {
+    const res = await fetch(api("/api/posts"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify(blogData),
+      body: JSON.stringify(postData),
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("Server error:", data);
       error.value = data.message || "Failed to create post";
-    } else {
-      message.value = "✅ Blog post created!";
-      emit("postCreated");
-      // Reset form
-      title.value = "";
-      slug.value = "";
-      tags.value = "";
-      content.value = "";
-      coverImage.value = null;
+      return;
     }
+
+    message.value = "✅ Blog post created successfully!";
+    // Reset form
+    title.value = "";
+    tags.value = "";
+    content.value = "";
+    coverImageUrl.value = null;
+    authorName.value = "";
+    authorBio.value = "";
+    authorAvatarUrl.value = null;
   } catch (err) {
-    console.error("❌ Request error:", err);
-    error.value = "❌ Something went wrong";
+    console.error(err);
+    error.value = "Something went wrong while creating the post.";
   }
 };
 </script>
 
 <style scoped>
 .blog-form {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
   max-width: 700px;
-  margin: 0 auto;
+  margin: 40px auto;
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
 }
-
-input {
+input[type="text"],
+textarea {
   display: block;
   width: 100%;
   margin-bottom: 12px;
   padding: 10px;
-  font-size: 15px;
-  border: 1px solid #ccc;
   border-radius: 6px;
+  border: 1px solid #ccc;
 }
-
+label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+input[type="file"] {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+}
+.info-text {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 12px;
+}
 .quill {
   margin-bottom: 16px;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  overflow: hidden;
   min-height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
 }
-
 button {
   padding: 10px 16px;
-  background-color: #2ecc71;
+  background: #2ecc71;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
 }
-
 button:hover {
   background-color: #27ae60;
 }
-
 .success {
   color: green;
   margin-top: 10px;
 }
-
 .error {
   color: red;
   margin-top: 10px;

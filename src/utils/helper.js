@@ -1,125 +1,66 @@
-// frontend/src/utils/helper.js
+// helper.js
 
-import { api } from '@/api'; 
+/**
+ * Upload a file to the server.
+ * Returns the final image URL after successful upload.
+ */
+export async function uploadFile(file, token = null) {
+  if (!file) throw new Error("No file provided");
 
-// Utility: Strip HTML + Truncate
-export function stripHtmlAndTruncate(htmlString, maxLength) {
-  if (!htmlString) return '';
+  const formData = new FormData();
+  formData.append("image", file);
 
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = htmlString;
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-  let text = tempDiv.textContent || tempDiv.innerText || '';
-
-  if (text.length > maxLength) {
-    text = text.substring(0, maxLength).trim();
-    const lastSpace = text.lastIndexOf(' ');
-    if (lastSpace > 0 && lastSpace < text.length - 1) {
-        text = text.substring(0, lastSpace);
-    }
-    text += '...';
-  }
-
-  return text;
-}
-
-// 🆕 NEW UTILITY: Corrects relative URLs in post content to prevent broken links and images 
-export function correctContentUrls(
-  htmlContent,
-  backendBaseUrl = 'https://herballo-api.onrender.com'
-) {
-    if (!htmlContent) return '';
-
-    let correctedHtml = htmlContent;
-
-    // 1️⃣ Correct relative src/href for local images/files that don't start with http
-    correctedHtml = correctedHtml.replace(
-      /(src|href)="(?!http)([^"]+)"/g,
-      (match, attr, url) => {
-        const trimmedUrl = url.trim();
-        if (trimmedUrl.startsWith('/')) {
-          // Already relative to root, prepend backendBaseUrl
-          return `${attr}="${backendBaseUrl}${trimmedUrl}"`;
-        } else {
-          // Otherwise, just assume backendBaseUrl + / + file
-          return `${attr}="${backendBaseUrl}/${trimmedUrl}"`;
-        }
-      }
-    );
-
-    // 2️⃣ Optional: Correct hrefs starting with www but missing protocol
-    correctedHtml = correctedHtml.replace(
-      /(href)="(www\.[^"]+)"/g,
-      (match, attr, url) => `${attr}="http://${url}"`
-    );
-
-    return correctedHtml;
-}
-
-// ✅ Get post by slug
-export async function getPostBySlug(slug) {
   try {
-    const response = await fetch(api(`/api/posts/slug/${slug}`));
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching post by slug:", error);
-    throw error;
-  }
-}
-
-// ✅ Get comments by post ID
-export async function getCommentsByPostId(postId) {
-  try {
-    const response = await fetch(api(`/api/posts/${postId}/comments`));
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching comments:", error);
-    throw error;
-  }
-}
-
-// ✅ Submit comment
-export async function submitComment(postId, commentData) {
-  try {
-    const response = await fetch(api(`/api/posts/${postId}/comments`), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(commentData),
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
+      method: "POST",
+      headers,
+      body: formData,
     });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Upload failed:", data);
+      throw new Error(data.message || "Upload failed");
     }
-    return await response.json();
-  } catch (error) {
-    console.error("Error submitting comment:", error);
-    throw error;
+
+    return data.imageUrl; // Backend should return { imageUrl: "https://..." }
+  } catch (err) {
+    console.error("Error uploading file:", err);
+    throw err;
   }
 }
 
-// ✅ Submit rating
-export async function submitRating(postId, ratingValue) {
-  try {
-    const response = await fetch(api(`/api/posts/${postId}/rate`), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ value: ratingValue }),
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error submitting rating:", error);
-    throw error;
-  }
+/**
+ * Convert comma-separated tags string into array
+ * Usage: parseTags("tag1, tag2") => ["tag1", "tag2"]
+ */
+export function parseTags(tagsString) {
+  if (!tagsString) return [];
+  return tagsString
+    .split(",")
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
+}
+
+/**
+ * Format a date into a readable string
+ * Usage: formatDate(new Date()) => "Nov 28, 2025"
+ */
+export function formatDate(date) {
+  if (!date) return "";
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  return new Date(date).toLocaleDateString(undefined, options);
+}
+
+/**
+ * Ensure the image URL is complete.
+ * If a relative path is provided, prepend the API URL.
+ * Example: "/uploads/file.jpg" => "https://yourapi.com/uploads/file.jpg"
+ */
+export function getFinalImageUrl(url) {
+  if (!url) return "";
+  if (url.startsWith("http") || url.startsWith("https")) return url;
+  return `${import.meta.env.VITE_API_URL}${url}`;
 }
