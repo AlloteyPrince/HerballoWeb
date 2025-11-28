@@ -1,32 +1,24 @@
 <template>
   <div class="blog-form">
-    <h3>Create New Blog Post</h3>
-
+    <h3>Create Blog Post</h3>
     <form @submit.prevent="handleSubmit">
-      <input v-model="title" type="text" placeholder="Title" required />
-      <input v-model="tags" type="text" placeholder="Tags (comma separated)" />
-      <input type="file" @change="handleCoverUpload" />
-
-      <input v-model="authorName" type="text" placeholder="Author Name" required />
+      <input v-model="title" placeholder="Title" required />
+      <input v-model="tags" placeholder="Tags (comma separated)" />
+      <input type="file" @change="handleFileUpload" />
+      <input v-model="authorName" placeholder="Author Name" required />
       <textarea v-model="authorBio" placeholder="Author Bio" required></textarea>
       <input type="file" @change="handleAuthorAvatarUpload" />
-
-      <QuillEditor v-model:content="content" contentType="html" theme="snow" />
-
-      <button type="submit">Submit Post</button>
-
-      <p v-if="message" class="success">{{ message }}</p>
-      <p v-if="error" class="error">{{ error }}</p>
+      <textarea v-model="content" placeholder="Content" required></textarea>
+      <button type="submit">Create Post</button>
     </form>
+    <p v-if="message" class="success">{{ message }}</p>
+    <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
-import { uploadFile, parseTags } from "@/helpers/helper.js";
-import { api } from "@/api";
+import { uploadFile, parseTags } from "@/helpers/helper";
 
 const title = ref("");
 const tags = ref("");
@@ -38,70 +30,44 @@ const authorAvatar = ref(null);
 const message = ref("");
 const error = ref("");
 
-const handleCoverUpload = async (e) => {
+const handleFileUpload = async (e) => {
   try {
-    coverImage.value = await uploadFile(e.target.files[0], localStorage.getItem("token"));
+    coverImage.value = await uploadFile(e.target.files[0]);
   } catch (err) {
     error.value = "Failed to upload cover image";
   }
 };
-
 const handleAuthorAvatarUpload = async (e) => {
   try {
-    authorAvatar.value = await uploadFile(e.target.files[0], localStorage.getItem("token"));
+    authorAvatar.value = await uploadFile(e.target.files[0]);
   } catch (err) {
-    error.value = "Failed to upload author avatar";
+    error.value = "Failed to upload avatar";
   }
 };
 
 const handleSubmit = async () => {
-  error.value = "";
-  message.value = "";
-
-  if (!content.value.trim()) {
-    error.value = "Content cannot be empty.";
-    return;
-  }
-
-  const postData = {
-    title: title.value,
-    tags: parseTags(tags.value),
-    content: content.value,
-    coverImage: coverImage.value,
-    author: {
-      name: authorName.value,
-      bio: authorBio.value,
-      avatar: authorAvatar.value,
-    },
-  };
-
   try {
-    const res = await fetch(api("/api/posts"), {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(postData),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: title.value,
+        tags: parseTags(tags.value),
+        content: content.value,
+        coverImage: coverImage.value,
+        author: { name: authorName.value, bio: authorBio.value, avatar: authorAvatar.value },
+      }),
     });
-    const data = await res.json();
-
-    if (!res.ok) {
-      error.value = data.message || "Failed to create post";
-    } else {
-      message.value = "✅ Blog post created!";
-      // Reset form
-      title.value = "";
-      tags.value = "";
-      content.value = "";
-      coverImage.value = null;
-      authorAvatar.value = null;
-    }
+    if (!res.ok) throw new Error("Failed to create post");
+    message.value = "✅ Post created!";
+    title.value = tags.value = content.value = authorName.value = authorBio.value = "";
+    coverImage.value = authorAvatar.value = null;
   } catch (err) {
-    error.value = "❌ Something went wrong";
+    error.value = err.message;
   }
 };
 </script>
+
 
 <style scoped>
 .blog-form {
