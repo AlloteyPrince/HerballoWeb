@@ -1,34 +1,26 @@
 <template>
-  <div class="blog-form">
-    <h3>Edit Blog Post</h3>
+  <div class="edit-post">
+    <h2>Edit Blog Post</h2>
 
     <form @submit.prevent="handleUpdate">
-      <!-- Title -->
       <input v-model="title" type="text" placeholder="Title" required />
-
-      <!-- Tags -->
       <input v-model="tags" type="text" placeholder="Tags (comma separated)" />
 
-      <!-- Cover Image -->
-      <label>Cover Image (Optional):</label>
-      <input type="file" @change="handleCoverImageUpload" />
-      <p v-if="coverImageUrl" class="info-text">Current or new image ready</p>
+      <label>Change Cover Image (Optional):</label>
+      <input type="file" @change="handleCoverUpload" />
+      <p v-if="coverImageUrl">Current Image: {{ coverImageUrl }}</p>
 
-      <!-- Author Info -->
       <input v-model="authorName" type="text" placeholder="Author Name" required />
       <textarea v-model="authorBio" placeholder="Author Bio" required></textarea>
-      <label>Author Avatar (Optional):</label>
-      <input type="file" @change="handleAuthorAvatarUpload" />
-      <p v-if="authorAvatarUrl" class="info-text">Current or new avatar ready</p>
 
-      <!-- Quill Editor -->
-      <QuillEditor
-        v-model:content="content"
-        contentType="html"
-        class="quill"
-      />
+      <label>Change Author Avatar (Optional):</label>
+      <input type="file" @change="handleAuthorAvatarUpload" />
+      <p v-if="authorAvatarUrl">Current Avatar: {{ authorAvatarUrl }}</p>
+
+      <QuillEditor v-model:content="content" contentType="html" theme="snow" />
 
       <button type="submit">Update Post</button>
+
       <p v-if="message" class="success">{{ message }}</p>
       <p v-if="error" class="error">{{ error }}</p>
     </form>
@@ -37,11 +29,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
-import { uploadFile, parseTags } from "@/helpers/helper.js";
+import { uploadFile, parseTags, correctImageUrl } from "@/helpers/helper.js";
 import { api } from "@/api";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
@@ -51,72 +43,49 @@ const tags = ref("");
 const content = ref("");
 const authorName = ref("");
 const authorBio = ref("");
-const coverImageUrl = ref(null);
-const authorAvatarUrl = ref(null);
+const coverImageUrl = ref("");
+const authorAvatarUrl = ref("");
 const message = ref("");
 const error = ref("");
 
-const postId = route.params.id;
-
-// Fetch post details on mount
 onMounted(async () => {
-  if (!postId) {
-    error.value = "Post ID not found";
-    return;
-  }
-
   try {
+    const postId = route.params.id;
     const res = await fetch(api(`/api/posts/${postId}`));
-    if (!res.ok) throw new Error("Failed to fetch post");
     const data = await res.json();
-
     title.value = data.title;
-    tags.value = data.tags?.join(", ") || "";
-    content.value = data.content || "";
-    coverImageUrl.value = data.coverImage || null;
-    authorName.value = data.author?.name || "";
-    authorBio.value = data.author?.bio || "";
-    authorAvatarUrl.value = data.author?.avatar || null;
+    tags.value = data.tags.join(", ");
+    content.value = data.content;
+    authorName.value = data.author.name;
+    authorBio.value = data.author.bio;
+    coverImageUrl.value = correctImageUrl(data.coverImage);
+    authorAvatarUrl.value = correctImageUrl(data.author.avatar);
   } catch (err) {
-    console.error(err);
-    error.value = "Failed to load post details";
+    error.value = "Failed to fetch post data";
   }
 });
 
-// Handle image uploads
-const handleCoverImageUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+const handleCoverUpload = async (e) => {
   try {
-    coverImageUrl.value = await uploadFile(file, localStorage.getItem("token"));
+    coverImageUrl.value = await uploadFile(e.target.files[0], localStorage.getItem("token"));
   } catch (err) {
     error.value = "Failed to upload cover image";
-    console.error(err);
   }
 };
 
 const handleAuthorAvatarUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
   try {
-    authorAvatarUrl.value = await uploadFile(file, localStorage.getItem("token"));
+    authorAvatarUrl.value = await uploadFile(e.target.files[0], localStorage.getItem("token"));
   } catch (err) {
     error.value = "Failed to upload author avatar";
-    console.error(err);
   }
 };
 
-// Update post
 const handleUpdate = async () => {
   error.value = "";
   message.value = "";
 
-  if (!title.value.trim() || !content.value.trim()) {
-    error.value = "Title and content are required.";
-    return;
-  }
-
-  const updateData = {
+  const postData = {
     title: title.value,
     tags: parseTags(tags.value),
     content: content.value,
@@ -129,70 +98,43 @@ const handleUpdate = async () => {
   };
 
   try {
+    const postId = route.params.id;
     const res = await fetch(api(`/api/posts/${postId}`), {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify(updateData),
+      body: JSON.stringify(postData),
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      error.value = data.message || "Failed to update post";
-      return;
+    if (!res.ok) error.value = data.message || "Failed to update post";
+    else {
+      message.value = "✅ Post updated successfully!";
+      setTimeout(() => router.push(`/admin/blog/${postId}`), 1000);
     }
-
-    message.value = "✅ Post updated successfully!";
-    setTimeout(() => router.push(`/admin/blog/${postId}`), 1000);
   } catch (err) {
-    console.error(err);
-    error.value = "Something went wrong while updating the post.";
+    error.value = "❌ Something went wrong";
   }
 };
 </script>
 
 <style scoped>
-.blog-form {
+.edit-post {
   max-width: 700px;
   margin: 40px auto;
   background: #fff;
   padding: 24px;
   border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 12px rgba(0,0,0,0.05);
 }
-input[type="text"],
-textarea {
+input, textarea {
   display: block;
   width: 100%;
   margin-bottom: 12px;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
-}
-label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-input[type="file"] {
-  display: block;
-  width: 100%;
-  margin-bottom: 12px;
-}
-.info-text {
-  font-size: 0.8em;
-  color: #666;
-  margin-bottom: 12px;
-}
-.quill {
-  margin-bottom: 16px;
-  min-height: 200px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  overflow: hidden;
 }
 button {
   padding: 10px 16px;
@@ -202,15 +144,6 @@ button {
   border-radius: 6px;
   cursor: pointer;
 }
-button:hover {
-  background-color: #2980b9;
-}
-.success {
-  color: green;
-  margin-top: 10px;
-}
-.error {
-  color: red;
-  margin-top: 10px;
-}
+.success { color: green; margin-top: 10px; }
+.error { color: red; margin-top: 10px; }
 </style>

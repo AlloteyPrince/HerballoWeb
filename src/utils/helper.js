@@ -1,8 +1,7 @@
 // helper.js
 
 /**
- * Upload a file to the server.
- * Returns the final image URL after successful upload.
+ * Upload a file to the backend (Cloudinary) and return the image URL
  */
 export async function uploadFile(file, token = null) {
   if (!file) throw new Error("No file provided");
@@ -21,11 +20,10 @@ export async function uploadFile(file, token = null) {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("Upload failed:", data);
       throw new Error(data.message || "Upload failed");
     }
 
-    return data.imageUrl; // Backend should return { imageUrl: "https://..." }
+    return data.imageUrl; // full URL from backend
   } catch (err) {
     console.error("Error uploading file:", err);
     throw err;
@@ -33,8 +31,16 @@ export async function uploadFile(file, token = null) {
 }
 
 /**
- * Convert comma-separated tags string into array
- * Usage: parseTags("tag1, tag2") => ["tag1", "tag2"]
+ * Correct the image URL: prepend backend URL only if relative
+ */
+export function correctImageUrl(url) {
+  if (!url) return "";
+  if (url.startsWith("http")) return url;
+  return `${import.meta.env.VITE_API_URL}${url}`;
+}
+
+/**
+ * Parse comma-separated tags into array
  */
 export function parseTags(tagsString) {
   if (!tagsString) return [];
@@ -45,22 +51,10 @@ export function parseTags(tagsString) {
 }
 
 /**
- * Format a date into a readable string
- * Usage: formatDate(new Date()) => "Nov 28, 2025"
+ * Format a date nicely
  */
 export function formatDate(date) {
   if (!date) return "";
   const options = { year: "numeric", month: "short", day: "numeric" };
   return new Date(date).toLocaleDateString(undefined, options);
-}
-
-/**
- * Ensure the image URL is complete.
- * If a relative path is provided, prepend the API URL.
- * Example: "/uploads/file.jpg" => "https://yourapi.com/uploads/file.jpg"
- */
-export function getFinalImageUrl(url) {
-  if (!url) return "";
-  if (url.startsWith("http") || url.startsWith("https")) return url;
-  return `${import.meta.env.VITE_API_URL}${url}`;
 }

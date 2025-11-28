@@ -3,32 +3,18 @@
     <h3>Create New Blog Post</h3>
 
     <form @submit.prevent="handleSubmit">
-      <!-- Title -->
       <input v-model="title" type="text" placeholder="Title" required />
-
-      <!-- Tags -->
       <input v-model="tags" type="text" placeholder="Tags (comma separated)" />
+      <input type="file" @change="handleCoverUpload" />
 
-      <!-- Cover Image -->
-      <label>Cover Image:</label>
-      <input type="file" @change="handleCoverImageUpload" />
-      <p v-if="coverImageUrl" class="info-text">Selected file ready for upload</p>
-
-      <!-- Author Info -->
       <input v-model="authorName" type="text" placeholder="Author Name" required />
       <textarea v-model="authorBio" placeholder="Author Bio" required></textarea>
-      <label>Author Avatar:</label>
       <input type="file" @change="handleAuthorAvatarUpload" />
-      <p v-if="authorAvatarUrl" class="info-text">Selected file ready for upload</p>
 
-      <!-- Quill Editor -->
-      <QuillEditor
-        v-model:content="content"
-        contentType="html"
-        class="quill"
-      />
+      <QuillEditor v-model:content="content" contentType="html" theme="snow" />
 
       <button type="submit">Submit Post</button>
+
       <p v-if="message" class="success">{{ message }}</p>
       <p v-if="error" class="error">{{ error }}</p>
     </form>
@@ -47,30 +33,24 @@ const tags = ref("");
 const content = ref("");
 const authorName = ref("");
 const authorBio = ref("");
-const coverImageUrl = ref(null);
-const authorAvatarUrl = ref(null);
+const coverImage = ref(null);
+const authorAvatar = ref(null);
 const message = ref("");
 const error = ref("");
 
-const handleCoverImageUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+const handleCoverUpload = async (e) => {
   try {
-    coverImageUrl.value = await uploadFile(file, localStorage.getItem("token"));
+    coverImage.value = await uploadFile(e.target.files[0], localStorage.getItem("token"));
   } catch (err) {
     error.value = "Failed to upload cover image";
-    console.error(err);
   }
 };
 
 const handleAuthorAvatarUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
   try {
-    authorAvatarUrl.value = await uploadFile(file, localStorage.getItem("token"));
+    authorAvatar.value = await uploadFile(e.target.files[0], localStorage.getItem("token"));
   } catch (err) {
     error.value = "Failed to upload author avatar";
-    console.error(err);
   }
 };
 
@@ -78,8 +58,8 @@ const handleSubmit = async () => {
   error.value = "";
   message.value = "";
 
-  if (!title.value.trim() || !content.value.trim()) {
-    error.value = "Title and content are required.";
+  if (!content.value.trim()) {
+    error.value = "Content cannot be empty.";
     return;
   }
 
@@ -87,11 +67,11 @@ const handleSubmit = async () => {
     title: title.value,
     tags: parseTags(tags.value),
     content: content.value,
-    coverImage: coverImageUrl.value,
+    coverImage: coverImage.value,
     author: {
       name: authorName.value,
       bio: authorBio.value,
-      avatar: authorAvatarUrl.value,
+      avatar: authorAvatar.value,
     },
   };
 
@@ -104,26 +84,21 @@ const handleSubmit = async () => {
       },
       body: JSON.stringify(postData),
     });
-
     const data = await res.json();
 
     if (!res.ok) {
       error.value = data.message || "Failed to create post";
-      return;
+    } else {
+      message.value = "✅ Blog post created!";
+      // Reset form
+      title.value = "";
+      tags.value = "";
+      content.value = "";
+      coverImage.value = null;
+      authorAvatar.value = null;
     }
-
-    message.value = "✅ Blog post created successfully!";
-    // Reset form
-    title.value = "";
-    tags.value = "";
-    content.value = "";
-    coverImageUrl.value = null;
-    authorName.value = "";
-    authorBio.value = "";
-    authorAvatarUrl.value = null;
   } catch (err) {
-    console.error(err);
-    error.value = "Something went wrong while creating the post.";
+    error.value = "❌ Something went wrong";
   }
 };
 </script>
@@ -135,39 +110,15 @@ const handleSubmit = async () => {
   background: #fff;
   padding: 24px;
   border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 12px rgba(0,0,0,0.05);
 }
-input[type="text"],
-textarea {
+input, textarea {
   display: block;
   width: 100%;
   margin-bottom: 12px;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
-}
-label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-input[type="file"] {
-  display: block;
-  width: 100%;
-  margin-bottom: 12px;
-}
-.info-text {
-  font-size: 0.8em;
-  color: #666;
-  margin-bottom: 12px;
-}
-.quill {
-  margin-bottom: 16px;
-  min-height: 200px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  overflow: hidden;
 }
 button {
   padding: 10px 16px;
@@ -177,15 +128,6 @@ button {
   border-radius: 6px;
   cursor: pointer;
 }
-button:hover {
-  background-color: #27ae60;
-}
-.success {
-  color: green;
-  margin-top: 10px;
-}
-.error {
-  color: red;
-  margin-top: 10px;
-}
+.success { color: green; margin-top: 10px; }
+.error { color: red; margin-top: 10px; }
 </style>
