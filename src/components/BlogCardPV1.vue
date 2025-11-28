@@ -4,9 +4,15 @@
       <!-- Blog Image with hover zoom -->
       <div class="blog-image-wrapper">
         <img
-          v-if="post.image"
-          :src="getFinalImageUrl(post.image)"
+          v-if="post.coverImage"
+          :src="getFinalImageUrl(post.coverImage)"
           alt="Cover Image"
+          class="blog-image"
+        />
+        <img
+          v-else
+          src="/images/default-thumbnail.jpg"
+          alt="Default Cover"
           class="blog-image"
         />
       </div>
@@ -16,9 +22,7 @@
         <p class="blog-snippet" v-html="postExcerpt"></p>
 
         <div class="blog-tags">
-          <span v-for="tag in post.tags" :key="tag" class="tag"
-            >#{{ tag }}</span
-          >
+          <span v-for="tag in post.tags" :key="tag" class="tag">#{{ tag }}</span>
         </div>
 
         <p class="blog-date">{{ formatDate(post.createdAt) }}</p>
@@ -29,21 +33,18 @@
 
 <script setup>
 import { defineProps } from "vue";
-import { stripHtmlAndTruncate } from "../utils/helpers";
-import { api } from "../api"; // import the same API helper used in admin
+import { stripHtmlAndTruncate } from "../utils/helper";
+import { api } from "../api";
 
 const props = defineProps({
-  post: {
-    type: Object,
-    required: true,
-  },
+  post: { type: Object, required: true },
 });
 
 // Unified image URL handler
 const getFinalImageUrl = (imageUrl) => {
-  if (!imageUrl) return "/images/default-thumbnail.jpg"; // fallback
-  if (imageUrl.startsWith("http")) return imageUrl; // Cloudinary or external URLs
-  return api(imageUrl); // Local backend path
+  if (!imageUrl) return "/images/default-thumbnail.jpg";
+  if (imageUrl.startsWith("http")) return imageUrl;
+  return api(imageUrl);
 };
 
 // Processed excerpt
@@ -61,7 +62,6 @@ const formatDate = (dateStr) => {
 </script>
 
 <style scoped>
-/* same styles as before */
 .blog-card-link {
   text-decoration: none;
   color: inherit;

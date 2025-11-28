@@ -2,9 +2,15 @@
   <div class="blog-card">
     <div class="blog-image-wrapper">
       <img
-        v-if="post.image"
-        :src="getFinalImageUrl(post.image)"
+        v-if="post.coverImage"
+        :src="getFinalImageUrl(post.coverImage)"
         alt="Cover Image"
+        class="blog-image"
+      />
+      <img
+        v-else
+        src="/images/default-thumbnail.jpg"
+        alt="Default Cover"
         class="blog-image"
       />
     </div>
@@ -24,18 +30,16 @@
 
 <script setup>
 import { api } from "../api";
-import { stripHtmlAndTruncate } from "../utils/helpers";
+import { stripHtmlAndTruncate } from "../utils/helper";
 
 defineProps({ post: Object });
 
-// Handle Cloudinary or old local path
 const getFinalImageUrl = (imageUrl) => {
-  if (!imageUrl) return "/images/default-thumbnail.jpg"; // fallback
-  if (imageUrl.startsWith("http")) return imageUrl; // Cloudinary
-  return api(imageUrl); // Old backend path
+  if (!imageUrl) return "/images/default-thumbnail.jpg";
+  if (imageUrl.startsWith("http")) return imageUrl;
+  return api(imageUrl);
 };
 
-// Format date
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString(undefined, {

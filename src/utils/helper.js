@@ -24,35 +24,37 @@ export function stripHtmlAndTruncate(htmlString, maxLength) {
 }
 
 // 🆕 NEW UTILITY: Corrects relative URLs in post content to prevent broken links and images 
-export function correctContentUrls(htmlContent, backendBaseUrl = 'https://herballo-api.onrender.com') {
+export function correctContentUrls(
+  htmlContent,
+  backendBaseUrl = 'https://herballo-api.onrender.com'
+) {
     if (!htmlContent) return '';
 
-    // 1. Correct Image/Link HREFs missing the protocol (e.g., "www.example.com")
-    // This regex finds href/src attributes that start with "www" or a common domain pattern but not http/https
-    // and prepends http://
-    let correctedHtml = htmlContent.replace(
-        /(href|src)="(\s*(?:www\.|[a-zA-Z0-9-]+\.(?:com|org|net|co|io)[a-zA-Z0-9-]*\b)[^"]*)"/g, 
-        (match, attr, url) => {
-            if (url.toLowerCase().startsWith('http')) {
-                return match; // Already absolute
-            }
-            if (url.startsWith('/')) {
-                return match; // Is a relative internal path, ignore this step
-            }
-            return `${attr}="http://${url.trim()}"`; // Prepend protocol
+    let correctedHtml = htmlContent;
+
+    // 1️⃣ Correct relative src/href for local images/files that don't start with http
+    correctedHtml = correctedHtml.replace(
+      /(src|href)="(?!http)([^"]+)"/g,
+      (match, attr, url) => {
+        const trimmedUrl = url.trim();
+        if (trimmedUrl.startsWith('/')) {
+          // Already relative to root, prepend backendBaseUrl
+          return `${attr}="${backendBaseUrl}${trimmedUrl}"`;
+        } else {
+          // Otherwise, just assume backendBaseUrl + / + file
+          return `${attr}="${backendBaseUrl}/${trimmedUrl}"`;
         }
+      }
     );
 
-    // 2. Correct Old Local Image Paths (e.g., '17626367895-herbal medicine research.jpg')
-    // This regex targets filenames without leading path information in src attributes.
-    // NOTE: This part is highly speculative and best fixed by re-uploading the post's content.
-    // However, if your API still returns old local filenames, we use the backendBaseUrl and the api() helper.
-    // For now, let's keep it simple and assume re-uploading the content is the final fix, 
-    // and this function primarily addresses link protocols.
+    // 2️⃣ Optional: Correct hrefs starting with www but missing protocol
+    correctedHtml = correctedHtml.replace(
+      /(href)="(www\.[^"]+)"/g,
+      (match, attr, url) => `${attr}="http://${url}"`
+    );
 
     return correctedHtml;
 }
-
 
 // ✅ Get post by slug
 export async function getPostBySlug(slug) {
