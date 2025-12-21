@@ -1,0 +1,409 @@
+[
+  {
+    "id": "orange_citrus_sinensis",
+    "commonName": "Orange",
+    "otherCommonNames": ["Naranja", "Portakal", "Akutuo", "Ankaa"],
+    "scientificName": "Citrus sinensis",
+    "imageUrl": [
+      "/plantImages/orange/orange1.jpg",
+      "/plantImages/orange/orange2.jpg"
+    ],
+    "tagline": "A vibrant citrus fruit packed with Vitamin C, widely known for its immune-boosting and antioxidant properties.",
+    "primaryHealthBenefits": [
+      "Immune System Support (high Vitamin C)",
+      "Potent Antioxidant (Flavonoids, Carotenoids)",
+      "Aids Digestive Health (fiber)",
+      "Promotes Skin Health"
+    ],
+    "keyActiveCompounds": [
+      "Vitamin C",
+      "Flavonoids (e.g., Hesperidin)",
+      "Carotenoids"
+    ],
+    "commonPreparations": [
+      "Fresh fruit",
+      "Juice",
+      "Zest (in cooking)",
+      "Essential oil (topical/aromatic)"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "High consumption may cause digestive upset or heartburn in some individuals.",
+      "Orange peel oil may cause mild photosensitivity when applied topically followed by direct sun exposure."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/orange-citrus-sinensis"
+  },
+
+  {
+    "id": "lemon_citrus_limon",
+    "commonName": "Lemon",
+    "otherCommonNames": ["Limón", "Limon", "Citron", "Limo"],
+    "scientificName": "Citrus limon",
+    "imageUrl": [
+      "/plantImages/lemon/lemon1.jpg",
+      "/plantImages/lemon/lemon1.jpg"
+    ],
+    "tagline": "A tangy citrus fruit celebrated for its high Vitamin C content and versatile culinary uses.",
+    "primaryHealthBenefits": [
+      "Immune System Support (high Vitamin C)",
+      "Antioxidant Properties (Flavonoids)",
+      "Aids Digestion (citric acid)",
+      "Supports Skin Health"
+    ],
+    "keyActiveCompounds": [
+      "Vitamin C",
+      "Flavonoids (e.g., Hesperidin)",
+      "Citric Acid"
+    ],
+    "commonPreparations": [
+      "Fresh fruit",
+      "Juice",
+      "Zest (in cooking)",
+      "Essential oil (topical/aromatic)"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "High acidity may cause digestive upset or heartburn in some individuals.",
+      "Lemon peel oil may cause mild photosensitivity when applied topically followed by direct sun exposure."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/lemon-citrus-limon"
+  },
+
+  {
+    "id": "tomato_solanum_lycopersicum",
+    "commonName": "Tomato",
+    "otherCommonNames": ["Tomate", "Domates", "Tamatar", "Tamat"],
+    "scientificName": "Solanum lycopersicum",
+    "imageUrl": [
+      "/plantImages/tomato/tomato3.jpg",
+      "/plantImages/tomato/tomato2.jpg"
+    ],
+    "tagline": "A versatile fruit (botanically) celebrated for its high antioxidant content, especially lycopene, supporting heart and skin health.",
+    "primaryHealthBenefits": [
+      "Heart Health (Lycopene, Potassium)",
+      "Powerful Antioxidant (Lycopene, Vitamin C)",
+      "Supports Skin Protection (from sun damage)",
+      "Anti-cancer Potential"
+    ],
+    "keyActiveCompounds": [
+      "Lycopene",
+      "Vitamin C",
+      "Potassium",
+      "Vitamin K",
+      "Folate"
+    ],
+    "commonPreparations": [
+      "Raw (salads)",
+      "Cooked (sauces, stews)",
+      "Juiced",
+      "Dried"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "Raw leaves and stems contain solanine, which can be toxic if consumed in large amounts.",
+      "Allergic reactions are possible in sensitive individuals (e.g., oral allergy syndrome)."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/tomato-solanum-lycopersicum"
+  },
+
+  {
+    "id": "pawpaw_carica_papaya",
+    "commonName": "Pawpaw",
+    "otherCommonNames": ["Papaya", "Papaw", "Paw Paw", "Paw Pah"],
+    "scientificName": "Carica papaya",
+    "imageUrl": [
+      "/plantImages/pawpaw/pawpaw1.jpg",
+      "/plantImages/pawpaw/pawpaw2.jpg"
+    ],
+    "tagline": "A tropical fruit renowned for its digestive enzymes, aiding digestion, reducing inflammation, and boosting immunity.",
+    "primaryHealthBenefits": [
+      "Digestive Aid (Papain, Chymopapain enzymes)",
+      "Anti-inflammatory Properties",
+      "Immune System Support (Vitamin C)",
+      "Antioxidant Power (Vitamin A, Vitamin C)"
+    ],
+    "keyActiveCompounds": [
+      "Papain",
+      "Chymopapain",
+      "Vitamin C",
+      "Vitamin A (beta-carotene)",
+      "Folate"
+    ],
+    "commonPreparations": [
+      "Fresh fruit (ripe)",
+      "Green/unripe (cooked like a vegetable)",
+      "Juice",
+      "Enzyme supplements"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption when ripe.",
+      "Unripe pawpaw contains latex that can cause allergic reactions in sensitive individuals (e.g., latex allergy).",
+      "Pregnant women are generally advised to avoid unripe pawpaw due to papain's potential to induce uterine contractions.",
+      "Excessive consumption may cause digestive upset or laxative effects."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/pawpaw-carica-papaya"
+  },
+
+  {
+    "id": "onion_allium_cepa",
+    "commonName": "Onion",
+    "otherCommonNames": ["Onion", "Cebolla", "Soğan", "Bawang", "Bulb Onion"],
+    "scientificName": "Allium cepa",
+    "imageUrl": [
+      "/plantImages/onion/onion1.jpg",
+      "/plantImages/onion/onion2.jpg"
+    ],
+    "tagline": "A staple vegetable known for its anti-inflammatory and antioxidant properties, supporting heart health and immune function.",
+    "primaryHealthBenefits": [
+      "Heart Health (Quercetin, Sulfur compounds)",
+      "Anti-inflammatory Properties",
+      "Antioxidant Power (Vitamin C, Flavonoids)",
+      "Supports Immune Function"
+    ],
+    "keyActiveCompounds": [
+      "Quercetin",
+      "Sulfur compounds (e.g., Allicin)",
+      "Vitamin C",
+      "B Vitamins (e.g., B6, Folate)"
+    ],
+    "commonPreparations": [
+      "Raw (salads)",
+      "Cooked (soups, stews, sautés)",
+      "Pickled",
+      "Powdered"
+    ],
+    "specificWarnings": [
+      "Generally safe for consumption.",
+      "May cause digestive upset or heartburn in some individuals.",
+      "Onion skin may cause allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/onion-allium-cepa"
+  },
+
+  {
+    "id": "dubrafo_grossera_vignei",
+    "commonName": "Dubrafo",
+    "otherCommonNames": ["Grossera", "African Cherry", "Wild Cherry"],
+    "scientificName": "Grossera vignei",
+    "imageUrl": [
+      "/plantImages/Dubrafo/plant1.jpg",
+      "/plantImages/Dubrafo/plant2.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used in African herbal medicine for its anti-inflammatory and antimicrobial properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Antimicrobial Effects",
+      "Wound Healing Support",
+      "Digestive Health",
+      "Promotes Systemic Detoxification and Deep Cleansing"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Tannins", "Saponins"],
+    "commonPreparations": [
+      "Decoction of leaves",
+      "Topical application of extracts",
+      "Infusion of bark"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/grossera-vignei"
+  },
+  {
+    "id": "sida_acuta",
+    "commonName": "Sida Acuta",
+    "otherCommonNames": ["Stubborn grass", "Wireweed", "Bala", "Common Sida"],
+    "scientificName": "Sida acuta",
+    "imageUrl": [
+      "/plantImages/Sidacuta/plant1.jpg",
+      "/plantImages/Sidacuta/plant2.jpg",
+      "/plantImages/Sidacuta/plant3.jpg",
+      "/plantImages/Sidacuta/plant4.jpg",
+      "/plantImages/Sidacuta/plant5.jpg"
+    ],
+    "tagline": "A medicinal herb traditionally used for its anti-inflammatory, analgesic, and antimicrobial properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Pain Relief (Analgesic)",
+      "Antimicrobial Effects",
+      "Respiratory Health Support"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Triterpenes", "Alkaloids"],
+    "commonPreparations": [
+      "Decoction of leaves",
+      "Infusion of roots",
+      "Topical application of extracts"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/sida-acuta"
+  },
+  {
+    "id": "laportea_aestuans",
+    "commonName": "Laportea Aestuans", 
+    "otherCommonNames": ["Honhon","West Indian Nettle", "Wild Nettle", "Nettleleaf Nettle"],
+    "scientificName": "Laportea aestuans",
+    "imageUrl": [
+      "/plantImages/honhon/honhon1.jpg",
+      "/plantImages/honhon/honhon2.jpg",
+      "/plantImages/honhon/honhon3.jpg",
+      "/plantImages/honhon/honhon4.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used for its anti-inflammatory, diuretic, and antimicrobial properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Diuretic Effects",
+      "Antimicrobial Activity",
+      "Supports Urinary Tract Health"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Phenolic acids", "Vitamins (e.g., Vitamin C, Vitamin K)"],
+    "commonPreparations": [
+      "Infusion of leaves",
+      "Decoction of roots",
+      "Topical application of extracts"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/laportea-aestuans"
+  },
+  {
+    "id": "alchornea_cordifolia",
+    "commonName": "Ogyama",
+    "otherCommonNames": ["Ogyama","Christmas Bush", "African Christmas Bush", "Heart-leaved Alchornea"],
+    "scientificName": "Alchornea cordifolia",
+    "imageUrl": [
+      "/plantImages/ogyama/plant1.jpg",
+      "/plantImages/ogyama/plant2.jpg",
+      "/plantImages/ogyama/plant3.jpg",
+      "/plantImages/ogyama/plant4.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used for its anti-inflammatory, antimicrobial, and analgesic properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Antimicrobial Effects",
+      "Pain Relief (Analgesic)",
+      "Supports Respiratory Health"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Tannins", "Alkaloids"],
+    "commonPreparations": [
+      "Decoction of leaves",
+      "Infusion of bark",
+      "Topical application of extracts"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/alchornea-cordifolia"
+  },
+  {
+    "id": "paulinia_pinnata",
+    "commonName": "Paulinia Pinnata",
+    "otherCommonNames": ["Toa ntini","Osepe","Brazilian Sarsaparilla", "Paulownia", "Wild Sarsaparilla"],
+    "scientificName": "Paulinia pinnata",
+    "imageUrl": [
+      "/plantImages/toantini/pinnata1.jpg",
+      "/plantImages/toantini/pinnata2.jpg",
+      "/plantImages/toantini/pinnata3.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used for its anti-inflammatory, diuretic, and antimicrobial properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Diuretic Effects",
+      "Antimicrobial Activity",
+      "Supports Urinary Tract Health"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Saponins", "Triterpenes"],
+    "commonPreparations": [
+      "Infusion of leaves",
+      "Decoction of roots",
+      "Topical application of extracts"
+    ],  
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": "https://herballo.com/plants/paulinia-pinnata"
+  },
+  {
+    "id": "rauwolfia_vomitoria",
+    "commonName": "Rauwolfia Vomitoria",
+    "otherCommonNames": ["Kakapenpen","Vomitoria", "Indian Snakeroot", "Serpent Root"],
+    "scientificName": "Rauwolfia vomitoria",
+    "imageUrl": [
+      "/plantImages/kakapenpen/kakapenpen1.jpg",
+      "/plantImages/kakapenpen/kakapenpen2.jpg",
+      "/plantImages/kakapenpen/kakapenpen3.jpg",
+      "/plantImages/kakapenpen/kakapenpen4.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used for its sedative, antihypertensive, and analgesic properties.",
+    "primaryHealthBenefits": [
+      "Sedative Effects",
+      "Antihypertensive Properties",
+      "Analgesic Activity",
+      "Supports Nervous System Health"
+    ],
+    "keyActiveCompounds": ["Reserpine", "Catecholamines", "Alkaloids"],
+    "commonPreparations": [
+      "Infusion of roots",
+      "Decoction of bark",
+      "Topical application of extracts"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": ""
+  },
+  {
+    "id": "dissotis_rotundifolia",
+    "commonName": "Dissotis Rotundifolia",
+    "otherCommonNames": ["Dissotis", "Round-leaved Dissotis"],
+    "scientificName": "Dissotis rotundifolia",
+    "imageUrl": [
+      "/plantImages/bolakete/bolakt1.jpg",
+      "/plantImages/bolakete/bolakt2.jpg",
+      "/plantImages/bolakete/bolakt3.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used for its anti-inflammatory, analgesic, and antimicrobial properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Analgesic Activity",
+      "Antimicrobial Effects"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Triterpenes", "Alkaloids"],
+    "commonPreparations": [
+      "Infusion of leaves",
+      "Decoction of roots",
+      "Topical application of extracts"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": ""
+  }
+]
