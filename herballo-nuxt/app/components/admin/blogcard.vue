@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import { api } from "../api";
-import { stripHtmlAndTruncate } from "../utils/helper.js";
+import { api } from "~/lib/api";
+import { stripHtmlAndTruncate } from "~/lib/helper.js";
 
 defineProps({ post: Object });
 
