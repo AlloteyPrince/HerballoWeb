@@ -405,5 +405,35 @@
     ],
     "additionalInfo": "",
     "readMoreLink": ""
+  },
+  {
+    "id": "cleome_viscosa",
+    "commonName": "Cleome Viscosa",
+    "otherCommonNames": ["Cleome", "Viscous Cleome"],
+    "scientificName": "Cleome viscosa",
+    "imageUrl": [
+      "/plantImages/cleome/cleome1.jpg",
+      "/plantImages/cleome/cleome2.jpg",
+      "/plantImages/cleome/cleome3.jpg"
+    ],
+    "tagline": "A medicinal plant traditionally used for its anti-inflammatory, analgesic, and antimicrobial properties.",
+    "primaryHealthBenefits": [
+      "Anti-inflammatory Properties",
+      "Analgesic Activity",
+      "Antimicrobial Effects"
+    ],
+    "keyActiveCompounds": ["Flavonoids", "Triterpenes", "Alkaloids"],
+    "commonPreparations": [
+      "Infusion of leaves",
+      "Decoction of roots",
+      "Topical application of extracts"
+    ],
+    "specificWarnings": [
+      "Limited scientific research available; traditional use only.",
+      "Consult a healthcare professional before use, especially if pregnant or breastfeeding.",
+      "Possible allergic reactions in sensitive individuals."
+    ],
+    "additionalInfo": "",
+    "readMoreLink": ""
   }
 ]

@@ -3,10 +3,6 @@
     <Navigation />
 
     <div class="plant-detail-page">
-      <button @click="$router.go(-1)" class="back-button">
-        ← Back to Library
-      </button>
-
       <div class="plant-hero">
         <img
           :src="plant.imageUrl?.[0] || '/images/plant-placeholder.jpg'"
@@ -155,21 +151,6 @@ export default {
   color: #333;
 }
 
-.back-button {
-  background: none;
-  border: none;
-  color: #10b981;
-  font-weight: 700;
-  cursor: pointer;
-  margin: 1rem 0;
-  padding: 0.5rem 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: opacity 0.2s;
-}
-
-.back-button:hover { opacity: 0.8; }
 
 .plant-names {
   margin-bottom: 2rem;
@@ -181,7 +162,7 @@ export default {
   color: #ffffff;
   margin: 0 0 0.5rem;
   font-weight: 800;
-  background-color: #033726;
+  background-color: linear-gradient(135deg, #033726 0%, #078537 100%);
   border-radius: 0.5rem;
   padding: 15px;
   text-transform: capitalize;
