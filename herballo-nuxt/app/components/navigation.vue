@@ -3,7 +3,10 @@
     <nav>
       <div class="branding">
         <NuxtLink to="/">
-          <img src="/images/herballo-logo.png" alt="Logo" />
+          <img
+            src="/images/herballo-logo.png"
+            alt="Herballo - Natural Health and Herbal Medicine"
+          />
         </NuxtLink>
       </div>
 
@@ -18,9 +21,9 @@
           @mouseenter="showDropdown = true"
           @mouseleave="showDropdown = false"
         >
-          <NuxtLink class="link dropdown-trigger" to="/resources">
+          <div class="link dropdown-trigger" to="/resources">
             Resources <span class="arrow">▾</span>
-          </NuxtLink>
+          </div>
           <Transition name="dropdown">
             <ul v-show="showDropdown" class="dropdown-menu">
               <li><NuxtLink to="/ulearn">ULearn - Plant Library</NuxtLink></li>
