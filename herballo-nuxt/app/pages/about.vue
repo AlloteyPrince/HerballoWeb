@@ -8,9 +8,7 @@
         <p class="hero-tagline">Health from the ground up</p>
         <div class="hero-content">
           <p class="intro-text">
-            Herballo is a health-focused brand specializing in herbal medicine
-            education, research, and product development. We integrate traditional
-            practices with modern insights to provide natural health solutions.
+            Herballo is a health-focused translational herbal-regenerative science company dedicated to bridging the gap between traditional botanical wisdom and modern medical innovation. We integrate traditional practices with modern insights to provide natural health solutions. By merging ethnobotanical research with regenerative science, we translate nature’s most potent secrets into precise, life-enhancing solutions
           </p>
           <NuxtLink to="/" class="btn-pulse-gradient">
             Discover Your Wellness Journey →
@@ -63,14 +61,10 @@
     <section class="philosophy-stripe">
       <div class="container">
         <h2 class="subheading reveal-item">Our Philosophy</h2>
-        <div class="philosophy-list">
-          <div v-for="item in philosophy" :key="item.title" class="philo-item reveal-item">
-            <div class="philo-bullet"></div>
-            <div>
-              <strong>{{ item.title }}</strong>
-              <p>{{ item.text }}</p>
-            </div>
-          </div>
+        <div class="philosophy-centered reveal-item">
+          <p class="philo-text">
+            {{ philosophyText }}
+          </p>
         </div>
       </div>
     </section>
@@ -127,10 +121,8 @@ const pillars = [
   }
 ];
 
-const philosophy = [
-  { title: 'Integrity', text: 'Transparent sourcing and ethical care.' },
-  { title: 'Education', text: 'Empowering wellness through knowledge.' }
-];
+// Philosophy text combined into a single string for better centering
+const philosophyText = `At Herballo, we believe that modern medicine finds its greatest potential when it addresses the fundamental foundations of human health. Our motto, "Health from the Ground Up," represents our commitment to this journey—sourcing the Earth’s most potent botanicals and translating their wisdom into advanced regenerative solutions. While traditional medicine has long recognized the healing power of nature, Herballo bridges the gap by providing the scientific evidence and molecular precision behind those results to support tissue restoration and systemic vitality.`;
 
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
@@ -185,7 +177,7 @@ onMounted(() => {
   color: #4a5568;
 }
 
-/* 3. GRADIENT PULSE BUTTON (The core style) */
+/* 3. GRADIENT PULSE BUTTON */
 .btn-pulse-gradient {
   display: inline-block;
   background: linear-gradient(135deg, #105212 0%, #22c55e 100%);
@@ -255,7 +247,7 @@ onMounted(() => {
   margin-bottom: 0.8rem;
 }
 
-/* 5. VISION STRIPE: Matching Button Gradient */
+/* 5. VISION STRIPE */
 .vision-stripe-gradient {
   width: 100%;
   background: linear-gradient(135deg, #105212 0%, #22c55e 100%);
@@ -267,10 +259,24 @@ onMounted(() => {
 .vision-box h2 { font-size: 2.8rem; margin-bottom: 1.5rem; font-weight: 800; }
 .vision-box p { font-size: 1.4rem; max-width: 850px; margin: 0 auto; line-height: 1.6; }
 
-/* 6. TEAM & PHILOSOPHY */
-.philosophy-stripe { padding: 80px 0; background: #f9fdf9; }
-.philo-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; max-width: 600px; margin-inline: auto; }
-.philo-bullet { min-width: 10px; height: 10px; background: #38a169; border-radius: 50%; margin-top: 8px; }
+/* 6. TEAM & CENTERED PHILOSOPHY */
+.philosophy-stripe { 
+  padding: 100px 0; 
+  background: #f9fdf9; 
+  text-align: center;
+}
+
+.philosophy-centered {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.philo-text {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #4a5568;
+  font-style: italic; /* Adds a touch of "Philosophy" elegance */
+}
 
 .team-stripe { padding: 80px 0; }
 .team-card {
