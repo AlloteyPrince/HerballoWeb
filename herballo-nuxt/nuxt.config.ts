@@ -1,10 +1,7 @@
 export default defineNuxtConfig({
-  compatibilityDate: "2025-07-15",
-
+  compatibilityDate: "2026-05-21",
   srcDir: "app/",
-
   devtools: { enabled: true },
-
   // 1. SEO Site Configuration
   site: {
     url: "https://herballo.co",
@@ -13,10 +10,8 @@ export default defineNuxtConfig({
       "Foundational resources for natural health and herbal medicine.",
     defaultLocale: "en",
   },
-
   // 2. App Configuration
   app: {
-    pageTransition: { name: "page", mode: "out-in" },
     head: {
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
@@ -28,27 +23,49 @@ export default defineNuxtConfig({
       ],
     },
   },
-
   // 3. Modules List
   modules: [
-    "nuxt-site-config",
-    "@nuxt/fonts",
     "@nuxtjs/tailwindcss",
     "@nuxtjs/sitemap",
-    "@nuxtjs/robots",
+    "@nuxtjs/supabase",
   ],
-
-  // 4. Global CSS
+  // 4. Supabase Configuration
+  supabase: {
+    redirectOptions: {
+      login: "/login",
+      callback: "/confirm",
+      exclude: [
+        "/",
+        "/about",
+        "/blog",
+        "/blog/*",
+        "/contact",
+        "/education",
+        "/events",
+        "/glossary",
+        "/privacypolicy",
+        "/productdev",
+        "/resources",
+        "/shop",
+        "/termsofuse",
+        "/ulearn",
+        "/ulearn/*",
+        "/pdflibrary",
+        "/pdflibrary/*",
+        "/admin",
+        "/admin/*",
+      ],
+    },
+  },
+  // 5. Global CSS
   css: ["@fortawesome/fontawesome-svg-core/styles.css"],
-
-  // 5. Tailwind Configuration
+  // 6. Tailwind Configuration
   tailwindcss: {
     configPath: "../tailwind.config.js",
     exposeConfig: true,
     viewer: true,
   },
-
-  // 6. Build & Transpilation
+  // 7. Build & Transpilation
   build: {
     transpile: [
       "@fortawesome/fontawesome-svg-core",
@@ -56,23 +73,13 @@ export default defineNuxtConfig({
       "@fortawesome/vue-fontawesome",
     ],
   },
-
-  // 7. Sitemap Settings
+  // 8. Sitemap Settings
   sitemap: {
     autoLastmod: true,
     exclude: ["/_nuxt/**", "/admin/**"],
   },
-
-  // 8. Auto-imports
+  // 9. Auto-imports
   imports: {
     dirs: ["lib"],
-  },
-
-  // 9. Runtime Config (For your Render API)
-  runtimeConfig: {
-    public: {
-      apiBase:
-        process.env.NUXT_PUBLIC_API_BASE || "https://herballo-api.onrender.com",
-    },
   },
 });

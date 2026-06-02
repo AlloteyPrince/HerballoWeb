@@ -80,8 +80,6 @@
         </div>
       </div>
     </section>
-
-    <VFooter />
   </div>
 </template>
 
