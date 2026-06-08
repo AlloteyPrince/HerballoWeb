@@ -1,11 +1,11 @@
 <template>
   <div class="bg-[#fdfdfb] min-h-screen py-12 px-4">
     <div class="max-w-6xl mx-auto">
-      
+
       <!-- Back Navigation -->
       <div class="mb-8">
-        <NuxtLink 
-          to="/blog" 
+        <NuxtLink
+          to="/blog"
           class="inline-flex items-center text-sm font-semibold text-[#105212] hover:underline no-underline"
         >
           ← Back to Herballo Blog
@@ -19,10 +19,9 @@
 
       <!-- Post found -->
       <article v-else-if="post" class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-        
-        <!-- Left Side: Main Content (Spans 2 columns on large screens) -->
+
+        <!-- Left Side: Main Content -->
         <div class="lg:col-span-2">
-          <!-- Meta Header -->
           <header class="mb-8">
             <div class="flex items-center flex-wrap gap-3 mb-4 text-xs">
               <span class="bg-[#105212] text-white font-semibold px-3 py-1 rounded-full">
@@ -32,35 +31,34 @@
                 {{ formatDate(post.date) }}
               </span>
             </div>
-            
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
               {{ post.title }}
             </h1>
-            
             <p v-if="post.excerpt" class="text-lg text-gray-500 mt-4 font-normal leading-relaxed italic border-l-4 border-[#105212] pl-4">
               {{ post.excerpt }}
             </p>
           </header>
 
-          <!-- Cinematic Cover Image -->
+          <!-- Cover Image -->
           <div class="relative h-64 sm:h-96 w-full rounded-2xl overflow-hidden shadow-lg mb-12">
             <img
               :src="post.cover_image"
               :alt="post.title"
               class="w-full h-full object-cover"
-              @error="(e) => (e.target.src = 'https://vhyzuqcthnpqrrtfxeyj.supabase.co/storage/v1/object/public/images/blog/placeholder.jpg')"
+              @error="(e) => (e.target.src = 'https://images.unsplash.com/photo-1548345680-f5475ea5df84?w=800')"
             />
           </div>
 
-          <!-- Rendered HTML Content Body -->
-          <div 
+          <!-- Rendered Content Body -->
+          <div
             class="prose prose-emerald max-w-none text-gray-800 leading-relaxed space-y-6 text-base sm:text-lg"
-            v-html="post.content"
+            v-html="renderedContent"
           ></div>
         </div>
 
-        <!-- Right Side: Sticky Sidebar (Spans 1 column, pins on scroll) -->
+        <!-- Right Side: Sticky Sidebar -->
         <aside class="lg:sticky lg:top-8 space-y-6 w-full">
+
           <!-- Author & Metadata Card -->
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Author & Date</h4>
@@ -74,44 +72,34 @@
               </div>
             </div>
             <hr class="border-gray-100 my-4" />
-            <!-- Replaced duplicated category badge with Reading Insights -->
             <span class="text-xs text-gray-400 block mb-1">Reading Depth</span>
             <span class="text-xs font-medium text-gray-600 flex items-center gap-1.5">
               ⏱️ {{ estimateReadingTime(post.content) }} min read
             </span>
           </div>
 
-          <!-- New Feature: Personalized Health Consultation Card -->
+          <!-- Consultation Card -->
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Clinical Guidance</h4>
             <h3 class="font-bold text-lg text-gray-900 leading-snug mb-2">Understand your health options</h3>
             <p class="text-sm text-gray-500 mb-4 leading-relaxed">
               Want a deeper understanding of herbal remedies or personalized diagnostics for your wellness profile? Book a formal clinical assessment.
             </p>
-            <NuxtLink to="/consultation" class="block text-center bg-[#105212] text-white text-xs font-bold px-4 py-3 rounded-xl no-underline hover:bg-[#0a360b] transition-colors shadow-sm">
+            <NuxtLink
+              to="/consultation"
+              class="block text-center bg-[#105212] text-white text-xs font-bold px-4 py-3 rounded-xl no-underline hover:bg-[#0a360b] transition-colors shadow-sm"
+            >
               Schedule Consultation
             </NuxtLink>
           </div>
 
-          <!-- Quick Return Action Card -->
-          <div class="bg-gradient-to-br from-[#105212] to-[#0a360b] rounded-2xl p-6 text-white shadow-md">
-            <h4 class="font-bold text-lg mb-2">Looking for remedies?</h4>
-            <p class="text-sm text-green-100/80 mb-4 leading-relaxed">Head back to our library hub to search through more clinical plant diagnostics and wellness research.</p>
-            <NuxtLink to="/blog" class="inline-block bg-white text-[#105212] text-xs font-bold px-4 py-2 rounded-xl no-underline hover:bg-gray-50 transition-colors">
-              Explore More Articles
-            </NuxtLink>
-          </div>
         </aside>
-
       </article>
 
       <!-- Post not found -->
       <div v-else class="text-center py-24 text-gray-500">
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Post not found</h2>
-        <p class="mb-6">The item may have been un-published or moved.</p>
-        <NuxtLink to="/blog" class="bg-[#105212] text-white px-6 py-2 rounded-xl text-sm font-semibold shadow-md no-underline">
-          Browse All Articles
-        </NuxtLink>
+        <p class="text-lg mb-4">Post not found.</p>
+        <NuxtLink to="/blog" class="text-[#105212] font-semibold hover:underline">← Back to Blog</NuxtLink>
       </div>
 
     </div>
@@ -119,6 +107,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+
 const supabase = useSupabaseClient()
 const route = useRoute()
 
@@ -127,11 +117,39 @@ const { data: post, pending } = await useAsyncData(`blog-${route.params.slug}`, 
     .from('blog_posts')
     .select('*')
     .eq('slug', route.params.slug)
-    .eq('published', true)
     .single()
 
   if (error) return null
   return data
+})
+
+const renderedContent = computed(() => {
+  if (!post.value?.content) return ''
+
+  let html = post.value.content
+
+  html = html.replace(/```json/g, '')
+  html = html.replace(/```/g, '')
+
+  return html
+    .split(/\n\n+/)
+    .map(block => {
+      block = block.trim()
+      if (!block) return ''
+
+      if (block.startsWith('## ')) {
+        return `<h2>${block.replace('## ', '')}</h2>`
+      }
+      if (block.startsWith('### ')) {
+        return `<h3>${block.replace('### ', '')}</h3>`
+      }
+
+      block = block.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      block = block.replace(/\n/g, '<br/>')
+
+      return `<p>${block}</p>`
+    })
+    .join('\n')
 })
 
 const formatDate = (dateStr) => {
@@ -143,12 +161,11 @@ const formatDate = (dateStr) => {
   })
 }
 
-// Simple text length counter to auto-compute reading speed benchmarks
-const estimateReadingTime = (htmlContent) => {
-  if (!htmlContent) return 1
-  const cleanText = htmlContent.replace(/<\/?[^>]+(>|$)/g, "") // Strip HTML tags
+const estimateReadingTime = (content) => {
+  if (!content) return 1
+  const cleanText = content.replace(/<\/?[^>]+(>|$)/g, '')
   const words = cleanText.trim().split(/\s+/).length
-  return Math.max(1, Math.ceil(words / 225)) // Based on an average adult reading speed of 225 WPM
+  return Math.max(1, Math.ceil(words / 225))
 }
 
 useHead({
@@ -161,20 +178,26 @@ useHead({
 .prose :deep(h2) {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #111827;
-  margin-top: 2rem;
+  color: #105212;
+  margin-top: 2.5rem;
   margin-bottom: 1rem;
+  line-height: 1.3;
 }
 .prose :deep(h3) {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: #111827;
-  margin-top: 1.5rem;
+  color: #1a1a1a;
+  margin-top: 1.75rem;
   margin-bottom: 0.75rem;
 }
 .prose :deep(p) {
   margin-bottom: 1.25rem;
-  line-height: 1.75;
+  line-height: 1.85;
+  color: #374151;
+}
+.prose :deep(strong) {
+  font-weight: 700;
+  color: #111827;
 }
 .prose :deep(ul) {
   list-style-type: disc;
@@ -183,5 +206,10 @@ useHead({
 }
 .prose :deep(li) {
   margin-bottom: 0.5rem;
+  line-height: 1.75;
+}
+.prose :deep(br) {
+  display: block;
+  margin: 0.2rem 0;
 }
 </style>
