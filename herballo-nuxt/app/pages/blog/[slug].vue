@@ -78,18 +78,33 @@
             </span>
           </div>
 
-          <!-- Consultation Card -->
-          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Clinical Guidance</h4>
-            <h3 class="font-bold text-lg text-gray-900 leading-snug mb-2">Understand your health options</h3>
-            <p class="text-sm text-gray-500 mb-4 leading-relaxed">
+          <!-- Consultation Card - Green background -->
+          <div class="bg-[#105212] rounded-2xl p-6 shadow-sm">
+            <h4 class="text-xs font-bold text-green-300 uppercase tracking-wider mb-2">Clinical Guidance</h4>
+            <h3 class="font-bold text-lg text-white leading-snug mb-2">Understand your health options</h3>
+            <p class="text-sm text-green-100 mb-4 leading-relaxed">
               Want a deeper understanding of herbal remedies or personalized diagnostics for your wellness profile? Book a formal clinical assessment.
             </p>
             <NuxtLink
               to="/consultation"
-              class="block text-center bg-[#105212] text-white text-xs font-bold px-4 py-3 rounded-xl no-underline hover:bg-[#0a360b] transition-colors shadow-sm"
+              class="block text-center bg-white text-[#105212] text-xs font-bold px-4 py-3 rounded-xl no-underline hover:bg-green-50 transition-colors shadow-sm"
             >
               Schedule Consultation
+            </NuxtLink>
+          </div>
+
+          <!-- Explore More Card - Light green tint background -->
+          <div class="bg-[#f0f7f0] rounded-2xl p-6 border border-[#105212]/10">
+            <h4 class="text-xs font-bold text-[#105212] uppercase tracking-wider mb-2">Explore More</h4>
+            <h3 class="font-bold text-lg text-gray-900 leading-snug mb-2">More from Herballo</h3>
+            <p class="text-sm text-gray-500 mb-4 leading-relaxed">
+              Discover more articles on herbal medicine, natural wellness, and plant-based health from our growing library.
+            </p>
+            <NuxtLink
+              to="/blog"
+              class="block text-center border-2 border-[#105212] text-[#105212] text-xs font-bold px-4 py-3 rounded-xl no-underline hover:bg-[#105212] hover:text-white transition-colors"
+            >
+              Browse All Articles →
             </NuxtLink>
           </div>
 
