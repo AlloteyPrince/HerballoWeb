@@ -41,22 +41,25 @@
       <p v-if="error" class="mt-4 text-red-600 text-sm text-center">
         {{ error }}
       </p>
+      <p v-if="success" class="mt-4 text-green-700 text-sm text-center font-medium">
+        {{ success }}
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { navigateTo } from "#app";
-
 const supabase = useSupabaseClient();
 const email = ref("");
 const password = ref("");
 const isLoading = ref(false);
 const error = ref("");
+const success = ref("");
 
 const signIn = async () => {
   error.value = "";
+  success.value = "";
   isLoading.value = true;
   const { error: err } = await supabase.auth.signInWithPassword({
     email: email.value,
@@ -64,7 +67,14 @@ const signIn = async () => {
   });
   isLoading.value = false;
   if (err) {
-    error.value = err.message;
+    // Make the error message friendlier
+    if (err.message.includes('Invalid login credentials')) {
+      error.value = "Incorrect email or password. Please try again.";
+    } else if (err.message.includes('Email not confirmed')) {
+      error.value = "Please check your email and confirm your account first.";
+    } else {
+      error.value = err.message;
+    }
   } else {
     await navigateTo("/consultation");
   }
@@ -72,16 +82,21 @@ const signIn = async () => {
 
 const signUp = async () => {
   error.value = "";
+  success.value = "";
   isLoading.value = true;
   const { error: err } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
+    options: {
+      emailRedirectTo: `${window.location.origin}/confirm`
+    }
   });
   isLoading.value = false;
   if (err) {
     error.value = err.message;
   } else {
-    await navigateTo("/consultation");
+    // Don't navigate — tell them to check email
+    success.value = "Account created! Please check your email to confirm your account, then come back to sign in.";
   }
 };
 </script>
