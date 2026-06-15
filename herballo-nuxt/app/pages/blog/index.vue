@@ -102,7 +102,7 @@ const formatDate = (dateStr) => {
 }
 
 useHead({
-  title: 'Blog | Herballo',
+  title: 'Herballo Blog | Herbal Medicine & Natural Health',
   meta: [{ name: 'description', content: 'Herbal medicine insights and natural wellness articles from Herballo.' }],
 })
 </script>
