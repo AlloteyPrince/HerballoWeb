@@ -56,7 +56,7 @@ export default defineNuxtConfig({
         "/pdflibrary/*",
         "/admin",
         "/admin/*",
-          "/api/__sitemap__/urls",
+        "/api/__sitemap__/urls",
       ],
     },
   },
