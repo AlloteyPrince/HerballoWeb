@@ -92,18 +92,22 @@ const handleProceed = () => {
     // Use standard window macro-tasking to safely exit the route hook thread
     window.setTimeout(() => {
       isLoading.value = false;
-      navigateTo("/consultation/booking");
+      navigateTo("/login?redirect=/consultation/booking");
     }, 1500);
   }
 };
 
-definePageMeta({
-  middleware: "require-auth",
+
+
+// SEO
+useSeoMeta({
+  title: 'Book a Herbal Consultation in Ghana | Online Herbal Medicine — Herballo',
+  description: 'Book a personalised online herbal consultation in Ghana with Herballo. Expert herbal medicine practitioners available for diabetes, hypertension, and more. Heal from the ground up.',
+  ogTitle: 'Book a Herbal Consultation in Ghana | Herballo',
+  ogDescription: 'Personalised online herbal consultations in Ghana. Expert guidance for diabetes, hypertension, and natural wellness. Book today.',
+  ogImage: 'https://herballo.co/logo.png',
 });
 
-// useHead({
-//   title: 'Consultation | Herballo',
-// });
 </script>
 
 <style scoped lang="scss">

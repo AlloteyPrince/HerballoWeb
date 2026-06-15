@@ -56,6 +56,8 @@ export default defineNuxtConfig({
         "/pdflibrary/*",
         "/admin",
         "/admin/*",
+        "/conditions/hypertension",
+        "/conditions/diabetes",
         "/api/__sitemap__/urls",
       ],
     },
