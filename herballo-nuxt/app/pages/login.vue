@@ -73,15 +73,6 @@
           />
         </div>
         <div class="form-group">
-          <label class="form-label">Mobile Number</label>
-          <input
-            v-model="mobile"
-            type="tel"
-            class="form-input"
-            placeholder="e.g. 0244000000"
-          />
-        </div>
-        <div class="form-group">
           <label class="form-label">Password</label>
           <input v-model="password" type="password" class="form-input" placeholder="Min. 6 characters" />
         </div>
@@ -119,7 +110,6 @@ const password = ref("");
 const confirmPassword = ref("");
 const firstName = ref("");
 const lastName = ref("");
-const mobile = ref("");
 const isLoading = ref(false);
 const isSignUp = ref(false);
 const error = ref("");
@@ -134,7 +124,6 @@ const switchMode = (signup: boolean) => {
   confirmPassword.value = "";
   firstName.value = "";
   lastName.value = "";
-  mobile.value = "";
 };
 
 const signIn = async () => {
@@ -167,7 +156,7 @@ const signIn = async () => {
 const signUp = async () => {
   error.value = "";
   success.value = "";
-  if (!firstName.value || !lastName.value || !email.value || !mobile.value || !password.value) {
+  if (!firstName.value || !lastName.value || !email.value || !password.value) {
     error.value = "Please fill in all fields.";
     return;
   }
@@ -188,7 +177,6 @@ const signUp = async () => {
         first_name: firstName.value,
         last_name: lastName.value,
         full_name: `${firstName.value} ${lastName.value}`,
-        mobile: mobile.value,
       },
       emailRedirectTo: `${window.location.origin}/confirm`
     }
