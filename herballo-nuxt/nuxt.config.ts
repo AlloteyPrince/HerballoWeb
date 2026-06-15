@@ -56,6 +56,7 @@ export default defineNuxtConfig({
         "/pdflibrary/*",
         "/admin",
         "/admin/*",
+          "/api/__sitemap__/urls",
       ],
     },
   },
@@ -79,7 +80,7 @@ export default defineNuxtConfig({
   sitemap: {
     autoLastmod: true,
     exclude: ["/_nuxt/**", "/admin/**"],
-    sources: ['/api/___sitemap___/urls'],
+    sources: ['/api/__sitemap__/urls'],
   },
   // 9. Auto-imports
   imports: {
