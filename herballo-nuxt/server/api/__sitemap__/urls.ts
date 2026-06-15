@@ -8,12 +8,12 @@ export default defineEventHandler(async () => {
 
   const { data: posts } = await client
     .from('blog_posts')
-    .select('slug, updated_at')
+    .select('slug, created_at') // 👈 changed from updated_at to created_at
 
   return (posts || []).map((post) => ({
     loc: `/blog/${post.slug}`,
-    lastmod: post.updated_at,
-    changefreq: 'weekly',
+    lastmod: post.created_at,
+    changefreq: 'monthly',
     priority: 0.8,
   }))
 })
