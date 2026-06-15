@@ -79,6 +79,7 @@ export default defineNuxtConfig({
   sitemap: {
     autoLastmod: true,
     exclude: ["/_nuxt/**", "/admin/**"],
+    sources: ['/api/__sitemap__/urls'],
   },
   // 9. Auto-imports
   imports: {
