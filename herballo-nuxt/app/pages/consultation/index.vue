@@ -81,6 +81,8 @@ const steps = [
   },
 ];
 
+const user = useSupabaseUser() 
+
 const handleProceed = () => {
   if (!agreed.value) return;
 
