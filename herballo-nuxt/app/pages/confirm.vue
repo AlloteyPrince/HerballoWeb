@@ -20,33 +20,33 @@ const statusTitle = ref('Confirming your account...')
 const statusMessage = ref('Please wait while we verify your email.')
 const showLoader = ref(true)
 
+const showError = () => {
+  statusIcon.value = '⚠️'
+  statusTitle.value = 'Link expired or already used'
+  statusMessage.value = 'This confirmation link may have expired. Please sign up again or request a new link.'
+  showLoader.value = false
+}
+
 onMounted(async () => {
-  // Listen for the auth state change — Supabase fires this once the token in
-  // the URL has been processed, which is more reliable than getSession()
+  const timeout = setTimeout(() => showError(), 8000)
+
   const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
+      clearTimeout(timeout)
       subscription.unsubscribe()
+
+      const firstName = session.user.user_metadata?.first_name || ''
       statusIcon.value = '✅'
-      statusTitle.value = `Welcome, ${session.user.user_metadata?.first_name || ''}!`
+      statusTitle.value = `Welcome${firstName ? ', ' + firstName : ''}!`
       statusMessage.value = 'Your email has been confirmed. Taking you to sign in...'
       showLoader.value = false
+
       setTimeout(async () => {
+        await supabase.auth.signOut()
         await router.push('/login?confirmed=true')
       }, 2000)
-    } else if (event === 'TOKEN_REFRESHED') {
-      // already confirmed, just redirect
-      subscription.unsubscribe()
-      await router.push('/login?confirmed=true')
     }
   })
-
-  // Fallback: if no auth event fires after 5 seconds, something went wrong
-  setTimeout(() => {
-    statusIcon.value = '⚠️'
-    statusTitle.value = 'Link expired or already used'
-    statusMessage.value = 'This confirmation link may have expired. Please sign up again or request a new link.'
-    showLoader.value = false
-  }, 5000)
 })
 </script>
 
@@ -59,7 +59,6 @@ onMounted(async () => {
   justify-content: center;
   padding: 2rem 1rem;
 }
-
 .confirm-card {
   max-width: 420px;
   width: 100%;
@@ -69,26 +68,22 @@ onMounted(async () => {
   padding: 2.5rem 2rem;
   text-align: center;
 }
-
 .confirm-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
 }
-
 .confirm-title {
   color: #105212;
   font-size: 1.4rem;
   font-weight: 800;
   margin-bottom: 0.5rem;
 }
-
 .confirm-sub {
   color: #666;
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
-
 .loader {
   width: 28px;
   height: 28px;
@@ -98,7 +93,6 @@ onMounted(async () => {
   animation: spin 1s linear infinite;
   margin: 0 auto;
 }
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
