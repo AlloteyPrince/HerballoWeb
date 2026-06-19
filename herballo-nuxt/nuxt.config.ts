@@ -47,7 +47,7 @@ export default defineNuxtConfig({
         "/glossary",
         "/privacypolicy",
         "/productdev",
-        "/resources",
+        // "/resources",
         "/shop",
         "/termsofuse",
         "/ulearn",
