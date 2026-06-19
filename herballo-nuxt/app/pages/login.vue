@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, onMounted } from 'vue'
 
 const supabase = useSupabaseClient()
 const route = useRoute()
@@ -307,6 +307,12 @@ const signUp = async () => {
     startResendCooldown()
   }
 }
+
+onMounted(() => {
+  if (route.query.confirmed === 'true') {
+    showSnackbar('Email confirmed! You can now sign in. 🌿')
+  }
+})
 </script>
 
 <style scoped lang="scss">
