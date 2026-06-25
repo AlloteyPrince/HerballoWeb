@@ -28,87 +28,97 @@
       <header class="summary-header">
         <h1>Review Your Booking</h1>
         <p class="intro">
-          Please check your details. Payment is processed securely via Paystack.
+          Please review your details below. A one-time fee of <strong>GHS 300</strong> is required to confirm your consultation.
         </p>
       </header>
 
       <div v-if="bookingData" class="summary-content">
+
+        <!-- Personal Information -->
         <div class="summary-section">
           <h2>Personal Information</h2>
           <div class="info-grid">
             <div class="info-group">
               <label>Full Name</label>
-              <p>{{ bookingData.fullName }}</p>
+              <p>{{ userFullName }}</p>
             </div>
             <div class="info-group">
               <label>Email Address</label>
-              <p>{{ bookingData.email }}</p>
+              <p>{{ user?.email }}</p>
             </div>
             <div class="info-group">
               <label>Phone Number</label>
               <p>{{ bookingData.phone }}</p>
             </div>
             <div class="info-group">
-              <label>Service</label>
-              <p class="capitalize">{{ bookingData.purpose }}</p>
+              <label>Consultation Type</label>
+              <p class="capitalize">{{ purposeLabel }}</p>
             </div>
           </div>
         </div>
 
+        <!-- Description -->
+        <div class="summary-section" v-if="bookingData.description">
+          <h2>Brief Description</h2>
+          <p class="description-text">{{ bookingData.description }}</p>
+        </div>
+
+        <!-- Schedule -->
         <div class="summary-section">
           <h2>Appointment Schedule</h2>
           <div class="schedule-card">
             <div class="schedule-detail">
               <span class="icon">📅</span>
               <div>
-                <label>Date</label>
-                <p>{{ formatDate(bookingData.date) }}</p>
+                <label>Preferred Date</label>
+                <p>{{ formatDate(bookingData.preferred_date) }}</p>
               </div>
             </div>
             <div class="schedule-divider"></div>
             <div class="schedule-detail">
-              <span class="icon">⏰</span>
+              <span class="icon">{{ timeIcon }}</span>
               <div>
-                <label>Time (GMT)</label>
-                <p>{{ formatTime(bookingData.time) }}</p>
+                <label>Time of Day</label>
+                <p class="capitalize">{{ bookingData.time_of_day }}</p>
+              </div>
+            </div>
+            <div class="schedule-divider"></div>
+            <div class="schedule-detail">
+              <span class="icon">📞</span>
+              <div>
+                <label>Call Type</label>
+                <p class="capitalize">{{ bookingData.call_type === 'video' ? 'Video Call' : 'Voice Call' }}</p>
               </div>
             </div>
           </div>
+          <p class="schedule-note">⏳ We will confirm your exact time within 24 hours of receiving your booking.</p>
         </div>
 
-        <div
-          class="summary-section no-border"
-          v-if="bookingData.fileNames && bookingData.fileNames.length > 0"
-        >
-          <h2>Attached Documents</h2>
-          <div class="docs-list">
-            <span
-              v-for="(file, index) in bookingData.fileNames"
-              :key="index"
-              class="doc-tag"
-            >
-              📄 {{ file }}
-            </span>
+        <!-- Payment Summary -->
+        <div class="summary-section no-border">
+          <h2>Payment Summary</h2>
+          <div class="payment-breakdown">
+            <div class="payment-row">
+              <span>Consultation Fee</span>
+              <span>GHS 300.00</span>
+            </div>
+            <div class="payment-row total">
+              <span>Total</span>
+              <span>GHS 300.00</span>
+            </div>
+          </div>
+          <div class="momo-note">
+            <span class="momo-icon">📱</span>
+            <p>Payment is via <strong>MTN Mobile Money</strong>. You'll be guided through the steps on the next page.</p>
           </div>
         </div>
 
         <div class="summary-actions">
-          <button
-            type="button"
-            @click="goBack"
-            class="btn-outline"
-            :disabled="loading"
-          >
+          <button type="button" @click="goBack" class="btn-outline">
             Edit Details
           </button>
-          <button
-            type="button"
-            @click="initiatePaystack"
-            class="btn-primary"
-            :disabled="loading"
-          >
-            <span v-if="loading">Processing...</span>
-            <span v-else>Pay GHS 250.00 Now</span>
+          <button type="button" @click="proceedToPayment" class="btn-primary">
+            Proceed to Payment
           </button>
         </div>
       </div>
@@ -121,105 +131,55 @@
 </template>
 
 <script setup>
-const config = useRuntimeConfig();
-const bookingData = ref(null);
-const loading = ref(false);
+const user = useSupabaseUser()
+const bookingData = ref(null)
+
+const userFullName = computed(() => {
+  const meta = user.value?.user_metadata
+  if (!meta) return ''
+  return `${meta.first_name || ''} ${meta.last_name || ''}`.trim() || user.value?.email
+})
+
+const purposeLabel = computed(() => {
+  const map = {
+    general: 'General Enquiries About Herbal Medicines',
+    research: 'Research Collaborations',
+    clinical: 'Clinical / Health Consultations',
+  }
+  return map[bookingData.value?.purpose] || bookingData.value?.purpose || ''
+})
+
+const timeIcon = computed(() => {
+  const icons = { morning: '🌅', afternoon: '☀️', evening: '🌙' }
+  return icons[bookingData.value?.time_of_day] || '⏰'
+})
 
 onMounted(() => {
   if (process.client) {
-    const savedData = localStorage.getItem("pending_booking_data");
+    const savedData = localStorage.getItem('pending_booking_data')
     if (savedData) {
-      bookingData.value = JSON.parse(savedData);
+      bookingData.value = JSON.parse(savedData)
     } else {
-      navigateTo("/consultation/booking");
+      navigateTo('/consultation/booking')
     }
   }
-});
+})
 
-const formatDate = (d) =>
-  d
-    ? new Date(d).toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "";
+const formatDate = (d) => {
+  if (!d) return ''
+  const [y, m, day] = d.split('-')
+  return new Date(+y, +m - 1, +day).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
 
-const formatTime = (t) => {
-  if (!t) return "";
-  const [start] = t.split("-");
-  const [hours, minutes] = start.split(":");
-  const h = hours % 12 || 12;
-  const ampm = hours < 12 ? "AM" : "PM";
-  return `${h}:${minutes} ${ampm}`;
-};
+const proceedToPayment = () => navigateTo('/consultation/payment')
+const goBack = () => navigateTo('/consultation/booking')
 
-const initiatePaystack = () => {
-  if (!window.PaystackPop) {
-    alert("Payment gateway is still loading. Please wait a second.");
-    return;
-  }
-  loading.value = true;
-
-  const handler = PaystackPop.setup({
-    key: config.public.paystackPublicKey,
-    email: bookingData.value.email,
-    amount: 250 * 100, // GHS 250
-    currency: "GHS",
-    ref: "HB_" + Math.floor(Math.random() * 1000000000 + 1),
-    callback: (response) => {
-      handlePostPayment(response.reference);
-    },
-    onClose: () => {
-      loading.value = false;
-    },
-  });
-  handler.openIframe();
-};
-
-const handlePostPayment = async (payRef) => {
-  try {
-    const formData = new FormData();
-    formData.append(
-      "_subject",
-      "New Booking Confirmed - " + bookingData.value.fullName
-    );
-    formData.append("_template", "table");
-    formData.append("_captcha", "false");
-    // This triggers the email to the user as a "Reply-To" and receipt
-    formData.append("_replyto", bookingData.value.email);
-
-    // Email Content
-    formData.append(
-      "Confirmation",
-      "We have successfully received your payment. Our team will contact you shortly with the consultation link."
-    );
-    formData.append("Name", bookingData.value.fullName);
-    formData.append("Email", bookingData.value.email);
-    formData.append("Date", formatDate(bookingData.value.date));
-    formData.append("Time", formatTime(bookingData.value.time));
-    formData.append("Payment Reference", payRef);
-    formData.append("Status", "PAID (GHS 250.00)");
-
-    // Background submission to FormSubmit
-    await fetch("https://formsubmit.co/ajax/info@herballo.co", {
-      method: "POST",
-      body: formData,
-    });
-
-    localStorage.removeItem("pending_booking_data");
-    navigateTo("/consultation/success");
-  } catch (err) {
-    console.error("Submission error:", err);
-    // Navigate anyway because the user has already paid
-    navigateTo("/consultation/success");
-  }
-};
-
-const goBack = () => navigateTo("/consultation/booking");
-
-useHead({ title: "Review Your Booking | Herballo" });
+useHead({ title: 'Review Your Booking | Herballo' })
 </script>
 
 <style scoped lang="scss">
@@ -270,9 +230,7 @@ useHead({ title: "Review Your Booking | Herballo" });
       border-color: #105212;
       color: #fff;
     }
-    span {
-      color: #105212;
-    }
+    span { color: #105212; }
   }
 }
 .line {
@@ -281,9 +239,7 @@ useHead({ title: "Review Your Booking | Herballo" });
   background: #e2e8f0;
   margin: 0 12px;
   margin-top: -26px;
-  &.active {
-    background: #105212;
-  }
+  &.active { background: #105212; }
 }
 
 .summary-card {
@@ -302,9 +258,12 @@ useHead({ title: "Review Your Booking | Herballo" });
     font-size: 2.2rem;
     color: #105212;
     font-weight: 900;
+    margin-bottom: 0.5rem;
   }
   .intro {
     color: #64748b;
+    font-size: 1rem;
+    strong { color: #105212; }
   }
 }
 
@@ -312,17 +271,17 @@ useHead({ title: "Review Your Booking | Herballo" });
   border-bottom: 1px solid #f1f5f9;
   padding-bottom: 2rem;
   margin-bottom: 2.5rem;
-  &.no-border {
-    border: none;
-  }
+  &.no-border { border: none; }
   h2 {
-    font-size: 1.1rem;
-    color: #105212;
-    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 1.25rem;
     font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 1px;
   }
 }
+
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -333,6 +292,8 @@ useHead({ title: "Review Your Booking | Herballo" });
     font-size: 0.75rem;
     color: #94a3b8;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   p {
     font-size: 1rem;
@@ -342,52 +303,106 @@ useHead({ title: "Review Your Booking | Herballo" });
   }
 }
 
+.description-text {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  border: 1px solid #f1f5f9;
+}
+
 .schedule-card {
   background: #f0f7f0;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 2rem;
-  border: 1px solid #d1e2d1;
+  border: 1px solid #c6e6c7;
+  flex-wrap: wrap;
 }
 .schedule-detail {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  .icon {
-    font-size: 1.5rem;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 120px;
+  .icon { font-size: 1.5rem; }
+  label {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 2px;
   }
   p {
     font-weight: 800;
     color: #105212;
     margin: 0;
+    font-size: 0.95rem;
   }
 }
 .schedule-divider {
   width: 1px;
-  height: 35px;
-  background: #d1e2d1;
+  height: 40px;
+  background: #c6e6c7;
+}
+.schedule-note {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-top: 1rem;
+  padding-left: 0.25rem;
 }
 
-.docs-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
+/* Payment Breakdown */
+.payment-breakdown {
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
 }
-.doc-tag {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
+.payment-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  font-size: 0.95rem;
   color: #475569;
+  border-bottom: 1px solid #f1f5f9;
+  &:last-child { border: none; }
+  &.total {
+    background: #f0f7f0;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #105212;
+  }
+}
+
+.momo-note {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  .momo-icon { font-size: 1.4rem; flex-shrink: 0; }
+  p {
+    font-size: 0.88rem;
+    color: #92400e;
+    margin: 0;
+    line-height: 1.5;
+    strong { color: #78350f; }
+  }
 }
 
 .summary-actions {
   display: flex;
   gap: 1.5rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 .btn-primary {
   flex: 2;
@@ -400,7 +415,8 @@ useHead({ title: "Review Your Booking | Herballo" });
   font-size: 1.1rem;
   cursor: pointer;
   transition: 0.3s;
-  &:hover:not(:disabled) {
+  &:hover {
+    background: #0d420f;
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(16, 82, 18, 0.15);
   }
@@ -413,30 +429,25 @@ useHead({ title: "Review Your Booking | Herballo" });
   padding: 1.25rem;
   border-radius: 50px;
   font-weight: 800;
+  font-size: 1rem;
   cursor: pointer;
   transition: 0.3s;
-  &:hover {
-    background: #f0f7f0;
-  }
+  &:hover { background: #f0f7f0; }
 }
 
-.capitalize {
-  text-transform: capitalize;
+.capitalize { text-transform: capitalize; }
+
+.no-data {
+  text-align: center;
+  padding: 3rem;
+  color: #94a3b8;
 }
+
 @media (max-width: 600px) {
-  .summary-actions {
-    flex-direction: column-reverse;
-  }
-  .schedule-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  .schedule-divider {
-    display: none;
-  }
-  .progress-bar span {
-    display: none;
-  }
+  .summary-card { padding: 2rem 1.25rem; }
+  .summary-actions { flex-direction: column-reverse; }
+  .schedule-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .schedule-divider { display: none; }
+  .progress-bar span { display: none; }
 }
 </style>

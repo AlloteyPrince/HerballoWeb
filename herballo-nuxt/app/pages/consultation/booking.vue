@@ -27,69 +27,47 @@
     <div class="booking-card">
       <header class="booking-header">
         <h1>Book Your Consultation</h1>
-        <p class="intro">
-          Fill out the details below to schedule your session.
-        </p>
+        <p class="intro">Fill out the details below to schedule your session.</p>
       </header>
 
+      <!-- Logged-in user info (read-only) -->
+      <div class="user-info-banner" v-if="user">
+        <div class="user-avatar">{{ userInitials }}</div>
+        <div class="user-details">
+          <p class="user-name">{{ userFullName }}</p>
+          <p class="user-email">{{ user.email }}</p>
+        </div>
+        <span class="verified-badge">✓ Verified</span>
+      </div>
+
       <form @submit.prevent="submitBookingInfo" class="booking-form">
+
+        <!-- Contact -->
         <div class="form-section">
-          <h2>Personal Information</h2>
+          <h2>Contact Details</h2>
           <div class="form-group">
-            <label for="name">Full Name *</label>
+            <label for="phone">Phone Number *</label>
             <input
-              type="text"
-              id="name"
-              v-model="form.fullName"
+              type="tel"
+              id="phone"
+              v-model="form.phone"
               required
-              placeholder="Enter your full name"
+              placeholder="+233..."
             />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="email">Email Address *</label>
-              <input
-                type="email"
-                id="email"
-                v-model="form.email"
-                required
-                placeholder="email@example.com"
-              />
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone Number *</label>
-              <input
-                type="tel"
-                id="phone"
-                v-model="form.phone"
-                required
-                placeholder="+233..."
-              />
-            </div>
           </div>
         </div>
 
+        <!-- Consultation Details -->
         <div class="form-section">
           <h2>Consultation Details</h2>
           <div class="form-group">
             <label for="purpose">Purpose of Consultation *</label>
             <div class="select-wrapper">
-              <select
-                id="purpose"
-                v-model="form.purpose"
-                required
-                class="custom-select"
-              >
-                <option value="" disabled selected>
-                  Select consultation type
-                </option>
-                <option value="general">
-                  General Enquiries About Herbal Medicines
-                </option>
+              <select id="purpose" v-model="form.purpose" required class="custom-select">
+                <option value="" disabled selected>Select consultation type</option>
+                <option value="general">General Enquiries About Herbal Medicines</option>
                 <option value="research">Research Collaborations</option>
-                <option value="clinical">
-                  Clinical / Health Consultations
-                </option>
+                <option value="clinical">Clinical / Health Consultations</option>
               </select>
             </div>
           </div>
@@ -126,47 +104,32 @@
               </div>
             </div>
             <div v-if="uploadedFiles.length > 0" class="uploaded-files">
-              <div
-                v-for="(file, index) in uploadedFiles"
-                :key="index"
-                class="file-item"
-              >
+              <div v-for="(file, index) in uploadedFiles" :key="index" class="file-item">
                 <span class="file-name">{{ file.name }}</span>
-                <button
-                  type="button"
-                  class="remove-file"
-                  @click="removeFile(index)"
-                >
-                  ×
-                </button>
+                <button type="button" class="remove-file" @click="removeFile(index)">×</button>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- Schedule -->
         <div class="form-section">
           <h2>Schedule Your Appointment</h2>
+          <p class="section-hint">Earliest available date is {{ minDateFormatted }}. We'll confirm your exact time within 24 hours of your request.</p>
           <Timedate
-            v-model:date="form.date"
-            v-model:time="form.time"
-            :available-slots="availableSlots"
-            :loading="loadingSlots"
+            v-model:date="form.preferred_date"
+            v-model:time="form.time_of_day"
             :min-date="minDate"
-            @update:date="onDateChange"
           />
         </div>
 
+        <!-- Preferences -->
         <div class="form-section no-border">
           <div class="form-row">
             <div class="form-group">
               <label for="callType">Preferred Call Type *</label>
               <div class="select-wrapper">
-                <select
-                  id="callType"
-                  v-model="form.callType"
-                  required
-                  class="custom-select"
-                >
+                <select id="callType" v-model="form.call_type" required class="custom-select">
                   <option value="voice">Voice Call (Audio only)</option>
                   <option value="video">Video Call</option>
                 </select>
@@ -175,12 +138,7 @@
             <div class="form-group">
               <label for="hearAbout">Where did you hear about us? *</label>
               <div class="select-wrapper">
-                <select
-                  id="hearAbout"
-                  v-model="form.hearAbout"
-                  required
-                  class="custom-select"
-                >
+                <select id="hearAbout" v-model="form.hear_about" required class="custom-select">
                   <option value="" disabled selected>Select an option</option>
                   <option value="google">Google</option>
                   <option value="social-media">Social Media</option>
@@ -192,10 +150,13 @@
           </div>
         </div>
 
+        <!-- Error message -->
+        <div v-if="errorMsg" class="error-banner">
+          ⚠️ {{ errorMsg }}
+        </div>
+
         <div class="form-actions">
-          <button type="button" @click="goBack" class="btn-outline">
-            Back
-          </button>
+          <button type="button" @click="goBack" class="btn-outline">Back</button>
           <button
             type="submit"
             class="btn-primary"
@@ -210,94 +171,123 @@
 </template>
 
 <script setup>
-const fileInput = ref(null);
-const bookingSubmitted = ref(false);
-const loadingSlots = ref(false);
-const availableSlots = ref([]);
-const uploadedFiles = ref([]);
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
+
+const fileInput = ref(null)
+const bookingSubmitted = ref(false)
+const uploadedFiles = ref([])
+const errorMsg = ref('')
 
 const form = reactive({
-  fullName: "",
-  email: "",
-  phone: "",
-  purpose: "",
-  description: "",
-  date: "",
-  time: "",
-  callType: "video",
-  hearAbout: "",
-});
+  phone: '',
+  purpose: '',
+  description: '',
+  preferred_date: '',
+  time_of_day: '',
+  call_type: 'video',
+  hear_about: '',
+})
+
+// Pull user's full name from user metadata
+const userFullName = computed(() => {
+  const meta = user.value?.user_metadata
+  if (!meta) return ''
+  return `${meta.first_name || ''} ${meta.last_name || ''}`.trim() || user.value?.email
+})
+
+const userInitials = computed(() => {
+  const meta = user.value?.user_metadata
+  if (!meta) return '?'
+  const f = meta.first_name?.[0] || ''
+  const l = meta.last_name?.[0] || ''
+  return (f + l).toUpperCase() || user.value?.email?.[0]?.toUpperCase() || '?'
+})
 
 onMounted(() => {
   if (process.client) {
-    if (localStorage.getItem("herballo_consent_agreed") !== "true")
-      navigateTo("/consultation");
+    if (localStorage.getItem('herballo_consent_agreed') !== 'true') {
+      navigateTo('/consultation')
+    }
   }
-});
+})
 
-const isFormValid = computed(
-  () =>
-    form.fullName &&
-    form.email &&
-    form.phone &&
-    form.date &&
-    form.time &&
-    form.purpose
-);
+// minDate = day after tomorrow
 const minDate = computed(() => {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return d.toISOString().split("T")[0];
-});
+  const d = new Date()
+  d.setDate(d.getDate() + 2)
+  return d.toISOString().split('T')[0]
+})
 
-const handleFileSelect = (e) => addFiles(Array.from(e.target.files));
-const handleFileDrop = (e) => addFiles(Array.from(e.dataTransfer.files));
+const minDateFormatted = computed(() => {
+  const d = new Date()
+  d.setDate(d.getDate() + 2)
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+})
+
+const isFormValid = computed(() =>
+  form.phone &&
+  form.purpose &&
+  form.preferred_date &&
+  form.time_of_day &&
+  form.call_type &&
+  form.hear_about
+)
+
+const handleFileSelect = (e) => addFiles(Array.from(e.target.files))
+const handleFileDrop = (e) => addFiles(Array.from(e.dataTransfer.files))
 const addFiles = (files) => {
   files.forEach((f) => {
-    if (f.size <= 10 * 1024 * 1024) uploadedFiles.value.push(f);
-    else alert("File too large (>10MB)");
-  });
-};
-const removeFile = (i) => uploadedFiles.value.splice(i, 1);
-
-const onDateChange = async (date) => {
-  form.date = date;
-  loadingSlots.value = true;
-  try {
-    availableSlots.value = await $fetch(
-      `/api/bookings/availability?date=${date}`
-    );
-  } catch (e) {
-    console.error(e);
-  } finally {
-    loadingSlots.value = false;
-  }
-};
+    if (f.size <= 10 * 1024 * 1024) uploadedFiles.value.push(f)
+    else alert('File too large (>10MB)')
+  })
+}
+const removeFile = (i) => uploadedFiles.value.splice(i, 1)
 
 const submitBookingInfo = async () => {
-  bookingSubmitted.value = true;
-  const formData = new FormData();
-  Object.keys(form).forEach((k) => formData.append(k, form[k]));
-  uploadedFiles.value.forEach((f) => formData.append("files", f));
+  bookingSubmitted.value = true
+  errorMsg.value = ''
+
   try {
-    const res = await $fetch("/api/bookings", {
-      method: "POST",
-      body: formData,
-    });
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert({
+        client_id:      user.value.id,
+        phone:          form.phone,
+        purpose:        form.purpose,
+        notes:          form.description,
+        preferred_date: form.preferred_date,
+        time_of_day:    form.time_of_day,
+        call_type:      form.call_type,
+        hear_about:     form.hear_about,
+        status:         'pending',
+      })
+      .select()
+      .single()
+
+    if (error) throw error
+
     if (process.client) {
       localStorage.setItem(
-        "pending_booking_data",
-        JSON.stringify({ ...form, bookingId: res.bookingId })
-      );
+        'pending_booking_data',
+        JSON.stringify({
+          ...form,
+          bookingId: data.id,
+          userName: userFullName.value,
+          userEmail: user.value.email,
+        })
+      )
     }
-    navigateTo("/consultation/summary");
+
+    navigateTo('/consultation/summary')
   } catch (err) {
-    alert(err.message);
+    errorMsg.value = err.message || 'Something went wrong. Please try again.'
   } finally {
-    bookingSubmitted.value = false;
+    bookingSubmitted.value = false
   }
-};
-const goBack = () => navigateTo("/consultation");
+}
+
+const goBack = () => navigateTo('/consultation')
 </script>
 
 <style scoped lang="scss">
@@ -349,9 +339,7 @@ const goBack = () => navigateTo("/consultation");
       border-color: #105212;
       color: #fff;
     }
-    span {
-      color: #105212;
-    }
+    span { color: #105212; }
   }
 }
 .line {
@@ -360,9 +348,7 @@ const goBack = () => navigateTo("/consultation");
   background: #e2e8f0;
   margin: 0 12px;
   margin-top: -26px;
-  &.active {
-    background: #105212;
-  }
+  &.active { background: #105212; }
 }
 
 /* Card */
@@ -377,7 +363,7 @@ const goBack = () => navigateTo("/consultation");
 }
 .booking-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   h1 {
     font-size: 2.4rem;
     font-weight: 900;
@@ -391,18 +377,69 @@ const goBack = () => navigateTo("/consultation");
   }
 }
 
+/* User Info Banner */
+.user-info-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f0f7f0;
+  border: 1px solid #c6e6c7;
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2.5rem;
+
+  .user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #105212;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .user-details {
+    flex: 1;
+    .user-name {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 0.95rem;
+      margin: 0 0 2px;
+    }
+    .user-email {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin: 0;
+    }
+  }
+  .verified-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #105212;
+    background: #d1f0d2;
+    padding: 4px 10px;
+    border-radius: 50px;
+  }
+}
+
 .form-section {
   border-bottom: 1px solid #f1f5f9;
   padding-bottom: 2rem;
   margin-bottom: 2.5rem;
-  &.no-border {
-    border: none;
-  }
+  &.no-border { border: none; }
   h2 {
     font-size: 1.25rem;
     color: #105212;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     font-weight: 800;
+  }
+  .section-hint {
+    font-size: 0.84rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
   }
 }
 .form-row {
@@ -421,7 +458,6 @@ const goBack = () => navigateTo("/consultation");
   }
 }
 
-/* Modern Input Styling */
 input,
 textarea,
 .custom-select {
@@ -433,12 +469,8 @@ textarea,
   font-size: 1rem;
   color: #1e293b;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  &::placeholder {
-    color: #94a3b8;
-  }
-  &:hover {
-    border-color: #105212;
-  }
+  &::placeholder { color: #94a3b8; }
+  &:hover { border-color: #105212; }
   &:focus {
     outline: none;
     border-color: #105212;
@@ -447,7 +479,6 @@ textarea,
   }
 }
 
-/* Dropdown specific fixes to avoid "Windows 2000" look */
 .select-wrapper {
   position: relative;
   &::after {
@@ -464,21 +495,15 @@ textarea,
     pointer-events: none;
   }
 }
-
 .custom-select {
   appearance: none;
   cursor: pointer;
   padding-right: 3.5rem !important;
   background-color: #fff !important;
   line-height: 1.5;
-
-  /* Modern browsers focus ring fix */
-  &:focus {
-    border-radius: 12px;
-  }
+  &:focus { border-radius: 12px; }
 }
 
-/* File Upload Area */
 .upload-area {
   border: 2px dashed #e2e8f0;
   padding: 2.5rem;
@@ -502,8 +527,43 @@ textarea,
     font-size: 0.95rem;
   }
 }
+.uploaded-files {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  .file-name { font-size: 0.85rem; color: #334155; }
+  .remove-file {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    &:hover { color: #ef4444; }
+  }
+}
 
-/* Buttons */
+.error-banner {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
 .form-actions {
   display: flex;
   gap: 1.5rem;
@@ -549,14 +609,8 @@ textarea,
 }
 
 @media (max-width: 600px) {
-  .booking-card {
-    padding: 2.5rem 1.5rem;
-  }
-  .form-actions {
-    flex-direction: column-reverse;
-  }
-  .progress-bar span {
-    display: none;
-  }
+  .booking-card { padding: 2.5rem 1.5rem; }
+  .form-actions { flex-direction: column-reverse; }
+  .progress-bar span { display: none; }
 }
 </style>

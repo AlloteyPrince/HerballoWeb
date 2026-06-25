@@ -1,11 +1,12 @@
 <template>
   <div class="booking-scheduler">
+    <!-- Date Picker -->
     <div class="form-group">
-      <label for="date">Select Date *</label>
+      <label for="date">Preferred Date *</label>
       <input
         id="date"
         type="date"
-        class="form-control"
+        class="date-input"
         :min="minDate"
         :value="date"
         @input="$emit('update:date', $event.target.value)"
@@ -13,25 +14,32 @@
       />
     </div>
 
-    <div v-if="date && availableTimeSlots.length" class="form-group">
-      <label for="time">Select Time *</label>
-      <select
-        id="time"
-        class="form-control"
-        :value="time"
-        @change="$emit('update:time', $event.target.value)"
-        required
-      >
-        <option value="">Select a time slot</option>
-        <option v-for="slot in availableTimeSlots" :key="slot" :value="slot">
-          {{ slot }}
-        </option>
-      </select>
+    <!-- Time of Day Selector -->
+    <div v-if="date" class="form-group">
+      <label>Preferred Time of Day *</label>
+      <div class="period-selector">
+        <button
+          v-for="period in periods"
+          :key="period.value"
+          type="button"
+          class="period-btn"
+          :class="{ active: selectedPeriod === period.value }"
+          @click="selectPeriod(period.value)"
+        >
+          <span class="period-icon">{{ period.icon }}</span>
+          <span class="period-label">{{ period.label }}</span>
+          <span class="period-hint">{{ period.hint }}</span>
+        </button>
+      </div>
     </div>
 
-    <div v-if="date && time" class="booking-summary">
-      <h3>Selected Schedule</h3>
-      <p>{{ formattedDate }} at {{ time }}</p>
+    <!-- Selected Summary -->
+    <div v-if="date && selectedPeriod" class="schedule-summary">
+      <span class="summary-icon">📅</span>
+      <div>
+        <p class="summary-date">{{ formattedDate }}</p>
+        <p class="summary-time">{{ periodLabel }} — we'll confirm your exact time within 24 hrs</p>
+      </div>
     </div>
   </div>
 </template>
@@ -41,107 +49,156 @@ const props = defineProps({
   date: String,
   time: String,
   minDate: String,
-  availableSlots: {
-    type: Array,
-    default: () => [],
-  },
-  loading: Boolean,
-});
+})
 
-const emit = defineEmits(["update:date", "update:time"]);
+const emit = defineEmits(['update:date', 'update:time'])
 
-const timeSlots = {
-  weekday: [
-    "09:00-10:00",
-    "10:00-11:00",
-    "11:00-12:00",
-    "13:00-14:00",
-    "14:00-15:00",
-    "15:00-16:00",
-    "16:00-17:00",
-    "19:00-20:00",
-  ],
-  saturday: ["09:00-10:00", "10:00-11:00", "11:00-12:00"],
-  sunday: [
-    "13:00-14:00",
-    "14:00-15:00",
-    "15:00-16:00",
-    "16:00-17:00",
-    "19:00-20:00",
-  ],
-};
+const periods = [
+  { value: 'morning',   icon: '🌅', label: 'Morning',   hint: 'Before noon' },
+  { value: 'afternoon', icon: '☀️',  label: 'Afternoon', hint: '12pm – 5pm' },
+  { value: 'evening',   icon: '🌙', label: 'Evening',   hint: 'After 5pm' },
+]
 
-const dayType = computed(() => {
-  if (!props.date) return null;
-  const day = new Date(props.date).getDay();
-  if (day === 0) return "sunday";
-  if (day === 6) return "saturday";
-  return "weekday";
-});
+const selectedPeriod = ref(props.time || '')
 
-const availableTimeSlots = computed(() => {
-  // If backend provides specific slots, use them; otherwise, use defaults
-  if (props.availableSlots && props.availableSlots.length > 0) {
-    return props.availableSlots.map((slot) =>
-      typeof slot === "string" ? slot : slot.value
-    );
-  }
-  return dayType.value ? timeSlots[dayType.value] : [];
-});
+const selectPeriod = (value) => {
+  selectedPeriod.value = value
+  emit('update:time', value)
+}
 
 const formattedDate = computed(() => {
-  if (!props.date) return "";
-  return new Date(props.date).toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-});
+  if (!props.date) return ''
+  // Fix timezone offset issue with date-only strings
+  const [y, m, d] = props.date.split('-')
+  return new Date(+y, +m - 1, +d).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+})
+
+const periodLabel = computed(() => {
+  return periods.find(p => p.value === selectedPeriod.value)?.label || ''
+})
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .booking-scheduler {
   width: 100%;
-  padding: 1.5rem;
-  background: #fdfdfb;
-  border: 1px solid #e8f5e8;
-  border-radius: 12px;
 }
+
 .form-group {
   margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+  }
 }
-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #105212;
-}
-.form-control {
+
+.date-input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #fff;
   font-size: 1rem;
+  color: #1e293b;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover { border-color: #105212; }
+  &:focus {
+    outline: none;
+    border-color: #105212;
+    box-shadow: 0 0 0 4px rgba(16, 82, 18, 0.1);
+  }
 }
-.form-control:focus {
-  outline: none;
-  border-color: #105212;
+
+.period-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
-.booking-summary {
-  background: #e8f5e8;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-top: 1rem;
+
+.period-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 1.2rem 0.8rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .period-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .period-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #334155;
+  }
+  .period-hint {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  &:hover {
+    border-color: #105212;
+    background: #f0f7f0;
+  }
+
+  &.active {
+    border-color: #105212;
+    background: #105212;
+
+    .period-label { color: #fff; }
+    .period-hint  { color: rgba(255,255,255,0.7); }
+  }
 }
-.booking-summary h3 {
-  font-size: 0.9rem;
-  color: #105212;
-  margin-bottom: 4px;
+
+.schedule-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f0f7f0;
+  border: 1px solid #c6e6c7;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-top: 0.5rem;
+
+  .summary-icon { font-size: 1.5rem; }
+
+  .summary-date {
+    font-weight: 700;
+    color: #105212;
+    font-size: 0.95rem;
+    margin: 0 0 2px;
+  }
+  .summary-time {
+    font-size: 0.82rem;
+    color: #475569;
+    margin: 0;
+  }
 }
-.booking-summary p {
-  font-size: 0.85rem;
-  color: #333;
-  font-weight: 600;
+
+@media (max-width: 480px) {
+  .period-selector {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+  .period-btn {
+    padding: 0.9rem 0.4rem;
+    .period-icon  { font-size: 1.3rem; }
+    .period-label { font-size: 0.8rem; }
+    .period-hint  { display: none; }
+  }
 }
 </style>
