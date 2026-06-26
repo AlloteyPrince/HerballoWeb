@@ -1,28 +1,5 @@
 <template>
   <div class="success-wrapper">
-    <div class="progress-container">
-      <div class="progress-bar">
-        <div class="step active">
-          <div class="dot">✓</div>
-          <span>Consent</span>
-        </div>
-        <div class="line active"></div>
-        <div class="step active">
-          <div class="dot">✓</div>
-          <span>Details</span>
-        </div>
-        <div class="line active"></div>
-        <div class="step active">
-          <div class="dot">✓</div>
-          <span>Review</span>
-        </div>
-        <div class="line active"></div>
-        <div class="step active">
-          <div class="dot">✓</div>
-          <span>Payment</span>
-        </div>
-      </div>
-    </div>
 
     <div class="success-card">
       <div class="success-icon">
@@ -161,49 +138,6 @@ useHead({ title: 'Booking Confirmed | Herballo' })
   min-height: 100vh;
   padding: 3rem 1rem;
   font-family: "Inter", sans-serif;
-}
-
-.progress-container {
-  max-width: 800px;
-  margin: 0 auto 2.5rem;
-}
-.progress-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  .dot {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: #105212;
-    border: 2px solid #105212;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-  span {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #105212;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-}
-.line {
-  flex: 1;
-  height: 2px;
-  background: #105212;
-  margin: 0 12px;
-  margin-top: -26px;
 }
 
 .success-card {

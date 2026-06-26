@@ -207,6 +207,17 @@ const submitPayment = async () => {
       JSON.stringify({ ...bookingData, transactionId: transactionId.value.trim() })
     )
 
+    // Notify the Herballo admin inbox so they can verify the transaction.
+    // Wrapped so a mail failure never blocks the customer's confirmation.
+    try {
+      await $fetch('/api/notify-booking', {
+        method: 'POST',
+        body: { ...bookingData, transactionId: transactionId.value.trim() },
+      })
+    } catch (notifyErr) {
+      console.error('Booking notification email failed:', notifyErr)
+    }
+
     navigateTo('/consultation/success')
   } catch (err) {
     errorMsg.value = err.message || 'Something went wrong. Please try again.'

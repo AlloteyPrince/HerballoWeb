@@ -2,6 +2,13 @@ export default defineNuxtConfig({
   compatibilityDate: "2026-05-21",
   srcDir: "app/",
   devtools: { enabled: true },
+  // Server-only secrets (never exposed to the browser).
+  // Values are read from .env at runtime.
+  runtimeConfig: {
+    resendApiKey: process.env.RESEND_API_KEY,
+    bookingFromEmail: process.env.BOOKING_FROM_EMAIL || "onboarding@resend.dev",
+    bookingNotifyEmail: process.env.BOOKING_NOTIFY_EMAIL,
+  },
   // 1. SEO Site Configuration
   site: {
     url: "https://herballo.co",
