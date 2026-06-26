@@ -281,6 +281,14 @@ const submitBookingInfo = async () => {
 
     navigateTo('/consultation/summary')
   } catch (err) {
+    // --- TEMP DEBUG: full Supabase error has more than .message ---
+    console.error('[booking] insert error:', {
+      message: err?.message,
+      code: err?.code,
+      details: err?.details,
+      hint: err?.hint,
+    })
+    // -------------------------------------------------------------
     errorMsg.value = err.message || 'Something went wrong. Please try again.'
   } finally {
     bookingSubmitted.value = false
