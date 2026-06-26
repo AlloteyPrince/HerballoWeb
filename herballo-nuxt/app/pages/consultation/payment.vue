@@ -136,7 +136,6 @@
 
 <script setup>
 const supabase = useSupabaseClient()
-const user = useSupabaseUser()
 
 const momoNumber = '0270751657'
 const maskedNumber = '0270 **** **57'
@@ -181,6 +180,14 @@ const submitPayment = async () => {
     }
     const bookingData = JSON.parse(savedData)
 
+    // Read the authenticated user directly; the useSupabaseUser() ref can be empty
+    // when this handler fires.
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser()
+    if (authError || !authUser) {
+      navigateTo('/login')
+      return
+    }
+
     // Update the booking in Supabase with transaction ID
     const { error } = await supabase
       .from('bookings')
@@ -190,7 +197,7 @@ const submitPayment = async () => {
         status: 'pending',
       })
       .eq('id', bookingData.bookingId)
-      .eq('client_id', user.value.id)
+      .eq('client_id', authUser.id)
 
     if (error) throw error
 

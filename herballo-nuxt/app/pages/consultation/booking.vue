@@ -249,10 +249,19 @@ const submitBookingInfo = async () => {
   errorMsg.value = ''
 
   try {
+    // Read the authenticated user directly from the session. The useSupabaseUser()
+    // ref can be empty when this handler fires, which would send a null client_id
+    // and fail the row-level security check.
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser()
+    if (authError || !authUser) {
+      navigateTo('/login')
+      return
+    }
+
     const { data, error } = await supabase
       .from('bookings')
       .insert({
-        client_id:      user.value.id,
+        client_id:      authUser.id,
         phone:          form.phone,
         purpose:        form.purpose,
         notes:          form.description,
@@ -274,21 +283,13 @@ const submitBookingInfo = async () => {
           ...form,
           bookingId: data.id,
           userName: userFullName.value,
-          userEmail: user.value.email,
+          userEmail: authUser.email,
         })
       )
     }
 
     navigateTo('/consultation/summary')
   } catch (err) {
-    // --- TEMP DEBUG: full Supabase error has more than .message ---
-    console.error('[booking] insert error:', {
-      message: err?.message,
-      code: err?.code,
-      details: err?.details,
-      hint: err?.hint,
-    })
-    // -------------------------------------------------------------
     errorMsg.value = err.message || 'Something went wrong. Please try again.'
   } finally {
     bookingSubmitted.value = false
