@@ -17,6 +17,7 @@
     "@nuxt/fonts": "^0.12.1",
     "@vueup/vue-quill": "^1.2.0",
     "clsx": "^2.1.1",
+    "jspdf": "^4.2.1",
     "nuxt": "^4.2.2",
     "resend": "^6.16.0",
     "tailwind-merge": "^3.4.0",

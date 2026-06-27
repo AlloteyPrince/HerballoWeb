@@ -30,6 +30,7 @@
               <li><NuxtLink to="/blog">Health Blog</NuxtLink></li>
               <li><NuxtLink to="/glossary">Glossary</NuxtLink></li>
               <li><NuxtLink to="/pdflibrary">PDF Library</NuxtLink></li>
+              <li><NuxtLink to="/medrequest">Lab Request Forms</NuxtLink></li>
             </ul>
           </Transition>
         </li>
@@ -121,6 +122,14 @@
                       to="/pdflibrary"
                       @click="closeMobileNav"
                       >PDF Library</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      class="link mobile-link sub-link"
+                      to="/medrequest"
+                      @click="closeMobileNav"
+                      >Lab Request Forms</NuxtLink
                     >
                   </li>
                 </ul>
