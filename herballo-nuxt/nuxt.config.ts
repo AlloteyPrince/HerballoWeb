@@ -67,7 +67,8 @@ export default defineNuxtConfig({
         "/conditions/diabetes",
         "/api/__sitemap__/urls",
         "/consultation",
-        "/resources"
+        "/resources",
+        "/medrequest"
       ],
     },
   },
