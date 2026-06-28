@@ -21,22 +21,6 @@
             </p>
           </div>
 
-          <div class="profession-section">
-            <p class="profession-q">What is your profession?</p>
-            <div class="profession-grid">
-              <button
-                v-for="p in professions"
-                :key="p.value"
-                class="profession-card"
-                :class="{ selected: selectedProfession === p.value }"
-                @click="selectedProfession = p.value"
-              >
-                <span class="prof-icon">{{ p.icon }}</span>
-                <span class="prof-label">{{ p.label }}</span>
-              </button>
-            </div>
-          </div>
-
           <p class="trust-line">Trusted by healthcare professionals across Ghana — completely free, always.</p>
 
           <!-- How To Section -->
@@ -52,9 +36,6 @@
           <div v-if="showHowTo" class="howto-panel">
             <h3 class="howto-title">How to use MedRequest</h3>
             <ol class="howto-steps">
-              <li>
-                <strong>Select your profession</strong> — Choose the option that best describes your role as a healthcare professional. This helps us understand who is using MedRequest.
-              </li>
               <li>
                 <strong>Click "Proceed to Generate Request Form"</strong> — This takes you to the form where you will fill in all the details for the lab request.
               </li>
@@ -86,9 +67,7 @@
               Share MedRequest
             </button>
             <button
-              class="continue-btn"
-              :class="{ ready: selectedProfession }"
-              :disabled="!selectedProfession"
+              class="continue-btn ready"
               @click="proceedToForm"
             >
               Proceed to Generate Request Form
@@ -346,18 +325,11 @@ const SCANS = [
   'Electroencephalogram (EEG)', 'Upper GI Endoscopy', 'Colonoscopy'
 ]
 
-const professions = [
-  { icon: '👨‍⚕️', label: 'Medical Doctor / Specialist', value: 'doctor' },
-  { icon: '🌿', label: 'Herbalist / Alternative Practitioner', value: 'herbalist' },
-  { icon: '🏥', label: 'Clinic / Hospital Administrator', value: 'admin' },
-  { icon: '👩‍⚕️', label: 'Nurse / Physician Assistant', value: 'nurse' },
-  { icon: '👤', label: 'Other Healthcare Professional', value: 'other' },
-]
+
 
 const { $supabase } = useNuxtApp()
 
 const formVisible = ref(false)
-const selectedProfession = ref('')
 const shareCopied = ref(false)
 const exportCount = ref(0)
 const showHowTo = ref(false)
@@ -677,7 +649,7 @@ async function exportPDF() {
   // ── LOG TO SUPABASE ───────────────────────────────────────
   try {
     await $supabase.from('medrequest_exports').insert({
-      profession: selectedProfession.value,
+      specialisation: form.specialisation,
       labs_count: selectedLabs.value.size,
       scans_count: selectedScans.value.size,
       is_urgent: form.urgent
@@ -775,44 +747,7 @@ async function exportPDF() {
   display: inline-block;
 }
 
-.profession-section { margin-bottom: 24px; }
 
-.profession-q {
-  font-size: 11px;
-  font-weight: 700;
-  color: #0f6e56;
-  margin: 0 0 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.profession-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.profession-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border: 1.5px solid #e1f2eb;
-  border-radius: 12px;
-  background: #f9fcfb;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  color: #3d5c4a;
-  text-align: left;
-  transition: all 0.15s;
-}
-
-.profession-card:hover { border-color: #0f6e56; background: #edf7f2; color: #0a3c28; }
-.profession-card.selected { border-color: #0f6e56; background: #e4f3ec; color: #0a3c28; font-weight: 600; }
-.prof-icon { font-size: 20px; flex-shrink: 0; }
-.prof-label { line-height: 1.3; }
 
 .trust-line {
   font-size: 12px;
@@ -1144,7 +1079,6 @@ async function exportPDF() {
   .card { padding: 18px 16px; border-radius: 14px; }
   .banner { height: 160px; }
   .intro-card { padding: 24px 20px; }
-  .profession-grid { grid-template-columns: 1fr; }
   .intro-actions { flex-direction: column; }
   .share-btn { width: 100%; justify-content: center; }
 }
