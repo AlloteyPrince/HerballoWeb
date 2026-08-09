@@ -119,13 +119,14 @@ definePageMeta({
 }
 
 .admin-logo {
-  width: 76px;
-  height: 76px;
+  box-sizing: border-box;
+  width: 92px;
+  height: 92px;
   object-fit: cover;
   border-radius: 50%;
   margin-bottom: 24px;
   background: #fff;
-  padding: 4px;
+  padding: 12px;
   box-shadow: 0 6px 20px rgba(16, 82, 18, 0.15);
 }
 
