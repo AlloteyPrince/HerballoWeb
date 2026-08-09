@@ -1,5 +1,7 @@
 <template>
   <div class="admin-wrapper">
+    <img src="/images/herballo-logo.png" alt="Herballo" class="admin-logo" />
+
     <div class="admin-card">
       <h1 class="brand">Herballo</h1>
       <p class="subtitle">Admin Login</p>
@@ -12,13 +14,18 @@
           autocomplete="username"
           required
         />
-        <input
-          type="password"
-          v-model="form.password"
-          placeholder="Password"
-          autocomplete="current-password"
-          required
-        />
+        <div class="password-wrapper">
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            v-model="form.password"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+          />
+          <button type="button" class="eye-btn" @click="showPassword = !showPassword">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
         <button type="submit" :disabled="loading">
           {{ loading ? 'Logging in...' : 'Login' }}
         </button>
@@ -44,6 +51,7 @@ const form = ref({
 
 const error = ref(null);
 const loading = ref(false);
+const showPassword = ref(false);
 
 const handleLogin = async () => {
   error.value = null;
@@ -90,10 +98,20 @@ definePageMeta({
 
 .admin-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
+  height: 100vh;
   background: #f8f9fa;
+}
+
+.admin-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .admin-card {
@@ -135,6 +153,32 @@ form input:focus {
   background-color: #fff;
   border-color: #105212;
   box-shadow: 0 0 0 3px rgba(16, 82, 18, 0.1);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 44px;
+}
+
+.eye-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.eye-btn:hover {
+  opacity: 1;
 }
 
 button {
