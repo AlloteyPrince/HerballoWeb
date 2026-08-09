@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       titleTemplate: (title) =>
         title && !title.includes("Herballo") ? `${title} | Herballo` : title || "Herballo",
       link: [
-        { rel: "icon", type: "image/x-icon", href: "/favicon.png" },
+        { rel: "icon", type: "image/png", href: "/favicon.png" },
         { rel: "apple-touch-icon", href: "/images/herballo-logo.png" },
         { rel: "manifest", href: "/site.webmanifest" },
         { rel: "preconnect", href: "https://vhyzuqcthnpqrrtfxeyj.supabase.co" },
