@@ -3,64 +3,72 @@
     <h3>Create Blog Post</h3>
     <form @submit.prevent="handleSubmit">
       <input v-model="form.title" placeholder="Title" required />
-      <input v-model="form.tags" placeholder="Tags (comma separated)" />
-      
+
+      <select v-model="form.category" required>
+        <option value="" disabled>Select a category</option>
+        <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+      </select>
+
+      <textarea v-model="form.excerpt" placeholder="Short excerpt (shown in the blog list)" rows="2" required></textarea>
+
       <label class="file-label">Cover Image</label>
-      <input type="file" @change="e => handleFileUpload(e, 'coverImage')" />
-      
-      <input v-model="form.authorName" placeholder="Author Name" required />
-      <textarea v-model="form.authorBio" placeholder="Author Bio" required></textarea>
-      
-      <label class="file-label">Author Avatar</label>
-      <input type="file" @change="e => handleFileUpload(e, 'authorAvatar')" />
-      
+      <input type="file" accept="image/*" @change="e => handleFileUpload(e)" />
+      <img v-if="form.coverImage" :src="form.coverImage" alt="Cover preview" class="cover-preview" />
+
+      <input v-model="form.author" placeholder="Author Name" required />
+
       <textarea v-model="form.content" placeholder="Content" class="content-area" required></textarea>
-      
+
+      <label class="checkbox-label">
+        <input type="checkbox" v-model="form.published" />
+        Publish immediately
+      </label>
+
       <button type="submit" :disabled="loading">
         {{ loading ? "Publishing..." : "Create Post" }}
       </button>
     </form>
-    
+
     <p v-if="message" class="success">{{ message }}</p>
     <p v-if="error" class="error">{{ error }}</p>
   </div>
 </template>
 
 <script setup>
-// Nuxt auto-imports ref, useRuntimeConfig, useCookie
-const config = useRuntimeConfig();
-const token = useCookie('auth_token');
 const emit = defineEmits(['postCreated']);
 
+const categories = ["Consultation", "Education", "Wellness", "Diabetes", "Hypertension", "General"];
+
 const loading = ref(false);
+const uploading = ref(false);
 const message = ref("");
 const error = ref("");
 
 const form = ref({
   title: "",
-  tags: "",
+  category: "",
+  excerpt: "",
   content: "",
-  authorName: "",
-  authorBio: "",
-  coverImage: null,
-  authorAvatar: null
+  author: "",
+  coverImage: "",
+  published: true,
 });
 
-// Helper: Note - verify your 'uploadFile' utility is in 'app/utils/helper.js'
-// Nuxt 3 also auto-imports files from the 'utils' directory if they use named exports
-const handleFileUpload = async (e, field) => {
+const handleFileUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-  
+
+  const body = new FormData();
+  body.append("file", file);
+
   try {
-    loading.value = true;
-    // Assuming uploadFile is available globally from app/utils/
-    form.value[field] = await uploadFile(file);
-    message.value = `${field} uploaded successfully!`;
+    uploading.value = true;
+    const { url } = await adminFetch('/api/admin/upload', { method: 'POST', body });
+    form.value.coverImage = url;
   } catch (err) {
-    error.value = `Failed to upload ${field}`;
+    error.value = "Failed to upload cover image";
   } finally {
-    loading.value = false;
+    uploading.value = false;
   }
 };
 
@@ -70,37 +78,28 @@ const handleSubmit = async () => {
   message.value = "";
 
   try {
-    await $fetch('/api/posts', {
-      baseURL: config.public.apiBase,
+    await adminFetch('/api/admin/posts', {
       method: "POST",
-      headers: {
-        // Adding the auth token from our cookie
-        Authorization: `Bearer ${token.value}`
-      },
       body: {
         title: form.value.title,
-        tags: parseTags(form.value.tags), // Assuming parseTags is in utils
+        category: form.value.category,
+        excerpt: form.value.excerpt,
         content: form.value.content,
-        coverImage: form.value.coverImage,
-        author: {
-          name: form.value.authorName,
-          bio: form.value.authorBio,
-          avatar: form.value.authorAvatar
-        },
+        author: form.value.author,
+        coverImage: form.value.coverImage || null,
+        published: form.value.published,
       },
     });
 
     message.value = "✅ Post created successfully!";
-    emit('postCreated'); // Let the parent know to refresh the list
-    
-    // Reset form
-    form.value = { 
-      title: "", tags: "", content: "", 
-      authorName: "", authorBio: "", 
-      coverImage: null, authorAvatar: null 
+    emit('postCreated');
+
+    form.value = {
+      title: "", category: "", excerpt: "", content: "",
+      author: "", coverImage: "", published: true,
     };
   } catch (err) {
-    error.value = err.data?.message || "Failed to create post";
+    error.value = err.data?.statusMessage || "Failed to create post";
   } finally {
     loading.value = false;
   }
@@ -109,7 +108,7 @@ const handleSubmit = async () => {
 
 <style scoped>
 .blog-form {
-  max-width: 100%; /* Changed from 700px to fill the dashboard pane */
+  max-width: 100%;
   background: #fff;
   padding: 24px;
   border-radius: 10px;
@@ -123,7 +122,7 @@ const handleSubmit = async () => {
   margin-bottom: 4px;
 }
 
-input, textarea {
+input, textarea, select {
   display: block;
   width: 100%;
   margin-bottom: 16px;
@@ -133,13 +132,37 @@ input, textarea {
   font-family: inherit;
 }
 
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.checkbox-label input {
+  width: auto;
+  margin-bottom: 0;
+}
+
 .content-area {
   min-height: 200px;
 }
 
+.cover-preview {
+  width: 100%;
+  max-width: 240px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
 button {
   padding: 12px 24px;
-  background: #105212; /* Matches Herballo branding */
+  background: #105212;
   color: white;
   border: none;
   border-radius: 6px;

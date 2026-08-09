@@ -50,6 +50,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+useHead({ title: 'Unsubscribe | Herballo', meta: [{ name: 'robots', content: 'noindex, follow' }] })
+
 const supabase = useSupabaseClient()
 const route = useRoute()
 

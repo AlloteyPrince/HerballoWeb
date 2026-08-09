@@ -245,25 +245,10 @@
     <section class="faq-stripe">
       <div class="container">
         <h2 class="subheading reveal-item">Common Questions About Herbal Treatment for High Blood Pressure in Ghana</h2>
-        
-        <div class="faq-item reveal-item">
-          <h3>Can herbs replace my blood pressure medication?</h3>
-          <p>Not immediately, and not without medical supervision. Our goal is to support your cardiovascular system so effectively that over time your need for medication reduces — but this happens gradually and always under your doctor's oversight. We never advise stopping antihypertensive medication abruptly.</p>
-        </div>
 
-        <div class="faq-item reveal-item">
-          <h3>Is sobolo enough to manage my blood pressure?</h3>
-          <p>Hibiscus is a powerful antihypertensive herb, but drinking sobolo casually is not the same as a therapeutic herbal protocol. The concentration, preparation method, frequency, and combination with other herbs all determine whether you get clinical benefit. This is exactly what our consultation determines for you.</p>
-        </div>
-
-        <div class="faq-item reveal-item">
-          <h3>What if my hypertension is stress-related?</h3>
-          <p>Stress-driven hypertension has a specific herbal approach involving adaptogenic herbs that regulate cortisol and calm the nervous system. We identify stress as a driver and address it directly in your protocol.</p>
-        </div>
-
-        <div class="faq-item reveal-item">
-          <h3>How long does it take to see results?</h3>
-          <p>Most clients see measurable improvements in blood pressure readings within 4 to 8 weeks of consistent herbal use combined with lifestyle adjustments. Significant and sustained cardiovascular improvement typically develops over 3 to 6 months.</p>
+        <div class="faq-item reveal-item" v-for="faq in faqs" :key="faq.question">
+          <h3>{{ faq.question }}</h3>
+          <p>{{ faq.answer }}</p>
         </div>
       </div>
     </section>
@@ -291,14 +276,55 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { keywordString, hypertensionKeywords } from '~/data/seoKeywords';
+
+const faqs = [
+  {
+    question: 'Can herbs replace my blood pressure medication?',
+    answer: "Not immediately, and not without medical supervision. Our goal is to support your cardiovascular system so effectively that over time your need for medication reduces — but this happens gradually and always under your doctor's oversight. We never advise stopping antihypertensive medication abruptly.",
+  },
+  {
+    question: 'Is sobolo enough to manage my blood pressure?',
+    answer: 'Hibiscus is a powerful antihypertensive herb, but drinking sobolo casually is not the same as a therapeutic herbal protocol. The concentration, preparation method, frequency, and combination with other herbs all determine whether you get clinical benefit. This is exactly what our consultation determines for you.',
+  },
+  {
+    question: 'What if my hypertension is stress-related?',
+    answer: 'Stress-driven hypertension has a specific herbal approach involving adaptogenic herbs that regulate cortisol and calm the nervous system. We identify stress as a driver and address it directly in your protocol.',
+  },
+  {
+    question: 'How long does it take to see results?',
+    answer: 'Most clients see measurable improvements in blood pressure readings within 4 to 8 weeks of consistent herbal use combined with lifestyle adjustments. Significant and sustained cardiovascular improvement typically develops over 3 to 6 months.',
+  },
+];
 
 // SEO
-useSeoMeta({
+usePageSeo({
   title: 'Herbal Treatment for Hypertension in Ghana | Natural Blood Pressure Support — Herballo',
   description: 'Manage high blood pressure naturally with personalised herbal medicine. Book a Herballo consultation in Ghana and discover how to heal from the ground up.',
-  ogTitle: 'Herbal Treatment for Hypertension in Ghana | Herballo',
-  ogDescription: 'Expert herbal consultations for high blood pressure in Ghana. Personalised, evidence-informed, rooted in African healing traditions.',
-  ogImage: 'https://herballo.co/logo.png',
+  path: '/conditions/hypertension',
+  keywords: keywordString(hypertensionKeywords),
+});
+
+useJsonLd({
+  '@context': 'https://schema.org',
+  '@type': 'MedicalWebPage',
+  about: {
+    '@type': 'MedicalCondition',
+    name: 'Hypertension',
+    alternateName: 'High Blood Pressure',
+  },
+  audience: { '@type': 'MedicalAudience', audienceType: 'Patient' },
+  specialty: 'https://schema.org/Cardiovascular',
+});
+
+useJsonLd({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
 });
 
 // Reveal animations

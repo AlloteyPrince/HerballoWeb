@@ -58,6 +58,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { keywordString, diabetesKeywords, hypertensionKeywords } from "~/data/seoKeywords";
 
 const agreed = ref(false);
 const isLoading = ref(false);
@@ -102,12 +103,24 @@ const handleProceed = () => {
 
 
 // SEO
-useSeoMeta({
+usePageSeo({
   title: 'Book a Herbal Consultation in Ghana | Online Herbal Medicine — Herballo',
   description: 'Book a personalised online herbal consultation in Ghana with Herballo. Expert herbal medicine practitioners available for diabetes, hypertension, and more. Heal from the ground up.',
-  ogTitle: 'Book a Herbal Consultation in Ghana | Herballo',
-  ogDescription: 'Personalised online herbal consultations in Ghana. Expert guidance for diabetes, hypertension, and natural wellness. Book today.',
-  ogImage: 'https://herballo.co/logo.png',
+  path: '/consultation',
+  keywords: keywordString(["book a herbal consultation Ghana", "online herbal doctor Ghana", "herbal telehealth Ghana"], diabetesKeywords.slice(0, 3), hypertensionKeywords.slice(0, 3)),
+});
+
+useJsonLd({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Herbal Medicine Consultation',
+  provider: { '@type': 'Organization', name: 'Herballo', url: SITE_URL },
+  areaServed: { '@type': 'Country', name: 'Ghana' },
+  availableChannel: {
+    '@type': 'ServiceChannel',
+    serviceUrl: `${SITE_URL}/consultation`,
+    availableLanguage: 'en',
+  },
 });
 
 </script>

@@ -1,6 +1,14 @@
 <script setup>
 import { pdfs } from "~/lib/libraryData";
 import { cn } from "~/lib/utils";
+import { keywordString, herbalMedicineGeneralKeywords } from "~/data/seoKeywords";
+
+usePageSeo({
+  title: "Herbal Resource Library — Free Downloadable Guides | Herballo",
+  description: "Download free herbal medicine guides from Herballo's resource library — practical, natural health resources for your wellness journey.",
+  path: "/pdflibrary",
+  keywords: keywordString(["free herbal guides pdf", "downloadable herbal medicine guides", "herbal resource library"], herbalMedicineGeneralKeywords.slice(0, 10)),
+});
 </script>
 
 <template>
@@ -28,6 +36,8 @@ import { cn } from "~/lib/utils";
           :src="pdf.image"
           :alt="pdf.title"
           class="w-full h-64 object-cover"
+          loading="lazy"
+          decoding="async"
         />
 
         <div class="p-6 flex flex-col flex-grow text-center">

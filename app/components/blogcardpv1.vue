@@ -5,14 +5,18 @@
         v-if="post.coverImage"
         :src="getFinalImageUrl(post.coverImage)"
         @error="handleImageError"
-        alt="Cover Image"
+        :alt="post.title || 'Cover image'"
         class="blog-image"
+        loading="lazy"
+        decoding="async"
       />
       <img
         v-else
         src="/images/default-thumbnail.jpg"
         alt="Default Cover"
         class="blog-image"
+        loading="lazy"
+        decoding="async"
       />
     </div>
 

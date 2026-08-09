@@ -273,10 +273,33 @@ const estimateReadingTime = (content) => {
   return Math.max(1, Math.ceil(words / 225))
 }
 
-useHead({
+usePageSeo({
   title: post.value ? `${post.value.title} | Herballo` : 'Post Not Found | Herballo',
-  meta: [{ name: 'description', content: post.value?.excerpt || '' }],
+  description: post.value?.excerpt || 'Herbal medicine insights and natural wellness articles from Herballo.',
+  path: `/blog/${route.params.slug}`,
+  image: post.value?.cover_image,
+  type: 'article',
+  publishedTime: post.value?.date,
+  robots: post.value ? 'index, follow' : 'noindex, follow',
 })
+
+if (post.value) {
+  useJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.value.title,
+    description: post.value.excerpt,
+    image: post.value.cover_image,
+    datePublished: post.value.date,
+    author: { '@type': 'Person', name: post.value.author || 'Herballo Team' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Herballo',
+      logo: { '@type': 'ImageObject', url: BRAND_LOGO },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl.value },
+  })
+}
 </script>
 
 <style scoped>

@@ -33,9 +33,11 @@
             v-for="(img, index) in plant.imageUrl"
             :key="index"
             :src="img"
-            :alt="plant.commonName"
+            :alt="`${plant.commonName} photo ${index + 1}`"
             @click="openImageModal(img)"
             class="gallery-thumbnail"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       </div>
@@ -136,41 +138,54 @@ const selectedImage = ref("");
 const showToast = ref(false);
 
 // Fetch plant data
+const supabase = useSupabaseClient();
+
 const {
   data: plant,
   pending,
   error,
-} = await useFetch("/jsons/ULearn.json", {
-  transform: (data) => {
-    const plants = Array.isArray(data) ? data : [];
-    const foundPlant = plants.find((p) => p.id === plantId);
-    if (!foundPlant) {
-      throw createError({ statusCode: 404, statusMessage: "Plant not found" });
-    }
-    return foundPlant;
-  },
+} = await useAsyncData(`ulearn-plant-${plantId}`, async () => {
+  const { data, error: dbError } = await supabase.from("plants").select("*").eq("id", plantId).single();
+  if (dbError || !data) {
+    throw createError({ statusCode: 404, statusMessage: "Plant not found" });
+  }
+  return {
+    id: data.id,
+    commonName: data.common_name,
+    otherCommonNames: data.other_common_names,
+    scientificName: data.scientific_name,
+    family: data.family,
+    imageUrl: data.image_url,
+    tagline: data.tagline,
+    primaryHealthBenefits: data.primary_health_benefits,
+    keyActiveCompounds: data.key_active_compounds,
+    commonPreparations: data.common_preparations,
+    specificWarnings: data.specific_warnings,
+    additionalInfo: data.additional_info,
+    readMoreLink: data.read_more_link,
+  };
 });
 
 // Dynamic SEO
-const siteUrl = "https://herballo.com";
 const shareTitle = computed(() =>
-  plant.value ? `${plant.value.commonName} | Herballo ULearn` : "Plant Details"
+  plant.value ? `${plant.value.commonName} | Herballo ULearn` : "Plant Details | Herballo ULearn"
 );
 const shareDesc = computed(
-  () => plant.value?.tagline || "Discover medicinal plants."
+  () => plant.value?.tagline || "Discover medicinal plants used in African herbal medicine."
 );
 const shareImg = computed(() => {
   const img = plant.value?.imageUrl?.[0] || "/images/plant-placeholder.jpg";
-  return img.startsWith("http") ? img : `${siteUrl}${img}`;
+  return img.startsWith("http") ? img : `${SITE_URL}${img}`;
 });
 
-useSeoMeta({
-  title: shareTitle,
-  ogTitle: shareTitle,
-  description: shareDesc,
-  ogDescription: shareDesc,
-  ogImage: shareImg,
-  twitterCard: "summary_large_image",
+usePageSeo({
+  title: shareTitle.value,
+  description: shareDesc.value,
+  path: `/ulearn/${plantId}`,
+  image: shareImg.value,
+  keywords: plant.value?.scientificName
+    ? `${plant.value.commonName}, ${plant.value.scientificName}, herbal medicine, medicinal plant Ghana`
+    : undefined,
 });
 
 // Share Logic

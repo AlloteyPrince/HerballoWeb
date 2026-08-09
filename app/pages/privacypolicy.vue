@@ -67,7 +67,8 @@ useHead({
   meta: [
     { name: 'description', content: 'Herballo privacy policy regarding health consultations and herbal education.' },
     { name: 'robots', content: 'noindex, follow' }
-  ]
+  ],
+  link: [{ rel: 'canonical', href: 'https://herballo.co/privacypolicy' }]
 })
 </script>
 

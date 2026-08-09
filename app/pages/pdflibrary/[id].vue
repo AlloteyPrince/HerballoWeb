@@ -8,27 +8,12 @@ const route = useRoute()
 const book = pdfs.find(p => p.id === route.params.id)
 
 // SEO & Social Media Optimization
-useHead({
-  title: book ? `${book.title} | Herballo Library` : 'Resource Not Found',
-  meta: [
-    { name: 'description', content: book ? book.intro.slice(0, 160) : '' },
-    
-    // Facebook & WhatsApp (Open Graph)
-    { property: 'og:type', content: 'website' },
-    { property: 'og:url', content: `https://herballo.co/pdflibrary/${book?.id}` },
-    { property: 'og:title', content: book ? `${book.title} | Herballo` : 'Herbal Guide' },
-    { property: 'og:description', content: book ? book.intro.slice(0, 160) : '' },
-    { property: 'og:image', content: book ? `https://herballo.co${book.image}` : 'https://herballo.co/logo.png' },
-
-    // Twitter / X
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: book?.title },
-    { name: 'twitter:description', content: book ? book.intro.slice(0, 160) : '' },
-    { name: 'twitter:image', content: book ? `https://herballo.co${book.image}` : 'https://herballo.co/logo.png' },
-  ],
-  link: [
-    { rel: 'canonical', href: `https://herballo.co/pdflibrary/${book?.id}` }
-  ]
+usePageSeo({
+  title: book ? `${book.title} | Herballo Library` : 'Resource Not Found | Herballo',
+  description: book ? book.intro.slice(0, 160) : 'This herbal guide could not be found.',
+  path: `/pdflibrary/${route.params.id}`,
+  image: book ? `${SITE_URL}${book.image}` : undefined,
+  robots: book ? 'index, follow' : 'noindex, follow',
 })
 
 // SHARING FUNCTIONALITY

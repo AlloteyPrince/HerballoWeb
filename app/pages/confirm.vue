@@ -12,39 +12,66 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+useHead({ title: 'Confirming Account | Herballo', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
+
 const supabase = useSupabaseClient()
 const router = useRouter()
+const route = useRoute()
 
 const statusIcon = ref('🌿')
 const statusTitle = ref('Confirming your account...')
 const statusMessage = ref('Please wait while we verify your email.')
 const showLoader = ref(true)
 
-const showError = () => {
+const showError = (message?: string) => {
   statusIcon.value = '⚠️'
   statusTitle.value = 'Link expired or already used'
-  statusMessage.value = 'This confirmation link may have expired. Please sign up again or request a new link.'
+  statusMessage.value = message || 'This confirmation link may have expired. Please sign up again or request a new link.'
   showLoader.value = false
 }
 
+const handleConfirmed = (session: { user: { user_metadata?: { first_name?: string } } }) => {
+  const firstName = session.user.user_metadata?.first_name || ''
+  statusIcon.value = '✅'
+  statusTitle.value = `Welcome${firstName ? ', ' + firstName : ''}!`
+  statusMessage.value = 'Your email has been confirmed. Taking you to sign in...'
+  showLoader.value = false
+
+  setTimeout(async () => {
+    await supabase.auth.signOut()
+    await router.push('/login?confirmed=true')
+  }, 2000)
+}
+
 onMounted(async () => {
+  // Supabase can append an error directly to the link (e.g. an already-used
+  // or expired token) — surface that instead of guessing via a timeout.
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''))
+  const linkError = route.query.error_description || hashParams.get('error_description')
+  if (linkError) {
+    showError(decodeURIComponent(String(linkError)).replace(/\+/g, ' '))
+    return
+  }
+
+  // The Supabase client processes the confirmation link's token as soon as it
+  // initializes — which happens in a Nuxt plugin, before this component's
+  // onMounted runs. That means the SIGNED_IN event can fire and be missed
+  // entirely (no listener was subscribed yet), even though the account was
+  // confirmed successfully. Check for an already-established session first
+  // before falling back to waiting on the event.
+  const { data: { session: existingSession } } = await supabase.auth.getSession()
+  if (existingSession) {
+    handleConfirmed(existingSession)
+    return
+  }
+
   const timeout = setTimeout(() => showError(), 8000)
 
   const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       clearTimeout(timeout)
       subscription.unsubscribe()
-
-      const firstName = session.user.user_metadata?.first_name || ''
-      statusIcon.value = '✅'
-      statusTitle.value = `Welcome${firstName ? ', ' + firstName : ''}!`
-      statusMessage.value = 'Your email has been confirmed. Taking you to sign in...'
-      showLoader.value = false
-
-      setTimeout(async () => {
-        await supabase.auth.signOut()
-        await router.push('/login?confirmed=true')
-      }, 2000)
+      handleConfirmed(session)
     }
   })
 })

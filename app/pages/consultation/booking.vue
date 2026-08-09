@@ -171,6 +171,8 @@
 </template>
 
 <script setup>
+useHead({ title: 'Book Your Consultation | Herballo', meta: [{ name: 'robots', content: 'noindex, follow' }] })
+
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 

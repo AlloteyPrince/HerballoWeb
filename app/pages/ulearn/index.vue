@@ -170,26 +170,52 @@
 </template>
 
 <script setup>
+import { keywordString, herbalMedicineGeneralKeywords, biotechRegenerativeKeywords } from "~/data/seoKeywords";
+
+usePageSeo({
+  title: "ULearn — Free Medicinal Plant Library | Herballo",
+  description: "Search Herballo's ULearn library of medicinal plants used across African herbal medicine. Discover common names, scientific names, and traditional uses for natural health.",
+  path: "/ulearn",
+  keywords: keywordString(herbalMedicineGeneralKeywords.slice(0, 10), biotechRegenerativeKeywords.slice(0, 5)),
+});
+
 const searchTerm = ref("");
 const isSearching = ref(false);
 const searchTimeout = ref(null);
 const currentPage = ref(1);
 const itemsPerPage = 10;
 
+const supabase = useSupabaseClient();
+
 const {
   data: plants,
   pending,
   error,
   refresh,
-} = await useFetch("/jsons/ULearn.json");
-
-const allPlants = computed(() => {
-  const raw = toRaw(plants.value);
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw;
-  if (raw.id) return [raw];
-  return raw.plants || raw.data || [];
+} = await useAsyncData("ulearn-plants", async () => {
+  const { data, error: dbError } = await supabase
+    .from("plants")
+    .select("*")
+    .order("common_name", { ascending: true });
+  if (dbError) throw dbError;
+  return (data || []).map((p) => ({
+    id: p.id,
+    commonName: p.common_name,
+    otherCommonNames: p.other_common_names,
+    scientificName: p.scientific_name,
+    family: p.family,
+    imageUrl: p.image_url,
+    tagline: p.tagline,
+    primaryHealthBenefits: p.primary_health_benefits,
+    keyActiveCompounds: p.key_active_compounds,
+    commonPreparations: p.common_preparations,
+    specificWarnings: p.specific_warnings,
+    additionalInfo: p.additional_info,
+    readMoreLink: p.read_more_link,
+  }));
 });
+
+const allPlants = computed(() => plants.value || []);
 
 const filteredPlants = computed(() => {
   const query = searchTerm.value.toLowerCase().trim();

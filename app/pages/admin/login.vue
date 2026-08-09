@@ -3,24 +3,26 @@
     <div class="admin-card">
       <h1 class="brand">Herballo</h1>
       <p class="subtitle">Admin Login</p>
-      
+
       <form @submit.prevent="handleLogin">
-        <input 
-          type="text" 
-          v-model="form.username" 
-          placeholder="Username" 
-          required 
+        <input
+          type="email"
+          v-model="form.email"
+          placeholder="Email"
+          autocomplete="username"
+          required
         />
         <input
           type="password"
           v-model="form.password"
           placeholder="Password"
+          autocomplete="current-password"
           required
         />
         <button type="submit" :disabled="loading">
           {{ loading ? 'Logging in...' : 'Login' }}
         </button>
-        
+
         <Transition name="fade">
           <p v-if="error" class="error">{{ error }}</p>
         </Transition>
@@ -30,12 +32,13 @@
 </template>
 
 <script setup>
+useHead({ title: 'Admin Login | Herballo', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
 const router = useRouter();
-const config = useRuntimeConfig();
+const supabase = useSupabaseClient();
 
 const form = ref({
-  username: "",
+  email: "",
   password: ""
 });
 
@@ -47,30 +50,39 @@ const handleLogin = async () => {
   loading.value = true;
 
   try {
-   
-    const data = await $fetch('/api/auth/login', {
-      baseURL: config.public.apiBase,
-      method: 'POST',
-      body: form.value
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email: form.value.email,
+      password: form.value.password,
     });
 
-   
-    if (data.token) {
-     
-      const token = useCookie('auth_token', { maxAge: 60 * 60 * 24 }); 
-      token.value = data.token;
-      router.push("/admin");
+    if (signInError) {
+      error.value = "Incorrect email or password.";
+      return;
     }
+
+    // Sign-in succeeded, but only allowlisted emails may enter /admin —
+    // the server independently re-checks this on every admin API call too.
+    const { isAdmin } = await $fetch('/api/admin/whoami', {
+      headers: { Authorization: `Bearer ${data.session.access_token}` },
+    });
+
+    if (!isAdmin) {
+      error.value = "This account is not authorized for admin access.";
+      await supabase.auth.signOut();
+      return;
+    }
+
+    router.push("/admin");
   } catch (err) {
     console.error("Login Error:", err);
-    error.value = err.data?.message || "Login failed. Please check your credentials.";
+    error.value = "Login failed. Please try again.";
   } finally {
     loading.value = false;
   }
 };
 
 definePageMeta({
-  layout: false 
+  layout: false
 });
 </script>
 

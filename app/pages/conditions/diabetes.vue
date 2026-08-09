@@ -175,25 +175,10 @@
         <!-- FAQ Section -->
         <div class="content-block reveal-item">
           <h2 class="subheading">Frequently Asked Questions</h2>
-          
-          <div class="faq-item">
-            <h3>Can herbal medicine cure diabetes?</h3>
-            <p>Herbal medicine does not promise a cure, and we will never make that claim. What it can do — with personalised expert guidance — is clinically support blood sugar control, reduce insulin resistance, protect organs from diabetic damage, and in some prediabetic cases, reverse the progression of the disease. Many of our clients reduce their medication requirements over time under medical supervision.</p>
-          </div>
-          
-          <div class="faq-item">
-            <h3>Is it safe to combine herbal medicine with my diabetes medication?</h3>
-            <p>This is exactly why a consultation is essential. Some herbs interact with diabetes medications like Metformin or insulin. Without professional guidance, combining them can cause dangerous hypoglycaemia or interfere with drug absorption. Our practitioners are trained to navigate these interactions safely.</p>
-          </div>
-          
-          <div class="faq-item">
-            <h3>How soon will I see results?</h3>
-            <p>Most clients begin to notice improvements in energy, blood sugar stability, and general wellbeing within 4 to 8 weeks of consistent use. Significant metabolic changes typically take 3 to 6 months of committed herbal therapy combined with appropriate lifestyle adjustments.</p>
-          </div>
-          
-          <div class="faq-item">
-            <h3>Do I need to stop my current medication?</h3>
-            <p>No. We never advise stopping prescribed medication without your doctor's consent. Our herbal protocols are designed to complement your existing treatment, not replace it abruptly.</p>
+
+          <div class="faq-item" v-for="faq in faqs" :key="faq.question">
+            <h3>{{ faq.question }}</h3>
+            <p>{{ faq.answer }}</p>
           </div>
         </div>
       </div>
@@ -216,13 +201,54 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { keywordString, diabetesKeywords } from '~/data/seoKeywords';
 
-useSeoMeta({
+const faqs = [
+  {
+    question: 'Can herbal medicine cure diabetes?',
+    answer: "Herbal medicine does not promise a cure, and we will never make that claim. What it can do — with personalised expert guidance — is clinically support blood sugar control, reduce insulin resistance, protect organs from diabetic damage, and in some prediabetic cases, reverse the progression of the disease. Many of our clients reduce their medication requirements over time under medical supervision.",
+  },
+  {
+    question: 'Is it safe to combine herbal medicine with my diabetes medication?',
+    answer: 'This is exactly why a consultation is essential. Some herbs interact with diabetes medications like Metformin or insulin. Without professional guidance, combining them can cause dangerous hypoglycaemia or interfere with drug absorption. Our practitioners are trained to navigate these interactions safely.',
+  },
+  {
+    question: 'How soon will I see results?',
+    answer: 'Most clients begin to notice improvements in energy, blood sugar stability, and general wellbeing within 4 to 8 weeks of consistent use. Significant metabolic changes typically take 3 to 6 months of committed herbal therapy combined with appropriate lifestyle adjustments.',
+  },
+  {
+    question: 'Do I need to stop my current medication?',
+    answer: "No. We never advise stopping prescribed medication without your doctor's consent. Our herbal protocols are designed to complement your existing treatment, not replace it abruptly.",
+  },
+];
+
+usePageSeo({
   title: 'Herbal Treatment for Diabetes in Ghana | Personalised Care — Herballo',
   description: 'Discover how personalised herbal medicine can help manage diabetes naturally in Ghana. Book an expert herbal consultation with Herballo and heal from the ground up.',
-  ogTitle: 'Herbal Treatment for Diabetes in Ghana | Herballo',
-  ogDescription: 'Personalised herbal consultations for diabetes management in Ghana. Evidence-informed, rooted in African healing traditions.',
-  ogImage: 'https://herballo.co/logo.png',
+  path: '/conditions/diabetes',
+  keywords: keywordString(diabetesKeywords),
+});
+
+useJsonLd({
+  '@context': 'https://schema.org',
+  '@type': 'MedicalWebPage',
+  about: {
+    '@type': 'MedicalCondition',
+    name: 'Diabetes Mellitus',
+    alternateName: 'Diabetes',
+  },
+  audience: { '@type': 'MedicalAudience', audienceType: 'Patient' },
+  specialty: 'https://schema.org/Endocrine',
+});
+
+useJsonLd({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
 });
 
 onMounted(() => {

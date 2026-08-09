@@ -17,33 +17,32 @@
 </template>
 
 <script setup>
-const socialLinks = [
-  { 
-    name: 'YouTube',  
-    href: 'https://www.youtube.com/@HerballoCo',      
-    img: '/images/yt-logo.png' 
-  },
-  { 
-    name: 'LinkedIn', 
-    href: 'https://www.linkedin.com/company/herballo/', 
-    img: '/images/linkedin.png' 
-  },
-  { 
-    name: 'TikTok',   
-    href: 'https://www.tiktok.com/@Herballo',          
-    img: '/images/tiktoklogo.png' 
-  },
-  { 
-    name: 'Email',    
-    href: 'mailto:info@herballo.co',                   
-    img: '/images/email-logo.png' 
-  },
-  { 
-    name: 'Twitter',  
-    href: 'https://x.com/princeo43022643?s=21',        
-    img: '/images/x-logo.png' 
-  }
-]
+// Fallback used if the site_settings row hasn't loaded (or isn't configured yet).
+const FALLBACK_LINKS = {
+  youtube_url: 'https://www.youtube.com/@HerballoCo',
+  linkedin_url: 'https://www.linkedin.com/company/herballo/',
+  tiktok_url: 'https://www.tiktok.com/@Herballo',
+  twitter_url: 'https://x.com/princeo43022643',
+  contact_email: 'info@herballo.co',
+};
+
+const supabase = useSupabaseClient();
+const { data: settings } = await useAsyncData('site-settings-social', async () => {
+  const { data, error } = await supabase.from('site_settings').select('*').eq('id', 1).single();
+  if (error) return null;
+  return data;
+});
+
+const socialLinks = computed(() => {
+  const s = { ...FALLBACK_LINKS, ...(settings.value || {}) };
+  return [
+    { name: 'YouTube', href: s.youtube_url, img: '/images/yt-logo.png' },
+    { name: 'LinkedIn', href: s.linkedin_url, img: '/images/linkedin.png' },
+    { name: 'TikTok', href: s.tiktok_url, img: '/images/tiktoklogo.png' },
+    { name: 'Email', href: `mailto:${s.contact_email}`, img: '/images/email-logo.png' },
+    { name: 'Twitter', href: s.twitter_url, img: '/images/x-logo.png' },
+  ].filter((link) => link.href);
+});
 </script>
 
 <style scoped>

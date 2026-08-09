@@ -129,7 +129,7 @@ const formatDate = (d) => {
   })
 }
 
-useHead({ title: 'Booking Confirmed | Herballo' })
+useHead({ title: 'Booking Confirmed | Herballo', meta: [{ name: 'robots', content: 'noindex, follow' }] })
 </script>
 
 <style scoped lang="scss">

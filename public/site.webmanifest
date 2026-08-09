@@ -1,0 +1,22 @@
+{
+  "name": "Herballo",
+  "short_name": "Herballo",
+  "description": "Herbal medicine consultations, education and natural health resources rooted in African herbal wisdom.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#105212",
+  "icons": [
+    {
+      "src": "/images/herballo-logo.png",
+      "sizes": "2896x1589",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}

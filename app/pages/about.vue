@@ -85,6 +85,14 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { keywordString, herbalMedicineGeneralKeywords, biotechRegenerativeKeywords } from '~/data/seoKeywords';
+
+usePageSeo({
+  title: 'About Herballo — Herbal-Regenerative Science Rooted in African Wisdom',
+  description: 'Herballo bridges traditional African botanical wisdom with modern regenerative science. Learn about our mission, core pillars, and vision to become a center of herbal excellence.',
+  path: '/about',
+  keywords: keywordString(herbalMedicineGeneralKeywords.slice(0, 10), biotechRegenerativeKeywords.slice(0, 10)),
+});
 
 const pillars = [
   { 

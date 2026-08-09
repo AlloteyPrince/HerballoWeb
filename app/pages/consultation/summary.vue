@@ -179,7 +179,7 @@ const formatDate = (d) => {
 const proceedToPayment = () => navigateTo('/consultation/payment')
 const goBack = () => navigateTo('/consultation/booking')
 
-useHead({ title: 'Review Your Booking | Herballo' })
+useHead({ title: 'Review Your Booking | Herballo', meta: [{ name: 'robots', content: 'noindex, follow' }] })
 </script>
 
 <style scoped lang="scss">

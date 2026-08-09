@@ -228,7 +228,7 @@ const submitPayment = async () => {
 
 const goBack = () => navigateTo('/consultation/summary')
 
-useHead({ title: 'Complete Payment | Herballo' })
+useHead({ title: 'Complete Payment | Herballo', meta: [{ name: 'robots', content: 'noindex, follow' }] })
 </script>
 
 <style scoped lang="scss">

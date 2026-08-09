@@ -5,15 +5,20 @@
       <h3>Edit Blog Post</h3>
     </div>
 
-    <form v-if="!pending" @submit.prevent="handleUpdate" class="edit-form">
+    <form v-if="!pending && post" @submit.prevent="handleUpdate" class="edit-form">
       <div class="form-grid">
         <div class="main-fields">
           <label>Post Title</label>
           <input v-model="form.title" placeholder="Title" required />
-          
-          <label>Tags (comma separated)</label>
-          <input v-model="form.tags" placeholder="Herbs, Health, Natural..." />
-          
+
+          <label>Category</label>
+          <select v-model="form.category" required>
+            <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+          </select>
+
+          <label>Excerpt</label>
+          <textarea v-model="form.excerpt" rows="2" required></textarea>
+
           <label>Content</label>
           <textarea v-model="form.content" class="content-area" required></textarea>
         </div>
@@ -21,20 +26,18 @@
         <div class="sidebar-fields">
           <div class="upload-section">
             <label>Cover Image</label>
-            <img v-if="form.coverImage" :src="getFullImageUrl(form.coverImage)" class="preview-img" />
-            <input type="file" @change="e => handleFileUpload(e, 'coverImage')" />
+            <img v-if="form.coverImage" :src="form.coverImage" alt="Cover image preview" class="preview-img" />
+            <input type="file" accept="image/*" @change="handleFileUpload" />
           </div>
 
           <div class="author-section">
             <label>Author Name</label>
-            <input v-model="form.authorName" required />
-            
-            <label>Author Bio</label>
-            <textarea v-model="form.authorBio" rows="3"></textarea>
-            
-            <label>Author Avatar</label>
-            <img v-if="form.authorAvatar" :src="getFullImageUrl(form.authorAvatar)" class="avatar-preview" />
-            <input type="file" @change="e => handleFileUpload(e, 'authorAvatar')" />
+            <input v-model="form.author" required />
+
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="form.published" />
+              Published
+            </label>
           </div>
         </div>
       </div>
@@ -43,67 +46,70 @@
         <button type="submit" :disabled="updating" class="btn-update">
           {{ updating ? "Updating..." : "Save Changes" }}
         </button>
+        <button type="button" :disabled="deleting" class="btn-delete" @click="handleDelete">
+          {{ deleting ? "Deleting..." : "Delete Post" }}
+        </button>
         <p v-if="message" class="success">{{ message }}</p>
         <p v-if="error" class="error">{{ error }}</p>
       </div>
     </form>
-    
-    <div v-else class="loading-state">Loading post details...</div>
+
+    <div v-else-if="pending" class="loading-state">Loading post details...</div>
+    <div v-else class="loading-state">Post not found.</div>
   </div>
 </template>
 
 <script setup>
 const route = useRoute();
 const router = useRouter();
-const config = useRuntimeConfig();
-const token = useCookie('auth_token');
 const postId = route.params.id;
 
+const categories = ["Consultation", "Education", "Wellness", "Diabetes", "Hypertension", "General"];
+
 const updating = ref(false);
+const deleting = ref(false);
 const message = ref("");
 const error = ref("");
 
 const form = ref({
   title: "",
-  tags: "",
+  category: "",
+  excerpt: "",
   content: "",
-  authorName: "",
-  authorBio: "",
-  coverImage: null,
-  authorAvatar: null
+  author: "",
+  coverImage: "",
+  published: true,
 });
 
-// Fetch post data using useFetch (Auto-runs on load)
-const { data: post, pending } = await useFetch(`/api/posts/${postId}`, {
-  baseURL: config.public.apiBase,
-  onResponse({ response }) {
-    if (response._data) {
-      const d = response._data;
-      form.value = {
-        title: d.title,
-        tags: d.tags ? d.tags.join(", ") : "",
-        content: d.content,
-        authorName: d.author?.name || "",
-        authorBio: d.author?.bio || "",
-        coverImage: d.coverImage,
-        authorAvatar: d.author?.avatar
-      };
-    }
-  }
-});
+const { data: post, pending } = await useAsyncData(
+  `admin-post-${postId}`,
+  () => adminFetch(`/api/admin/posts/${postId}`)
+);
 
-const getFullImageUrl = (path) => {
-  if (!path) return '';
-  return path.startsWith('http') ? path : `${config.public.apiBase}${path}`;
-};
+if (post.value) {
+  form.value = {
+    title: post.value.title,
+    category: post.value.category,
+    excerpt: post.value.excerpt,
+    content: post.value.content,
+    author: post.value.author,
+    coverImage: post.value.cover_image,
+    published: post.value.published,
+  };
+}
 
-const handleFileUpload = async (e, field) => {
+const handleFileUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+
+  const body = new FormData();
+  body.append("file", file);
+
   try {
-    form.value[field] = await uploadFile(file); // From utils/
+    const { url } = await adminFetch('/api/admin/upload', { method: 'POST', body });
+    form.value.coverImage = url;
   } catch (err) {
-    error.value = "File upload failed";
+    error.value = "Cover image upload failed";
   }
 };
 
@@ -113,34 +119,42 @@ const handleUpdate = async () => {
   error.value = "";
 
   try {
-    await $fetch(`/api/posts/${postId}`, {
-      baseURL: config.public.apiBase,
+    await adminFetch(`/api/admin/posts/${postId}`, {
       method: "PUT",
-      headers: { Authorization: `Bearer ${token.value}` },
       body: {
         title: form.value.title,
-        tags: parseTags(form.value.tags), // From utils/
+        category: form.value.category,
+        excerpt: form.value.excerpt,
         content: form.value.content,
+        author: form.value.author,
         coverImage: form.value.coverImage,
-        author: {
-          name: form.value.authorName,
-          bio: form.value.authorBio,
-          avatar: form.value.authorAvatar
-        },
+        published: form.value.published,
       },
     });
     message.value = "✅ Post updated successfully!";
   } catch (err) {
-    error.value = err.data?.message || "Update failed";
+    error.value = err.data?.statusMessage || "Update failed";
   } finally {
     updating.value = false;
   }
 };
 
-// Set layout to false if you don't want the main site navigation
+const handleDelete = async () => {
+  if (!confirm("Are you sure you want to delete this post? This cannot be undone.")) return;
+
+  deleting.value = true;
+  try {
+    await adminFetch(`/api/admin/posts/${postId}`, { method: "DELETE" });
+    router.push("/admin");
+  } catch (err) {
+    error.value = err.data?.statusMessage || "Delete failed";
+    deleting.value = false;
+  }
+};
+
 definePageMeta({
   layout: false,
-  middleware: 'auth' // Ensure only logged in admins can reach this
+  middleware: 'admin',
 });
 </script>
 
@@ -186,7 +200,7 @@ label {
   color: #334155;
 }
 
-input, textarea {
+input, textarea, select {
   width: 100%;
   padding: 12px;
   margin-bottom: 1.5rem;
@@ -194,9 +208,22 @@ input, textarea {
   border-radius: 8px;
 }
 
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  font-size: 0.9rem;
+}
+
+.checkbox-label input {
+  width: auto;
+  margin-bottom: 0;
+}
+
 .content-area { min-height: 400px; }
 
-.preview-img, .avatar-preview {
+.preview-img {
   width: 100%;
   height: 150px;
   object-fit: cover;
@@ -204,7 +231,12 @@ input, textarea {
   margin-bottom: 1rem;
 }
 
-.avatar-preview { height: 80px; width: 80px; border-radius: 50%; }
+.action-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
 
 .btn-update {
   background: #105212;
@@ -216,6 +248,18 @@ input, textarea {
   cursor: pointer;
 }
 
-.success { color: #10b981; font-weight: bold; margin-top: 1rem; }
-.error { color: #ef4444; font-weight: bold; margin-top: 1rem; }
+.btn-delete {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-delete:hover { background: #dc2626; color: white; }
+
+.success { color: #10b981; font-weight: bold; }
+.error { color: #ef4444; font-weight: bold; }
 </style>

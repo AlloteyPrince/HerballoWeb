@@ -1,0 +1,84 @@
+-- Medicinal plant library (ULearn), moved from a static bundled JSON file so
+-- it can be managed centrally from /admin instead of requiring a code deploy.
+
+create table if not exists public.plants (
+  id text primary key,
+  common_name text not null,
+  other_common_names text[] default '{}',
+  scientific_name text,
+  family text,
+  image_url text[] default '{}',
+  tagline text,
+  primary_health_benefits text[] default '{}',
+  key_active_compounds text[] default '{}',
+  common_preparations text[] default '{}',
+  specific_warnings text[] default '{}',
+  additional_info text,
+  read_more_link text,
+  created_at timestamptz default now()
+);
+
+alter table public.plants enable row level security;
+
+-- Public (anon) can read — the live ULearn pages need this.
+-- All writes go through /api/admin/plants using the service-role key, which
+-- bypasses RLS, so no write policy is needed here.
+create policy "Public can read plants"
+  on public.plants for select
+  using (true);
+
+-- Seed with the 13 plants that were previously hardcoded in
+-- public/jsons/ULearn.json, so nothing is lost in the migration.
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('orange_citrus_sinensis', 'Orange', ARRAY['Naranja', 'Portakal', 'Akutuo', 'Ankaa']::text[], 'Citrus sinensis', null, ARRAY['/plantImages/orange/orange1.jpg', '/plantImages/orange/orange2.jpg']::text[], 'A vibrant citrus fruit packed with Vitamin C, widely known for its immune-boosting and antioxidant properties.', ARRAY['Immune System Support (high Vitamin C)', 'Potent Antioxidant (Flavonoids, Carotenoids)', 'Aids Digestive Health (fiber)', 'Promotes Skin Health']::text[], ARRAY['Vitamin C', 'Flavonoids (e.g., Hesperidin)', 'Carotenoids']::text[], ARRAY['Fresh fruit', 'Juice', 'Zest (in cooking)', 'Essential oil (topical/aromatic)']::text[], ARRAY['Generally safe for consumption.', 'High consumption may cause digestive upset or heartburn in some individuals.', 'Orange peel oil may cause mild photosensitivity when applied topically followed by direct sun exposure.']::text[], '', 'https://herballo.com/plants/orange-citrus-sinensis')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('lemon_citrus_limon', 'Lemon', ARRAY['Limón', 'Limon', 'Citron', 'Limo']::text[], 'Citrus limon', null, ARRAY['/plantImages/lemon/lemon1.jpg', '/plantImages/lemon/lemon1.jpg']::text[], 'A tangy citrus fruit celebrated for its high Vitamin C content and versatile culinary uses.', ARRAY['Immune System Support (high Vitamin C)', 'Antioxidant Properties (Flavonoids)', 'Aids Digestion (citric acid)', 'Supports Skin Health']::text[], ARRAY['Vitamin C', 'Flavonoids (e.g., Hesperidin)', 'Citric Acid']::text[], ARRAY['Fresh fruit', 'Juice', 'Zest (in cooking)', 'Essential oil (topical/aromatic)']::text[], ARRAY['Generally safe for consumption.', 'High acidity may cause digestive upset or heartburn in some individuals.', 'Lemon peel oil may cause mild photosensitivity when applied topically followed by direct sun exposure.']::text[], '', 'https://herballo.com/plants/lemon-citrus-limon')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('tomato_solanum_lycopersicum', 'Tomato', ARRAY['Tomate', 'Domates', 'Tamatar', 'Tamat']::text[], 'Solanum lycopersicum', null, ARRAY['/plantImages/tomato/tomato3.jpg', '/plantImages/tomato/tomato2.jpg']::text[], 'A versatile fruit (botanically) celebrated for its high antioxidant content, especially lycopene, supporting heart and skin health.', ARRAY['Heart Health (Lycopene, Potassium)', 'Powerful Antioxidant (Lycopene, Vitamin C)', 'Supports Skin Protection (from sun damage)', 'Anti-cancer Potential']::text[], ARRAY['Lycopene', 'Vitamin C', 'Potassium', 'Vitamin K', 'Folate']::text[], ARRAY['Raw (salads)', 'Cooked (sauces, stews)', 'Juiced', 'Dried']::text[], ARRAY['Generally safe for consumption.', 'Raw leaves and stems contain solanine, which can be toxic if consumed in large amounts.', 'Allergic reactions are possible in sensitive individuals (e.g., oral allergy syndrome).']::text[], '', 'https://herballo.com/plants/tomato-solanum-lycopersicum')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('pawpaw_carica_papaya', 'Pawpaw', ARRAY['Papaya', 'Papaw', 'Paw Paw', 'Paw Pah']::text[], 'Carica papaya', null, ARRAY['/plantImages/pawpaw/pawpaw1.jpg', '/plantImages/pawpaw/pawpaw2.jpg']::text[], 'A tropical fruit renowned for its digestive enzymes, aiding digestion, reducing inflammation, and boosting immunity.', ARRAY['Digestive Aid (Papain, Chymopapain enzymes)', 'Anti-inflammatory Properties', 'Immune System Support (Vitamin C)', 'Antioxidant Power (Vitamin A, Vitamin C)']::text[], ARRAY['Papain', 'Chymopapain', 'Vitamin C', 'Vitamin A (beta-carotene)', 'Folate']::text[], ARRAY['Fresh fruit (ripe)', 'Green/unripe (cooked like a vegetable)', 'Juice', 'Enzyme supplements']::text[], ARRAY['Generally safe for consumption when ripe.', 'Unripe pawpaw contains latex that can cause allergic reactions in sensitive individuals (e.g., latex allergy).', 'Pregnant women are generally advised to avoid unripe pawpaw due to papain''s potential to induce uterine contractions.', 'Excessive consumption may cause digestive upset or laxative effects.']::text[], '', 'https://herballo.com/plants/pawpaw-carica-papaya')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('onion_allium_cepa', 'Onion', ARRAY['Onion', 'Cebolla', 'Soğan', 'Bawang', 'Bulb Onion']::text[], 'Allium cepa', null, ARRAY['/plantImages/onion/onion1.jpg', '/plantImages/onion/onion2.jpg']::text[], 'A staple vegetable known for its anti-inflammatory and antioxidant properties, supporting heart health and immune function.', ARRAY['Heart Health (Quercetin, Sulfur compounds)', 'Anti-inflammatory Properties', 'Antioxidant Power (Vitamin C, Flavonoids)', 'Supports Immune Function']::text[], ARRAY['Quercetin', 'Sulfur compounds (e.g., Allicin)', 'Vitamin C', 'B Vitamins (e.g., B6, Folate)']::text[], ARRAY['Raw (salads)', 'Cooked (soups, stews, sautés)', 'Pickled', 'Powdered']::text[], ARRAY['Generally safe for consumption.', 'May cause digestive upset or heartburn in some individuals.', 'Onion skin may cause allergic reactions in sensitive individuals.']::text[], '', 'https://herballo.com/plants/onion-allium-cepa')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('dubrafo_grossera_vignei', 'Dubrafo', ARRAY['Grossera', 'African Cherry', 'Wild Cherry']::text[], 'Grossera vignei', null, ARRAY['/plantImages/Dubrafo/plant1.jpg', '/plantImages/Dubrafo/plant2.jpg']::text[], 'A medicinal plant traditionally used in African herbal medicine for its anti-inflammatory and antimicrobial properties.', ARRAY['Anti-inflammatory Properties', 'Antimicrobial Effects', 'Wound Healing Support', 'Digestive Health', 'Promotes Systemic Detoxification and Deep Cleansing']::text[], ARRAY['Flavonoids', 'Tannins', 'Saponins']::text[], ARRAY['Decoction of leaves', 'Topical application of extracts', 'Infusion of bark']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', 'https://herballo.com/plants/grossera-vignei')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('sida_acuta', 'Sida Acuta', ARRAY['Stubborn grass', 'Wireweed', 'Bala', 'Common Sida']::text[], 'Sida acuta', null, ARRAY['/plantImages/Sidacuta/plant1.jpg', '/plantImages/Sidacuta/plant2.jpg', '/plantImages/Sidacuta/plant3.jpg', '/plantImages/Sidacuta/plant4.jpg', '/plantImages/Sidacuta/plant5.jpg']::text[], 'A medicinal herb traditionally used for its anti-inflammatory, analgesic, and antimicrobial properties.', ARRAY['Anti-inflammatory Properties', 'Pain Relief (Analgesic)', 'Antimicrobial Effects', 'Respiratory Health Support']::text[], ARRAY['Flavonoids', 'Triterpenes', 'Alkaloids']::text[], ARRAY['Decoction of leaves', 'Infusion of roots', 'Topical application of extracts']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', 'https://herballo.com/plants/sida-acuta')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('laportea_aestuans', 'Laportea Aestuans', ARRAY['Honhon', 'West Indian Nettle', 'Wild Nettle', 'Nettleleaf Nettle']::text[], 'Laportea aestuans', null, ARRAY['/plantImages/honhon/honhon1.jpg', '/plantImages/honhon/honhon2.jpg', '/plantImages/honhon/honhon3.jpg', '/plantImages/honhon/honhon4.jpg']::text[], 'A medicinal plant traditionally used for its anti-inflammatory, diuretic, and antimicrobial properties.', ARRAY['Anti-inflammatory Properties', 'Diuretic Effects', 'Antimicrobial Activity', 'Supports Urinary Tract Health']::text[], ARRAY['Flavonoids', 'Phenolic acids', 'Vitamins (e.g., Vitamin C, Vitamin K)']::text[], ARRAY['Infusion of leaves', 'Decoction of roots', 'Topical application of extracts']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', 'https://herballo.com/plants/laportea-aestuans')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('alchornea_cordifolia', 'Ogyama', ARRAY['Ogyama', 'Christmas Bush', 'African Christmas Bush', 'Heart-leaved Alchornea']::text[], 'Alchornea cordifolia', null, ARRAY['/plantImages/ogyama/plant1.jpg', '/plantImages/ogyama/plant2.jpg', '/plantImages/ogyama/plant3.jpg', '/plantImages/ogyama/plant4.jpg']::text[], 'A medicinal plant traditionally used for its anti-inflammatory, antimicrobial, and analgesic properties.', ARRAY['Anti-inflammatory Properties', 'Antimicrobial Effects', 'Pain Relief (Analgesic)', 'Supports Respiratory Health']::text[], ARRAY['Flavonoids', 'Tannins', 'Alkaloids']::text[], ARRAY['Decoction of leaves', 'Infusion of bark', 'Topical application of extracts']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', 'https://herballo.com/plants/alchornea-cordifolia')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('paulinia_pinnata', 'Paulinia Pinnata', ARRAY['Toa ntini', 'Osepe', 'Brazilian Sarsaparilla', 'Paulownia', 'Wild Sarsaparilla']::text[], 'Paulinia pinnata', null, ARRAY['/plantImages/toantini/pinnata1.jpg', '/plantImages/toantini/pinnata2.jpg', '/plantImages/toantini/pinnata3.jpg']::text[], 'A medicinal plant traditionally used for its anti-inflammatory, diuretic, and antimicrobial properties.', ARRAY['Anti-inflammatory Properties', 'Diuretic Effects', 'Antimicrobial Activity', 'Supports Urinary Tract Health']::text[], ARRAY['Flavonoids', 'Saponins', 'Triterpenes']::text[], ARRAY['Infusion of leaves', 'Decoction of roots', 'Topical application of extracts']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', 'https://herballo.com/plants/paulinia-pinnata')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('rauwolfia_vomitoria', 'Rauwolfia Vomitoria', ARRAY['Kakapenpen', 'Vomitoria', 'Indian Snakeroot', 'Serpent Root']::text[], 'Rauwolfia vomitoria', null, ARRAY['/plantImages/kakapenpen/kakapenpen1.jpg', '/plantImages/kakapenpen/kakapenpen2.jpg', '/plantImages/kakapenpen/kakapenpen3.jpg', '/plantImages/kakapenpen/kakapenpen4.jpg']::text[], 'A medicinal plant traditionally used for its sedative, antihypertensive, and analgesic properties.', ARRAY['Sedative Effects', 'Antihypertensive Properties', 'Analgesic Activity', 'Supports Nervous System Health']::text[], ARRAY['Reserpine', 'Catecholamines', 'Alkaloids']::text[], ARRAY['Infusion of roots', 'Decoction of bark', 'Topical application of extracts']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', '')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('dissotis_rotundifolia', 'Dissotis Rotundifolia', ARRAY['Dissotis', 'Round-leaved Dissotis']::text[], 'Dissotis rotundifolia', null, ARRAY['/plantImages/bolakete/bolakt1.jpg', '/plantImages/bolakete/bolakt2.jpg', '/plantImages/bolakete/bolakt3.jpg']::text[], 'A medicinal plant traditionally used for its anti-inflammatory, analgesic, and antimicrobial properties.', ARRAY['Anti-inflammatory Properties', 'Analgesic Activity', 'Antimicrobial Effects']::text[], ARRAY['Flavonoids', 'Triterpenes', 'Alkaloids']::text[], ARRAY['Infusion of leaves', 'Decoction of roots', 'Topical application of extracts']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', '')
+on conflict (id) do nothing;
+
+insert into public.plants (id, common_name, other_common_names, scientific_name, family, image_url, tagline, primary_health_benefits, key_active_compounds, common_preparations, specific_warnings, additional_info, read_more_link)
+values ('cleome_viscosa', 'Cleome Viscosa', ARRAY['Cleome', 'Viscous Cleome']::text[], 'Cleome viscosa', null, ARRAY['/plantImages/cleome/cleome1.jpg', '/plantImages/cleome/cleome2.jpg', '/plantImages/cleome/cleome3.jpg']::text[], 'A medicinal plant traditionally used for its anti-inflammatory, analgesic, and antimicrobial properties.', ARRAY['Anti-inflammatory Properties', 'Analgesic Activity', 'Antimicrobial Effects']::text[], ARRAY['Flavonoids', 'Triterpenes', 'Alkaloids']::text[], ARRAY['Infusion of leaves', 'Decoction of roots', 'Topical application of extracts']::text[], ARRAY['Limited scientific research available; traditional use only.', 'Consult a healthcare professional before use, especially if pregnant or breastfeeding.', 'Possible allergic reactions in sensitive individuals.']::text[], '', '')
+on conflict (id) do nothing;
+

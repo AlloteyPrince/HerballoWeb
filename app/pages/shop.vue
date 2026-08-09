@@ -12,16 +12,13 @@
 
 <script setup>
 useHead({
-  title: "Herballo Shop - Herbs and Herbal Product Market Place",
+  title: "Herballo Shop — Coming Soon",
   meta: [
-    { 
-      name: 'description', 
-      content: 'Explore our comprehensive herbal medicine catalogue and products at Herballo Shop.' 
+    {
+      name: 'description',
+      content: 'The Herballo Shop for herbal products is coming soon. In the meantime, book a personalised herbal consultation with Herballo.'
     },
-    { 
-      name: 'keywords', 
-      content: 'herbal shop, herbs, herbal medicine, herbal products' 
-    },
+    { name: 'robots', content: 'noindex, follow' },
     { property: 'og:url', content: 'https://herballo.co/shop' }
   ],
   link: [

@@ -2,30 +2,33 @@
   <div class="blog-list">
     <div class="controls">
       <input v-model="searchQuery" type="text" placeholder="Search posts..." />
-      <select v-model="selectedTag">
-        <option value="">All Tags</option>
-        <option v-for="tag in uniqueTags" :key="tag" :value="tag">
-          #{{ tag }}
-        </option>
+      <select v-model="selectedCategory">
+        <option value="">All Categories</option>
+        <option v-for="c in uniqueCategories" :key="c" :value="c">{{ c }}</option>
       </select>
     </div>
 
     <div v-if="pending">Loading blog posts...</div>
+    <div v-else-if="error">Failed to load posts: {{ error.data?.statusMessage || error.message }}</div>
     <div v-else-if="filteredPosts.length === 0">No blog posts found.</div>
     <div v-else class="post-cards">
-      <div v-for="post in filteredPosts" :key="post._id" class="post-card">
-        <div class="card-content" @click="openPost(post._id)">
+      <div v-for="post in filteredPosts" :key="post.id" class="post-card">
+        <span class="status-pill" :class="post.published ? 'is-published' : 'is-draft'">
+          {{ post.published ? 'Published' : 'Draft' }}
+        </span>
+        <div class="card-content" @click="openPost(post.id)">
           <img
-            v-if="post.coverImage"
-            :src="getFullImageUrl(post.coverImage)"
-            alt="Cover"
+            v-if="post.cover_image"
+            :src="post.cover_image"
+            :alt="post.title"
             class="cover"
           />
           <h3>{{ post.title }}</h3>
-          <p class="tags">#{{ post.tags.join(" #") }}</p>
-          <p class="preview">{{ trimContent(post.content) }}</p>
+          <p class="category">#{{ post.category }}</p>
+          <p class="preview">{{ post.excerpt }}</p>
+          <p class="meta">By {{ post.author }} · {{ formatDate(post.date) }}</p>
         </div>
-        <button class="delete" @click.stop="handleDelete(post._id)">
+        <button class="delete" @click.stop="handleDelete(post.id)">
           🗑️ Delete
         </button>
       </div>
@@ -34,55 +37,34 @@
 </template>
 
 <script setup>
-// Nuxt auto-imports ref, computed, watch, useRuntimeConfig, etc.
 const props = defineProps({
   refreshKey: Number,
 });
 
-const config = useRuntimeConfig();
 const router = useRouter();
-const token = useCookie('auth_token');
 
 const searchQuery = ref("");
-const selectedTag = ref("");
+const selectedCategory = ref("");
 
-// 1. Data Fetching using Nuxt's useFetch
-// This will reactively re-fetch whenever refreshKey changes
-const { data: posts, pending, refresh } = await useFetch('/api/posts', {
-  baseURL: config.public.apiBase,
-  key: `admin-posts-${props.refreshKey}`, // Unique key based on refresh prop
-  default: () => []
-});
+const { data: posts, pending, error, refresh } = await useAsyncData(
+  () => `admin-posts-${props.refreshKey}`,
+  () => adminFetch('/api/admin/posts'),
+  { default: () => [] }
+);
 
-// Watch the refreshKey prop to trigger a refresh
 watch(() => props.refreshKey, () => {
   refresh();
 });
 
-// 2. Methods
-const getFullImageUrl = (path) => {
-  if (!path) return '';
-  // If path is already a full URL, return it; otherwise, append base API
-  return path.startsWith('http') ? path : `${config.public.apiBase}${path}`;
-};
-
 const handleDelete = async (id) => {
-  if (!confirm("Are you sure you want to delete this post?")) return;
-  
+  if (!confirm("Are you sure you want to delete this post? This cannot be undone.")) return;
+
   try {
-    await $fetch(`/api/posts/${id}`, {
-      baseURL: config.public.apiBase,
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
-    });
-    
-    // Refresh the list after successful deletion
+    await adminFetch(`/api/admin/posts/${id}`, { method: "DELETE" });
     refresh();
   } catch (err) {
     console.error("Delete failed:", err);
-    alert(err.data?.message || "Failed to delete post.");
+    alert(err.data?.statusMessage || "Failed to delete post.");
   }
 };
 
@@ -90,39 +72,32 @@ const openPost = (id) => {
   router.push(`/admin/blog/${id}`);
 };
 
-// 3. Computed Logic
-const trimContent = (html) => {
-  if (!html) return "";
-  const plain = html.replace(/<[^>]*>/g, "");
-  return plain.length > 100 ? plain.slice(0, 100) + "..." : plain;
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  return new Date(dateStr).toLocaleDateString(undefined, {
+    year: "numeric", month: "short", day: "numeric",
+  });
 };
 
-const uniqueTags = computed(() => {
-  const tagSet = new Set();
-  posts.value?.forEach((post) => {
-    post.tags?.forEach((tag) => tagSet.add(tag));
-  });
-  return [...tagSet];
+const uniqueCategories = computed(() => {
+  const set = new Set();
+  posts.value?.forEach((post) => { if (post.category) set.add(post.category); });
+  return [...set];
 });
 
 const filteredPosts = computed(() => {
   if (!posts.value) return [];
-  
+
   return posts.value.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchQuery.value.toLowerCase());
-
-    const matchesTag =
-      !selectedTag.value || post.tags.includes(selectedTag.value);
-
-    return matchesSearch && matchesTag;
+    const q = searchQuery.value.toLowerCase();
+    const matchesSearch = !q || post.title.toLowerCase().includes(q) || post.excerpt?.toLowerCase().includes(q);
+    const matchesCategory = !selectedCategory.value || post.category === selectedCategory.value;
+    return matchesSearch && matchesCategory;
   });
 });
 </script>
 
 <style scoped>
-/* I've kept your styles but optimized them for a cleaner Admin look */
 .blog-list { margin-top: 20px; }
 
 .controls {
@@ -158,6 +133,19 @@ const filteredPosts = computed(() => {
 
 .post-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
 
+.status-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  z-index: 1;
+}
+.status-pill.is-published { background: #dcfce7; color: #15803d; }
+.status-pill.is-draft { background: #fef3c7; color: #92400e; }
+
 .delete {
   position: absolute;
   top: 12px;
@@ -174,9 +162,11 @@ const filteredPosts = computed(() => {
 
 .delete:hover { background: #dc2626; color: white; }
 
-.tags { color: #105212; font-size: 0.85em; font-weight: 600; margin-bottom: 8px; }
+.category { color: #105212; font-size: 0.85em; font-weight: 600; margin-bottom: 8px; }
 
-.preview { font-size: 0.9em; color: #64748b; line-height: 1.5; }
+.preview { font-size: 0.9em; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
+
+.meta { font-size: 0.75em; color: #94a3b8; }
 
 .cover {
   width: 100%;

@@ -58,7 +58,8 @@ useHead({
   title: 'Terms of Use | Herballo',
   meta: [
     { name: 'description', content: 'Terms and conditions for Herballo herbal consultations and education.' }
-  ]
+  ],
+  link: [{ rel: 'canonical', href: 'https://herballo.co/termsofuse' }]
 })
 </script>
 

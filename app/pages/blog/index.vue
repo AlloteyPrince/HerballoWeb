@@ -28,6 +28,8 @@
                 :src="post.cover_image"
                 :alt="post.title"
                 class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
                 @error="(e) => (e.target.src = 'https://vhyzuqcthnpqrrtfxeyj.supabase.co/storage/v1/object/public/images/blog/placeholder.jpg')"
               />
               <span class="absolute top-3 left-3 bg-[#105212] text-white text-xs font-semibold px-3 py-1 rounded-full">
@@ -68,6 +70,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { keywordString, herbalMedicineGeneralKeywords, wellnessKeywords } from '~/data/seoKeywords'
 
 const supabase = useSupabaseClient()
 const visibleCount = ref(9)
@@ -101,8 +104,10 @@ const formatDate = (dateStr) => {
   })
 }
 
-useHead({
-  title: 'Herballo Blog | Herbal Medicine & Natural Health',
-  meta: [{ name: 'description', content: 'Herbal medicine insights and natural wellness articles from Herballo.' }],
+usePageSeo({
+  title: 'Herballo Blog | Herbal Medicine & Natural Health Articles',
+  description: 'Herbal medicine insights, natural wellness articles, and evidence-informed guidance on diabetes, hypertension, detox, fertility, and holistic health from Herballo.',
+  path: '/blog',
+  keywords: keywordString(herbalMedicineGeneralKeywords.slice(0, 15), wellnessKeywords.slice(0, 10)),
 })
 </script>

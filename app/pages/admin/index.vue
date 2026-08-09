@@ -20,9 +20,9 @@
         <h1>Welcome back, Admin 👋</h1>
         <p>This is your control center for managing Herballo content.</p>
 
-        <div class="dashboard-cards">
-          <AdminSubscriberscard />
-          <AdminBlogcard />
+        <AdminDashboardstats />
+
+        <div class="quick-send">
           <AdminNewslettersender @navigate="handleNavigation" />
         </div>
       </div>
@@ -50,8 +50,20 @@
       </div>
 
       <div v-else-if="section === 'library'">
-        <h2>Medicinal Plant Library</h2>
-        <p>Add, view, and update plant records.</p>
+        <div class="blog-header">
+          <h2>Medicinal Plant Library</h2>
+          <button @click="showPlantForm = !showPlantForm" class="btn-toggle">
+            {{ showPlantForm ? "← Back to Plant List" : "➕ Add New Plant" }}
+          </button>
+        </div>
+
+        <div v-if="showPlantForm">
+          <AdminPlantform @plantCreated="onPlantCreated" />
+        </div>
+
+        <div v-else>
+          <AdminPlantlist :refreshKey="plantRefreshKey" />
+        </div>
       </div>
 
       <div v-else-if="section === 'subscribers'">
@@ -66,24 +78,27 @@
 
       <div v-else-if="section === 'settings'">
         <h2>Settings</h2>
-        <p>Site settings, profile, and branding.</p>
+        <AdminSettingsform />
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
-// 1. Authentication Check
-const token = useCookie('auth_token')
-if (!token.value) {
-  // Use navigateTo for Nuxt redirects
-  throw navigateTo('/admin/login')
-}
+useHead({ title: 'Admin Dashboard | Herballo', meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 
+definePageMeta({
+  layout: false,
+  middleware: 'admin',
+})
+
+const supabase = useSupabaseClient()
 const router = useRouter()
 const section = ref("home")
 const showForm = ref(false)
 const refreshKey = ref(0)
+const showPlantForm = ref(false)
+const plantRefreshKey = ref(0)
 
 const menu = [
   { key: "home", label: "Dashboard" },
@@ -100,19 +115,19 @@ const onPostCreated = () => {
   refreshKey.value += 1
 }
 
+const onPlantCreated = () => {
+  showPlantForm.value = false
+  plantRefreshKey.value += 1
+}
+
 const handleNavigation = (targetSection) => {
   section.value = targetSection
 }
 
-const handleLogout = () => {
-  token.value = null // Clear the cookie
+const handleLogout = async () => {
+  await supabase.auth.signOut()
   router.push("/admin/login")
 }
-
-// Disable default layout so the site navigation doesn't show in the admin panel
-definePageMeta({
-  layout: false
-})
 </script>
 
 <style scoped>
@@ -186,10 +201,9 @@ definePageMeta({
   padding: 40px;
 }
 
-.dashboard-cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+.quick-send {
+  margin-top: 24px;
+  max-width: 700px;
 }
 
 @media (max-width: 768px) {

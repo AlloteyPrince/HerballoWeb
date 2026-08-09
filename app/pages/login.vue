@@ -153,6 +153,8 @@
 <script setup lang="ts">
 import { ref, computed, reactive, onMounted } from 'vue'
 
+useHead({ title: 'Sign In | Herballo', meta: [{ name: 'robots', content: 'noindex, follow' }] })
+
 const supabase = useSupabaseClient()
 const route = useRoute()
 
