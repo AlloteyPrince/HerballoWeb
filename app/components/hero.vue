@@ -7,9 +7,9 @@
         </h1>
 
         <p class="hero-subtitle">
-          <!-- Explore the world of herbs. Start your journey today! -->
-          Get professional herbal medicine guidance tailored to your health concerns, 
-          <br>goals and individual needs.
+          Explore the world of herbs. Start your journey today!
+          <!-- Get professional herbal medicine guidance tailored to your health concerns, 
+          <br>goals and individual needs. -->
         </p>
 
         <div class="btn-container">
@@ -75,12 +75,12 @@ onMounted(() => {
 
   const options = {
     strings: [
-      "Herbal medicine guidance",
-      "Rooted in knowledge & evidence",
+      // "Herbal medicine guidance",
+      // "Rooted in knowledge & evidence",
       // ,
-      // "Research herbal medicines",
-      // "Discover natural remedies",
-      // "Book your consultation",
+      "Research herbal medicines",
+      "Discover natural remedies",
+      "Book your consultation",
     ],
     typeSpeed: 50,
     backSpeed: 30,
