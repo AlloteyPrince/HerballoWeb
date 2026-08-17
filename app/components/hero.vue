@@ -8,7 +8,8 @@
 
         <p class="hero-subtitle">
           <!-- Explore the world of herbs. Start your journey today! -->
-          Get professional herbal medicine guidance tailored to your health concerns, goals and individual needs.
+          Get professional herbal medicine guidance tailored to your health concerns, 
+          <br>goals and individual needs.
         </p>
 
         <div class="btn-container">
@@ -74,8 +75,8 @@ onMounted(() => {
 
   const options = {
     strings: [
-      "Personalized herbal medicine guidance",
-      "Rooted in Knowledge & Evidence",
+      "Herbal medicine guidance",
+      "Rooted in knowledge & evidence",
       // ,
       // "Research herbal medicines",
       // "Discover natural remedies",
