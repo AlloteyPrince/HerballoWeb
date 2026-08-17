@@ -11,13 +11,15 @@
         <span class="apostrophe-open"> &lsquo; </span>
 
         <p class="why-herballo-text">
-          Herballo is a modern herbal wellness brand rooted in African healing
+          <!-- Herballo is a modern herbal wellness brand rooted in African healing
           traditions and backed by evidence-based insights. We help you restore
           balance, detox naturally, and support long-term health using trusted
           herbal remedies. In a world of quick fixes, Herballo offers safe,
           personalized, and holistic care that works from the ground up. Choose
           Herballo for personalized care, authentic herbal expertise, and a
-          commitment to holistic health that puts you first.
+          commitment to holistic health that puts you first. -->
+
+          Herballo is a modern wellness platform rooted in African healing traditions and guided by evidence-based insights. We bring traditional wisdom and modern understanding together to help you make informed choices about your wellbeing or health. In a world of quick fixes and exaggerated claims, we take a thoughtful approach that values safety, authenticity, and the individual behind every health journey. From personalized consultations to trusted educational resources, Herballo is committed to healing from the ground up.
         </p>
 
         <span class="apostrophe-close"> &rsquo; </span>
