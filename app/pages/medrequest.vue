@@ -336,7 +336,7 @@ const LABS = [
   'Liver Function Test (LFT)', 'Renal Function Test (RFT)', 'Serum Electrolytes',
   'Lipid Profile', 'Thyroid Function Test (TFT)', 'Serum Uric Acid',
   'Hepatitis B Surface Antigen (HBsAg)', 'Hepatitis C Antibody', 'HIV 1 & 2 Antibody',
-  'Malaria Parasite (MP) Test', 'Widal Test (Typhoid)', 'VDRL / Syphilis Test',
+  'Malaria Parasite (MP) Test', 'Widal Test (Typhoid)', 'H. Pyloric Test','VDRL / Syphilis Test',
   'Urinalysis', 'Urine Culture & Sensitivity', 'Stool Microscopy & Culture',
   'Sputum AFB (TB Test)', 'Pregnancy Test (Serum beta-hCG)', 'Prostate Specific Antigen (PSA)',
   'Serum Creatinine', 'Serum Albumin', 'C-Reactive Protein (CRP)', 'Prothrombin Time (PT/INR)',
@@ -346,7 +346,7 @@ const LABS = [
 const SCANS = [
   'Chest X-Ray (CXR)', 'Abdominal X-Ray', 'Spine X-Ray (Lumbar / Cervical / Thoracic)',
   'Pelvic X-Ray', 'Skull X-Ray', 'Hand / Wrist X-Ray', 'Knee X-Ray', 'Hip X-Ray',
-  'Abdominal Ultrasound', 'Pelvic Ultrasound', 'Obstetric Ultrasound (Dating / Anomaly)',
+  'Abdominal Ultrasound', 'Pelvic Ultrasound', 'Abdominopelvic Ultrasound', 'Obstetric Ultrasound (Dating / Anomaly)',
   'Renal / Urinary Tract Ultrasound', 'Thyroid Ultrasound', 'Breast Ultrasound',
   'Testicular Ultrasound', 'Doppler Ultrasound (Vascular)', 'Echocardiogram',
   'CT Scan - Head / Brain', 'CT Scan - Chest', 'CT Scan - Abdomen & Pelvis',
